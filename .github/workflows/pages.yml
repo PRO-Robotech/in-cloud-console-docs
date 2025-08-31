@@ -35,6 +35,7 @@ jobs:
           working-directory: ./documentation
           run: npm i
         - name: Build (Docusaurus)
+          working-directory: ./documentation
           env:
             BASEURL: "/docs/"
             Docusaurus_GIT_API_URL_STAR: https://api.github.com/repos/PRO-Robotech/in-cloud-docs
