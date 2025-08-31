@@ -1,4 +1,4 @@
-name: documentation
+name: build-landing-and-docs
 
 on:
   push:
