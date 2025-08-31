@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🔄 Updating submodules to latest remote branches...."
+echo "🔄 Updating submodules to latest remote branches..."
 
 # Initialize submodules if not already done
 git submodule init
