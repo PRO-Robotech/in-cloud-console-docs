@@ -43,7 +43,7 @@ jobs:
         - name: Build (Docusaurus)
           working-directory: ./documentation
           env:
-            BASEURL: "/docs/"
+            BASEURL: "/in-cloud-console-docs/docs/"
             Docusaurus_GIT_API_URL_STAR: https://api.github.com/repos/PRO-Robotech/in-cloud-docs
             Docusaurus_GIT_API_URL_TAG: https://api.github.com/repos/PRO-Robotech/in-cloud-docs/tags
             Docusaurus_GIT_URL: https://github.com/PRO-Robotech/in-cloud-docs
