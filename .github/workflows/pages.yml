@@ -6,7 +6,10 @@ on:
       - "*"
 
 permissions:
-  contents: write
+  contents: read      # чтобы checkout работал
+  pages: write        # чтобы деплой на Pages разрешить
+  id-token: write     # нужно для OIDC, иначе падает с вашей ошибкой
+
 
 jobs:
   build:
