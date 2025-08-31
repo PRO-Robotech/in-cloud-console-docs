@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: incloude-console-landing
+    restart: always
+    ports:
+      - 3000:3000
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '100m'
