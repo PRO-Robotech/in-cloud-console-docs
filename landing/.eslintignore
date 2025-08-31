@@ -1,5 +1,0 @@
-**/build/*
-**/public/*
-**/node_modules/*
-!src/
-next.config.js
