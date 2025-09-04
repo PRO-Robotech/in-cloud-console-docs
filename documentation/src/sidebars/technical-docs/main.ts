@@ -8,14 +8,20 @@ export const main = [
   },
   {
     type: 'doc',
-    label: '1. Общее описание',
-    id: "tech-docs/fallback"
+    label: '1. С чего начать',
+    id: "tech-docs/getting-started"
     // id: 'tech-docs/kubernetes/introduction',
   },
   {
     type: 'doc',
-    label: '4. Компоненты',
-    id: "tech-docs/fallback"
+    label: '2. Компоненты',
+    id: "tech-docs/components"
+    // id: 'tech-docs/kubernetes/introduction',
+  },
+  {
+    type: 'doc',
+    label: '3. Настройка',
+    id: "tech-docs/settings"
     // id: 'tech-docs/kubernetes/components/components',
   },
   // {

@@ -1,0 +1,86 @@
+---
+id: getting-started
+---
+
+import { FancyboxDiagram } from '@site/src/components/commonBlocks/FancyboxDiagram'
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import CodeBlock from '@theme/CodeBlock'
+import dedent from 'ts-dedent'
+
+# С чего начать
+
+
+## Что такое in-Cloud?
+
+**in-Cloud** — это фреймворк для создания собственного пользовательского интерфейса к&nbsp;Kubernetes-API. Вы можете построить интерфейс, который соответствует вашему видению — от&nbsp;минималистичного дашборда до&nbsp;аналога OpenShift Console. Все элементы собираются из&nbsp;готовых компонентов, а&nbsp;логика описывается декларативно.
+
+
+---
+## Как установить?
+
+Установка разделена на&nbsp;этапы — вы выбираете нужные.
+
+
+### 1. Установка in-Cloud Console
+> На&nbsp;этом этапе вы устанавливаете основное приложение. Возможна настройка как&nbsp;базового варианта, так&nbsp;и&nbsp;полноценной версии «под&nbsp;ключ» — с&nbsp;oAuth-Proxy и&nbsp;Dex.
+
+<CodeBlock language="bash">
+  {dedent`
+    helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/in-cloud-web-chart \\
+      --namespace in-cloud-web \\
+      --install \\
+      --set in-cloud-web-resources.enabled=false \\
+      --set fullnameOverride=in-cloud-web
+  `}
+</CodeBlock>
+
+
+### 2. Установка визуальной конфигурации
+> Здесь добавляется интерфейсная надстройка — готовый пресет, с&nbsp;которого удобно начать знакомство с&nbsp;системой.
+
+<CodeBlock language="bash">
+  {dedent`
+    helm upgrade in-cloud-web-resources oci://registry-1.docker.io/prorobotech/in-cloud-web-resources \\
+      --namespace in-cloud-web \\
+      --install
+  `}
+</CodeBlock>
+
+---
+## Как начать использовать?
+
+Мы осознаем, что инфраструктура у&nbsp;каждого своя, включая способы заведения трафика (Ingress, VirtualService и&nbsp;т. п.). Поэтому оставляем это на&nbsp;ваше усмотрение.
+
+По&nbsp;умолчанию разворачивается один `Deployment` с&nbsp;тремя контейнерами: `Nginx`, `Web`, `BFF`. Входной трафик следует направлять на&nbsp;контейнер `Nginx`, порт `nginx-http`.
+
+Для быстрого старта вы можете использовать `port-forward`:
+
+<CodeBlock language="bash">
+  {dedent`
+    kubectl port-forward svc/in-cloud-web 8081:80 -n in-cloud-web
+  `}
+</CodeBlock>
+
+
+:::warning
+Если вы запускаете UI в&nbsp;ознакомительных целях, без&nbsp;интеграции с&nbsp;IDP (централизованной аутентификацией), потребуется назначить базовую роль для&nbsp;анонимного пользователя:
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: anonymous-clusterrolebinding
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: admin-clusterrole
+    subjects:
+      - kind: User
+        name: system:anonymous
+        apiGroup: rbac.authorization.k8s.io
+  `}
+</CodeBlock>
+:::

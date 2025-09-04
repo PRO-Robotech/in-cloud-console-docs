@@ -28,7 +28,7 @@ export const GithubLink: FC = () => {
       className="navbar__item navbar__link header-github-link"
       aria-label="GitHub repository"
     >
-      in-cloud-docs
+      in-cloud-web
       <svg
         width="13.5"
         height="13.5"

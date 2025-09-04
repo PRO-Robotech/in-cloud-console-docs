@@ -5,7 +5,7 @@ const sidebars = {
   techDocs: [
     {
       type: 'category',
-      label: 'InCloud Console',
+      label: 'in-Сloud Console',
       collapsed: false,
       items: main,
     },

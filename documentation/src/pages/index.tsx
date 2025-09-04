@@ -5,7 +5,7 @@ import { Header } from '@site/src/components/Landing/molecules'
 
 const LandingPage: FC = () => {
   return (
-    <Layout title="InCloud Console" description="InCloud Console">
+    <Layout title="in-Сloud Console" description="in-Сloud Console">
       <Header />
     </Layout>
   )

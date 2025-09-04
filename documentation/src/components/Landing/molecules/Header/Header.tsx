@@ -18,7 +18,7 @@ export const Header: FC = () => (
             )
           }}
         </BrowserOnly>
-        InCloud Console
+        in-Cloud Console
       </h1>
       {/* <p className="subheading">Строим вместе облако</p> */}
     </div>

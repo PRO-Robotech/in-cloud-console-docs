@@ -7,71 +7,70 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read      # чтобы checkout работал
-  pages: write        # чтобы деплой на Pages разрешить
-  id-token: write     # нужно для OIDC, иначе падает с вашей ошибкой
-
+  contents: read # чтобы checkout работал
+  pages: write # чтобы деплой на Pages разрешить
+  id-token: write # нужно для OIDC, иначе падает с вашей ошибкой
 
 jobs:
   build:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            submodules: true
-            fetch-depth: 0
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
 
-        - name: Setup Node
-          uses: actions/setup-node@v4
-          with:
-            node-version: 20
-            cache: 'npm'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
 
-        # Install and build Next
-        - name: Install deps (Next)
-          working-directory: ./landing
-          run: npm i
-        - name: Build + Export (Next)
-          working-directory: ./landing
-          env:
-            NEXT_PUBLIC_BASE_PATH: /in-cloud-console-docs
-          run: |
-            npm run build
+      # Install and build Next
+      - name: Install deps (Next)
+        working-directory: ./landing
+        run: npm i
+      - name: Build + Export (Next)
+        working-directory: ./landing
+        env:
+          NEXT_PUBLIC_BASE_PATH: ""
+        run: |
+          npm run build
 
-        # Install and build Docusaurus
-        - name: Install deps (Docusaurus)
-          working-directory: ./documentation
-          run: npm i
-        - name: Build (Docusaurus)
-          working-directory: ./documentation
-          env:
-            BASEURL: "/in-cloud-console-docs/docs/"
-            Docusaurus_GIT_API_URL_STAR: https://api.github.com/repos/PRO-Robotech/in-cloud-docs
-            Docusaurus_GIT_API_URL_TAG: https://api.github.com/repos/PRO-Robotech/in-cloud-docs/tags
-            Docusaurus_GIT_URL: https://github.com/PRO-Robotech/in-cloud-docs
-            URL: "http://example.com"
-            TITLE: ""
-            DOC_INCLUDE_CURRENT_VERSION: false
-          run: |
-            npm run build
+      # Install and build Docusaurus
+      - name: Install deps (Docusaurus)
+        working-directory: ./documentation
+        run: npm i
+      - name: Build (Docusaurus)
+        working-directory: ./documentation
+        env:
+          BASEURL: "/docs/"
+          Docusaurus_GIT_API_URL_STAR: https://api.github.com/repos/PRO-Robotech/openapi-ui
+          Docusaurus_GIT_API_URL_TAG: https://api.github.com/repos/PRO-Robotech/openapi-ui/tags
+          Docusaurus_GIT_URL: https://github.com/PRO-Robotech/openapi-ui
+          URL: "http://example.com"
+          TITLE: ""
+          DOC_INCLUDE_CURRENT_VERSION: false
+        run: |
+          npm run build
 
-        # Assemble final site
-        - name: Prepare dist
-          run: |
-            mkdir -p dist
-            # Next.js to root
-            cp -R landing/out/* dist/
-            # Docusaurus to /docs/
-            mkdir -p dist/docs
-            cp -R documentation/build/* dist/docs/
-            # Avoid Jekyll processing
-            touch dist/.nojekyll
+      # Assemble final site
+      - name: Prepare dist
+        run: |
+          mkdir -p dist
+          # Next.js to root
+          cp -R landing/out/* dist/
+          # Docusaurus to /docs/
+          mkdir -p dist/docs
+          cp -R documentation/build/* dist/docs/
+          # Avoid Jekyll processing
+          touch dist/.nojekyll
 
-        - name: Upload artifact
-          uses: actions/upload-pages-artifact@v3
-          with:
-            path: dist
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
   deploy:
     needs: build
     runs-on: ubuntu-latest

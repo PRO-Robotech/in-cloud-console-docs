@@ -8,7 +8,7 @@ const config: Config = {
 
   // Set the production url of your site here
   url: process.env.URL || 'http://localhost',
-  baseUrl: process.env.BASEURL || '/infrastructure/in-cloud-docs/',
+  baseUrl: process.env.BASEURL || '/infrastructure/in-cloud-console-docs/',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -100,15 +100,16 @@ const config: Config = {
   themeConfig: {
     navbar: {
       logo: {
-        src: 'img/logo.png',
+        src: 'img/paws.svg',
+        href: '/tech-docs/introduction',
       },
-      title: 'InCloud Console',
+      title: 'in-Сloud Console',
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'techDocs',
           position: 'left',
-          label: 'Техническая документация',
+          label: 'Документация',
         },
         // { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
       ],
