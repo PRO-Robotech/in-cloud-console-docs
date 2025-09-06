@@ -11,18 +11,30 @@ import { getBasePrefix } from '@site/src/utils/getBasePrefix'
 import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 
+
 # Настройка
 
 
-
-<h3>Работа с ресурсами</h3>
-Основу любого Kube-native интерфейса составляют сами ресурсы.
-Для того чтобы UI мог динамически отображать данные,
-нам нужно было стандартизировать подход к&nbsp; их описанию, контексту и&nbsp; области действия.
-
 ---
+## Работа с ресурсами
 
-<h4>Области видимости</h4>
+Основу любого **Kube-native интерфейса** составляют сами ресурсы.
+Чтобы UI мог динамически отображать данные, необходимо стандартизировать подход к их описанию, контексту и области действия.
+
+<h3>Области видимости</h3>
+Область видимости определяет контекст интерфейса, в рамках которого выполняются действия пользователя.
+
+:::info Пояснение
+- **STOCK** — базовая область интерфейса, где происходит основная работа.
+  Она делится на два подтипа:
+  - **cluster** — когда не указан Namespace или в переключателе выбран режим *All Namespaces*. В этом случае при просмотре ресурсов нужно, например, показывать дополнительный столбец `Namespace`.
+  - **namespace** — когда выбран конкретный Namespace. Тогда колонка `Namespace` уже избыточна и скрывается.
+
+- **INSIDE** — дополнительная область интерфейса, обычно предназначенная для административных задач.
+  Администраторы могут описывать её по тем же принципам, что и STOCK, но адаптировать под свои нужды.
+:::
+
+
 <table>
   <thead>
     <tr>
@@ -50,9 +62,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Типы страниц</h4>
+<h3>Типы страниц</h3>
+
+В Kubernetes существуют две разные механики доступа к ресурсам: **builtin** и **api**.
+
+- **builtin** — это базовые ресурсы, доступные по URI `/api/v1`.
+  К ним относятся стандартные сущности Kubernetes: `Pods`, `Secrets`, `Services` и т. п.
+
+- **api** — это все ресурсы, доступные по URI вида:
+  - `/apis/{apiGroup}/{apiVersion}/{kind}`
+  - `/apis/{apiGroup}/{apiVersion}/namespaces/{namespace}/{kind}`
+
+Эти схемы описывают ресурсы с группами и версиями (CRD и расширенные API Kubernetes).
+
 <table>
   <thead>
     <tr>
@@ -91,7 +114,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </table>
 
 ---
-
 ## Sidebar
 
 <p>
@@ -101,12 +123,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 <p>
   В отличие от&nbsp; статичных решений, сайдбар в in‑Cloud можно адаптировать под&nbsp; конкретные команды и&nbsp; их рабочие процессы.
-  Это дает возможность настраивать разные области видимости — пользовательскую, административную, кластерную или namespace — и&nbsp; поддерживать разные сценарии работы без&nbsp; дублирования интерфейса.
+  Это дает возможность настраивать разные области видимости — пользовательскую, административную, cluster или namespace — и&nbsp; поддерживать разные сценарии работы без&nbsp; дублирования интерфейса.
 </p>
 
----
 
-<h4>Структура полей menuItems</h4>
+<h3>Структура полей Sidebar</h3>
 
 <table>
   <thead>
@@ -305,9 +326,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Настройка sidebar</h4>
+<h3>Настройка sidebar</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -431,13 +451,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </CodeBlock>
 </details>
 
-
----
-
 :::warning
 Просьба обратить внимание что id связаны между компонентами интерфейса и&nbsp; подчиняются правилам именования.
 :::
-
 
 :::info
 Просьба учитывать, что сайдбары требуется настраивать под&nbsp; каждую область видимости.
@@ -474,8 +490,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   по вложенным уровням интерфейса или быстро переключаться между кластерами и&nbsp; пространствами имен.
 </p>
 
----
-<h4>Структура полей Breadcrumb</h4>
+
+<h3>Структура полей Breadcrumb</h3>
 
 <table>
   <thead>
@@ -621,9 +637,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Настройка breadcrumb</h4>
+<h3>Настройка breadcrumb</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -660,8 +675,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </CodeBlock>
 </details>
 
----
-
 :::warning
 Просьба обратить внимание что id связаны между компонентами интерфейса и&nbsp; подчиняются правилам именования.
 :::
@@ -672,8 +685,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 Также Breadcrumb необходимо описывать под&nbsp; каждую страницу фабрики. На первый взгляд это может показаться избыточным, но именно такой подход обеспечивает гибкость и&nbsp; позволяет адаптировать интерфейс под&nbsp; конкретные команды и&nbsp; их процессы.
 :::
 
-
----
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
   <FancyboxImage
@@ -687,7 +698,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 
 ---
-
 ## CustomColumnsOverride
 <p>
   CustomColumnsOverride — механизм описания колонок табличных представлений Kubernetes-ресурсов в in‑Cloud.
@@ -697,8 +707,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   Работает для пользовательской и&nbsp; административной областей видимости. Конфигурация декларативная (YAML) и&nbsp; не&nbsp; требует правок кода.
 </p>
 
----
-<h4>Структура полей CustomColumnsOverride</h4>
+
+<h3>Структура полей CustomColumnsOverride</h3>
 
 <table>
   <thead>
@@ -792,7 +802,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h4>Описание полей</h4>
+<h3>Описание полей</h3>
 <dl>
   <dt><code>spec.id</code></dt>
   <dd>Идентификатор области видимости и&nbsp; ресурса, для которого переопределяются колонки.</dd>
@@ -808,9 +818,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </dl>
 
 
----
-
-<h4>Структура элемента <code>additionalPrinterColumns[]</code></h4>
+<h3>Структура элемента <code>additionalPrinterColumns[]</code></h3>
 
 <table>
   <thead>
@@ -849,9 +857,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Структура элемента <code>additionalPrinterColumnsUndefinedValues[]</code></h4>
+<h3>Структура элемента <code>additionalPrinterColumnsUndefinedValues[]</code></h3>
 
 <table>
   <thead>
@@ -890,9 +897,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Структура элемента <code>additionalPrinterColumnsTrimLengths[]</code></h4>
+<h3>Структура элемента <code>additionalPrinterColumnsTrimLengths[]</code></h3>
 
 <table>
   <thead>
@@ -931,9 +937,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Настройка CustomColumnsOverride</h4>
+<h3>Настройка CustomColumnsOverride</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -999,6 +1004,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <p style={{ marginBottom: 0 }}>CustomColumnsOverride Example Factory</p>
     </div>
   </summary>
+  :::warning Внимание!
+    Обратите внимание: данный пример отличается от предыдущего использованием кастомного типа `factory`.
+    Чуть ниже вы сможете подробнее ознакомиться с этой абстракцией.
+    На данном этапе важно запомнить, что элементы таблицы также могут использовать этот механизм для наполнения ячеек.
+  :::
   <CodeBlock language="yaml">
     {dedent`
       ---
@@ -1217,7 +1227,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   `}
   </CodeBlock>
 </details>
----
 
 :::warning
 Просьба обратить внимание что id в этом ресурсе отличается от&nbsp; BreadCrumb и&nbsp; Sidebar.
@@ -1227,9 +1236,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 Просьба учитывать, что CustomColumnsOverride требуется настраивать под&nbsp; каждый тип ресурса тк они отличаются по структуре.
 > JsonPath использует весь функционал библиотеки TypeScript JSONPath, а значит позволяет использовать фильтры, условия и&nbsp; другие возможности для извлечения данных из сложных структур.
 :::
-
-
----
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
   <FancyboxImage
@@ -1253,8 +1259,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   Работает для пользовательской и&nbsp; административной областей видимости. Конфигурация декларативная (YAML) и&nbsp; не&nbsp; требует правок кода.
 </p>
 
-
-<h4>Структура полей TableUriMapping</h4>
+<h3>Структура полей TableUriMapping</h3>
 
 <table>
   <thead>
@@ -1356,7 +1361,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h5>Плейсхолдеры маршрута</h5>
+<h3>Плейсхолдеры маршрута</h3>
+
 <table>
   <thead>
     <tr>
@@ -1392,8 +1398,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-
-<h4>Настройка TableUriMapping</h4>
+<h3>Настройка TableUriMapping</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -1417,8 +1422,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </CodeBlock>
 </details>
 
----
-
 :::warning
 Просьба обратить внимание что id в этом ресурсе отличается от&nbsp; BreadCrumb и&nbsp; Sidebar.
 :::
@@ -1426,9 +1429,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 :::info
 Просьба учитывать, что CustomColumnsOverride требуется настраивать под&nbsp; каждый тип ресурса.
 :::
-
-
----
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
   <FancyboxImage
@@ -1439,7 +1439,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     Страница табличного представления Pods в пространстве имен All где&nbsp; нажали на&nbsp; строку таблицы
   </figcaption>
 </figure>
-
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
   <FancyboxImage
@@ -1452,8 +1451,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </figure>
 
 > Как видно на&nbsp; втором изображении, контекст сохраняется на&nbsp; уровнях Sidebar и&nbsp; Breadcrumb — это позволяет быстро вернуться к&nbsp; предыдущему состоянию интерфейса. Указатели keysToParse и&nbsp; keysToParseSecond передают нужные значения в фабрику, задавая Namespace-контекст для дальнейшей работы с Pods.
----
 
+---
 ## Navigation
 
 <p>
@@ -1494,9 +1493,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Структура полей Navigation</h4>
+<h3>Структура полей Navigation</h3>
 
 <table>
   <thead>
@@ -1583,9 +1581,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
 
-<h4>Пример ресурса Navigation</h4>
+<h3>Пример ресурса Navigation</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -1616,8 +1613,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </CodeBlock>
 </details>
 
----
-
 :::info
 Ресурс <code>Navigation</code> обычно описывается один раз и&nbsp; применяется глобально ко всем элементам интерфейса.
 При необходимости можно задать разные правила навигации для разных страниц фабрики.
@@ -1631,7 +1626,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ---
 ## Factory
 
-
 <p>
   Ресурс <code>Factory</code> используется в in‑Cloud UI для декларативного построения интерфейсов на&nbsp; основе описания в YAML.
   Он&nbsp; выступает как описатель страницы или ее части, включающей:
@@ -1644,7 +1638,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   <li>работу с JSONPath-выражениями и&nbsp; переменными из URL</li>
 </ul>
 
----
 
 <h3>Переменные URL</h3>
 
@@ -1659,7 +1652,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   `}
 </CodeBlock>
 
----
+
 
 <h3>Обработка данных</h3>
 
@@ -1679,7 +1672,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   <li><code>["-"]</code> — Базовое значение если значение не&nbsp; определено</li>
 </ul>
 
----
 
 <h3>Типовые применения</h3>
 
@@ -1689,8 +1681,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   <li>Динамические вкладки с таблицами (<code>EnrichedTable</code>)</li>
   <li>Визуализация логов и&nbsp; терминала</li>
 </ul>
-
----
 
 
 <h3>Общее описание</h3>
@@ -1716,7 +1706,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   `}
 </CodeBlock>
 
----
 
 <h3>Ключевые поля</h3>
 
@@ -1757,15 +1746,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
-
 <h3>Поле <code>data[]</code></h3>
 
 Поле <code>data</code> — это **основное содержимое Factory-ресурса**.
 Оно описывает структуру интерфейса в виде иерархии компонентов.
 
 
-<h4>Доступные компоненты Factory</h4>
+<h3>Доступные компоненты Factory</h3>
 
 <table>
   <thead>
@@ -3029,8 +3016,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
----
-
 <h3>Примеры</h3>
 
 <ul>
@@ -3038,7 +3023,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   <li><a href="https://github.com/PRO-Robotech/in-cloud-web-resources/blob/main/templates/Factory/node-details.yaml" target="_blank">Factory: node-details</a></li>
 </ul>
 
----
+
 
 :::info
 Компонент <code>Factory</code> является ключевым в визуальной архитектуре in‑Cloud UI. Он&nbsp; дает возможность создавать интерфейс без&nbsp; написания кода.
@@ -3049,14 +3034,13 @@ Factory поддерживает версионность API. Вы можете
 :::
 
 
-
+---
 ## CustomFormsOverride
 
 Компонент `CustomFormsOverride` используется для кастомизации динамических форм редактирования ресурсов в интерфейсе in‑Cloud. Он&nbsp; работает поверх OpenAPI-спецификаций и&nbsp; позволяет декларативно переопределять поведение и&nbsp; структуру UI-форм.
 
----
 
-<h4>1. Зачем нужен CustomFormsOverride</h4>
+<h3>1. Зачем нужен CustomFormsOverride</h3>
 
 :::info
 `CustomFormsOverride` создан для того, чтобы стандартная форма, построенная на&nbsp; базе OpenAPI, стала более удобной, лаконичной и&nbsp; безопасной.
@@ -3068,9 +3052,9 @@ Factory поддерживает версионность API. Вы можете
 - добавляет поддержку справочников и&nbsp; зависимостей между полями;
 - меняет отображение без&nbsp; пересборки всего UI.
 
----
 
-<h4>3. Основные блоки ресурса</h4>
+
+<h3>3. Основные блоки ресурса</h3>
 
 Ресурс `CustomFormsOverride` внутри `spec` логически делится на&nbsp; несколько ключевых блоков:
 
@@ -3101,7 +3085,7 @@ Factory поддерживает версионность API. Вы можете
   </tbody>
 </table>
 
-<h4>4. Что делает блок <code>schema</code></h4>
+<h3>4. Что делает блок <code>schema</code></h3>
 
 Блок <code>schema</code> используется для переопределения OpenAPI-структуры формы. Он&nbsp; позволяет задать удобную, безопасную и&nbsp; бизнес-ориентированную форму с описаниями, справочниками, обязательными полями и&nbsp; типами.
 
@@ -3148,7 +3132,7 @@ Factory поддерживает версионность API. Вы можете
 Блок <code>schema</code> позволяет настроить поведение формы без&nbsp; пересборки UI.
 :::
 
-<h4>6. Кастомные типы полей</h4>
+<h3>6. Кастомные типы полей</h3>
 
 При переопределении схемы в ресурсах <code>CustomFormsOverride</code> доступны нестандартные типы, которые расширяют базовые возможности <code>OpenAPI Schema</code>. Эти типы используются в поле <code>type</code> и&nbsp; активируют специальное поведение в UI.
 
@@ -3297,18 +3281,17 @@ Factory поддерживает версионность API. Вы можете
   </tbody>
 </table>
 
-
 :::info
 Кастомные типы являются расширением стандартных типов <code>string</code>, <code>number</code>, <code>boolean</code> и&nbsp; работают только в рамках UI in‑Cloud.
 :::
 
-
+---
 ## CustomFormsPrefill
 
 Ресурс <code>CustomFormsPrefill</code> позволяет заранее подставлять значения в кастомные формы UI in‑Cloud.
 Это упрощает ввод данных и&nbsp; обеспечивает единообразие при создании ресурсов Kubernetes.
 
-<h4>Пример ресурса</h4>
+<h3>Пример ресурса</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -3339,7 +3322,7 @@ Factory поддерживает версионность API. Вы можете
   `}
 </CodeBlock>
 
-<h4>Поля ресурса</h4>
+<h3>Поля ресурса</h3>
 
 <table>
   <thead>
@@ -3378,7 +3361,6 @@ Factory поддерживает версионность API. Вы можете
   </tbody>
 </table>
 
-
 ---
 :::info Информация
 > Что-то непонятно или нашли ошибку? Напишите нам — поможем разобраться.
@@ -3388,8 +3370,8 @@ Factory поддерживает версионность API. Вы можете
     <img
       src={`${getBasePrefix()}img/icons/contact_icons-email.svg`}
       alt="Email"
-      width="32"
-      height="32"
+      width="24"
+      height="24"
       style={{ marginRight: '0.5rem',marginTop: '-1rem'}}
     />
     <a
@@ -3404,8 +3386,8 @@ Factory поддерживает версионность API. Вы можете
     <img
       src={`${getBasePrefix()}img/icons/contact_icons-tg.svg`}
       alt="Telegram"
-      width="32"
-      height="32"
+      width="24"
+      height="24"
       style={{ marginRight: '0.5rem',marginTop: '-1rem'}}
     />
     <a
