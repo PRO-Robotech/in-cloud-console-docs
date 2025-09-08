@@ -18,7 +18,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ---
 ## Работа с ресурсами
 
-Основу любого **Kube-native интерфейса** составляют сами ресурсы.
+Основу любого **Kube-native интерфейса** составляют ресурсы Kubernetes.
 Чтобы UI мог динамически отображать данные, необходимо стандартизировать подход к их описанию, контексту и области действия.
 
 <h3>Области видимости</h3>
@@ -63,7 +63,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </table>
 
 
-<h3>Типы страниц</h3>
+### Типы страниц
 
 В Kubernetes существуют две разные механики доступа к ресурсам: **builtin** и **api**.
 
@@ -73,8 +73,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 - **api** — это все ресурсы, доступные по URI вида:
   - `/apis/{apiGroup}/{apiVersion}/{kind}`
   - `/apis/{apiGroup}/{apiVersion}/namespaces/{namespace}/{kind}`
-
-Эти схемы описывают ресурсы с группами и версиями (CRD и расширенные API Kubernetes).
 
 <table>
   <thead>
@@ -112,6 +110,75 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
   </tbody>
 </table>
+
+
+---
+## Визуализация абстракций
+
+Прежде чем углубляться в используемые нами абстракции, попробуем набросать их визуальное представление на основе следующих скриншотов.
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/describe-interface-1.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Пример страниц с кратким расположением элементов CustomColumnsOverride
+  </figcaption>
+</figure>
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/describe-interface-2.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Пример страниц с кратким расположением элементов Factory
+  </figcaption>
+</figure>
+
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/describe-interface-3.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Пример страниц с кратким расположением элементов CusoromFormOverride/CusoromFormPrefill
+  </figcaption>
+</figure>
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/describe-interface-4.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Пример страниц с областью видимости INSIDE-*
+  </figcaption>
+</figure>
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/describe-interface-5.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Пример страниц с областью видимости STOCK-CLUSTER
+  </figcaption>
+</figure>
+
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/describe-interface-6.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Пример страниц с областью видимости STOCK-NAMESPACE
+  </figcaption>
+</figure>
+
 
 ---
 ## Sidebar
