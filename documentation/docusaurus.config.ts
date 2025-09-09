@@ -101,7 +101,7 @@ const config: Config = {
     navbar: {
       logo: {
         src: 'img/paws.svg',
-        href: '/tech-docs/introduction',
+        href: '/',
       },
       title: 'in-Сloud Console',
       items: [
