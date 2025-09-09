@@ -101,7 +101,7 @@ const config: Config = {
     navbar: {
       logo: {
         src: 'img/paws.svg',
-        href: '/',
+        href: 'https://in-cloud.io/',
       },
       title: 'in-Сloud Console',
       items: [
