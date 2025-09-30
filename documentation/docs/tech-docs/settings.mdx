@@ -1873,6 +1873,51 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
 
     <tr>
+      <td><code>ResourceBadge</code></td>
+      <td>Выводит простой текст или заголовок</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ResourceBadge.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+
+          <YamlModal
+            yamlContent={dedent`
+              - type: ResourceBadge
+                data:
+                  id: kind-resource-badge
+                  value: Pod
+
+              - type: ResourceBadge
+                data:
+                  id: namespace-resource-badge
+                  value: Namespace
+
+              - type: ResourceBadge
+                data:
+                  id: node-resource-badge
+                  value: Node
+            `}
+          />
+
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                value: string // to get color and maybe abbr
+                abbreviation?: string
+                spanStyle?: CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
       <td><code>parsedText</code></td>
       <td>Значение из JSONPath</td>
       <td>
