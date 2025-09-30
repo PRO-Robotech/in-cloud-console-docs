@@ -27,7 +27,7 @@ import dedent from 'ts-dedent'
 
 <CodeBlock language="bash">
   {dedent`
-    helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/in-cloud-web-chart \\
+    helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/incloud-web-chart \\
       --namespace in-cloud-web \\
       --install \\
       --set in-cloud-web-resources.enabled=false \\
@@ -41,7 +41,7 @@ import dedent from 'ts-dedent'
 
 <CodeBlock language="bash">
   {dedent`
-    helm upgrade in-cloud-web-resources oci://registry-1.docker.io/prorobotech/in-cloud-web-resources \\
+    helm upgrade in-cloud-web-resources oci://registry-1.docker.io/prorobotech/incloud-web-resources \\
       --namespace in-cloud-web \\
       --install
   `}
