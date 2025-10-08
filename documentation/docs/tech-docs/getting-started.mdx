@@ -27,11 +27,15 @@ import dedent from 'ts-dedent'
 
 <CodeBlock language="bash">
   {dedent`
-    helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/incloud-web-chart \\
-      --namespace in-cloud-web \\
-      --install \\
-      --set incloud-web-resources.enabled=false \\
-      --set fullnameOverride=in-cloud-web
+    helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/incloud-web-chart  \
+    --namespace in-cloud-web \
+    --install \
+    --set incloud-web-resources.enabled=false \
+    --set fullnameOverride=in-cloud-web \
+    --set externalDomain=127.0.0.1 \
+    --set externalDomainPort=8081 \
+    --set-json 'service.ports=[{"name":"web-http","port":8080,"targetPort":8080,"protocol":"TCP"},{"name":"nginx-http","port":8081,"targetPort":8081,"protocol":"TCP"},{"name":"bff-http","port":8082,"targetPort":8082,"protocol":"TCP"}]' \
+    --create-namespace
   `}
 </CodeBlock>
 
@@ -59,7 +63,7 @@ import dedent from 'ts-dedent'
 
 <CodeBlock language="bash">
   {dedent`
-    kubectl port-forward svc/in-cloud-web 8081:80 -n in-cloud-web
+    sudo kubectl port-forward svc/in-cloud-web 80:80 -n in-cloud-web --kubeconfig ~/.kube/config
   `}
 </CodeBlock>
 
