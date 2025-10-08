@@ -1951,6 +1951,48 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
 
     <tr>
+      <td><code>LabelsToSearchParams</code></td>
+      <td>Создает ссылку на Search модуль с подставленными атрибутами поиска</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/LabelsToSearchParams.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: LabelsToSearchParams
+                data:
+                  id: example-to-search-params
+                  reqIndex: 0
+                  jsonPathToLabels: ".metadata.labels"
+                  linkPrefix: "/openapi-ui/{2}/search?kinds=~v1~pods&labels="
+                  errorText: "No selector"
+                  maxTextLength: 11
+                  textLink: Search
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                reqIndex: number
+                jsonPathToLabels: string
+                linkPrefix: string
+                errorText: string
+                maxTextLength: number
+                textLink: string
+                style?: CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
       <td><code>StatusText</code></td>
       <td>Определяет статус по значениям (успех, ошибка, ожидание)</td>
       <td>
@@ -3472,6 +3514,36 @@ Factory поддерживает версионность API. Вы можете
     </tr>
   </tbody>
 </table>
+
+
+### Search
+
+Страница <code>Search</code> предназначена для поиска ресурсов Kubernetes по имени, типу, лейблам и кастомным полям в рамках выбранного кластера.
+
+Она доступна из бокового меню интерфейса и также поддерживает callback-ссылки из форм создания и редактирования ресурсов, что позволяет быстро перейти к списку найденных объектов после выполнения операций.
+
+#### Пути доступа
+
+<details>
+  <summary>Доступные маршруты</summary>
+
+- <code>/openapi-ui/\{clusterName}/\{namespace}/search</code> — поиск с указанием пространства имён.
+- <code>/openapi-ui/\{clusterName}/search</code> — глобальный поиск по кластеру.
+</details>
+
+<figure style={{ textAlign: 'center', display: 'contents' }}>
+  <FancyboxImage
+    src={`${getBasePrefix()}img/in-cloud/interfaces/search.drawio.svg`}
+    style={{ width: '100%', maxWidth: 'none' }}
+  />
+  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+    Схема взаимодействия интерфейса страницы <code>Search</code> с кластером Kubernetes
+  </figcaption>
+</figure>
+
+:::note
+Страница <code>Search</code> является частью общей системы визуализации Factory и использует единый механизм отображения данных, включая поддержку фильтрации, подсветку совпадений и контекстные переходы.
+:::
 
 ---
 :::info Информация
