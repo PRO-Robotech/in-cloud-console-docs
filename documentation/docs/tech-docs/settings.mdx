@@ -1089,24 +1089,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             disableEventBubbling: true
             items:
             - children:
-              - data:
-                  id: header-badge
-                  style:
-                    backgroundColor: '#009596'
-                    borderRadius: 20px
-                    color: '#fff'
-                    display: inline-block
-                    fontFamily: RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif
-                    fontSize: 15px
-                    fontWeight: 400
-                    lineHeight: 24px
-                    minWidth: 24
-                    padding: 0 9px
-                    textAlign: center
-                    whiteSpace: nowrap
-                  text: P
-                  title: pod
-                type: antdText
+              - type: ResourceBadge
+                data:
+                  id: resource-badge
+                  value: '{reqsJsonPath[0][''.kind''][''-'']}'
               - data:
                   href: /openapi-ui/{2}/{reqsJsonPath[0]['.metadata.namespace']['-']}/factory/pod-details/{reqsJsonPath[0]['.metadata.name']['-']}
                   id: name-link
@@ -1123,25 +1109,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         - customProps:
             disableEventBubbling: true
             items:
-            - children:
-              - data:
-                  id: header-badge
-                  style:
-                    backgroundColor: '#a25792ff'
-                    borderRadius: 20px
-                    color: '#fff'
-                    display: inline-block
-                    fontFamily: RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif
-                    fontSize: 15px
-                    fontWeight: 400
-                    lineHeight: 24px
-                    minWidth: 24
-                    padding: 0 9px
-                    textAlign: center
-                    whiteSpace: nowrap
-                  text: NS
-                  title: namespace
-                type: antdText
+              - type: ResourceBadge
+                data:
+                  id: resource-badge
+                  value: Namespace
               - data:
                   href: /openapi-ui/{2}/factory/namespace-details/{reqsJsonPath[0]['.metadata.namespace']['-']}
                   id: namespace-link
@@ -1159,24 +1130,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             disableEventBubbling: true
             items:
             - children:
-              - data:
-                  id: header-badge
-                  style:
-                    backgroundColor: '#8476d1'
-                    borderRadius: 20px
-                    color: '#fff'
-                    display: inline-block
-                    fontFamily: RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif
-                    fontSize: 15px
-                    fontWeight: 400
-                    lineHeight: 24px
-                    minWidth: 24
-                    padding: 0 9px
-                    textAlign: center
-                    whiteSpace: nowrap
-                  text: "N"
-                  title: node
-                type: antdText
+              - type: ResourceBadge
+                data:
+                  id: resource-badge
+                  value: Node
               - data:
                   href: /openapi-ui/{2}/factory/node-details/{reqsJsonPath[0]['.spec.nodeName']['-']}
                   id: name-link
@@ -2703,6 +2660,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   baseprefix: "/openapi-ui"
                   withoutControls: true
                   pathToItems: ".status.resources"
+                  fieldSelector:
+                    metadata.namespace: default
+                    kind: Pod
+                  namespace: "{3}"
+                  isNamespaced: true
+                  dataForControls:
+                    resource: pods
+                    apiVersion: v1
             `}
           />
           <YamlModal
@@ -2718,10 +2683,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   reqIndex: number
                   pathToLabels: string | string[] // jsonpath or keys as string[]
                 }
-                fieldSelector?: {
-                  fieldName: string
-                  parsedText: string
-                }
+                fieldSelector?: Record<string, string>
                 baseprefix?: string
                 resourceSchema?: TJSON
                 dataForControls?: {
@@ -2739,6 +2701,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 }
                 customizationId?: string
                 forceDefaultAdditionalPrinterColumns?: TAdditionalPrinterColumns
+                k8sResource?: {
+                  resource: string
+                  apiGroup?: string
+                  apiVersion: string
+                }
+                namespace?: string
+                withoutControls?: boolean
               }
             `}
           />
@@ -2801,6 +2770,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   substractHeight: 400
                   type: apis
                   typeName: deployments
+                  readOnly: false
             `}
           />
           <YamlModal
@@ -2816,6 +2786,67 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 typeName: string
                 prefillValuesRequestIndex: number
                 substractHeight?: number
+                readOnly?: boolean
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Events</code></td>
+      <td>Редактор YAML для одного ресурса (prefill через API)</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Events.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: Events
+                data:
+                  id: events
+                  baseprefix: "/openapi-ui"
+                  clusterNamePartOfUrl: "{2}"
+                  wsUrl: "/api/clusters/{2}/openapi-bff-ws/events/eventsWs"
+                  pageSize: 50
+                  substractHeight: 315
+                  limit: 40
+                  fieldSelector:
+                      metadata.namespace: incloud-argocd
+                      regarding.kind: Pod
+                  baseFactoryNamespacedAPIKey: base-factory-namespaced-api
+                  baseFactoryClusterSceopedAPIKey: base-factory-clusterscoped-api
+                  baseFactoryNamespacedBuiltinKey: base-factory-namespaced-builtin
+                  baseFactoryClusterSceopedBuiltinKey: base-factory-clusterscoped-builtin
+                  baseNamespaceFactoryKey: base-factory-clusterscoped-builtin
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              Events: {
+                id: number | string
+                baseprefix?: string
+                clusterNamePartOfUrl: string
+                wsUrl: string
+                pageSize?: number
+                substractHeight?: number
+                limit?: number
+                labelSelector?: Record<string, string>
+                labelSelectorFull?: {
+                  reqIndex: number
+                  pathToLabels: string | string[] // jsonpath or keys as string[]
+                }
+                fieldSelector?: Record<string, string>
+                baseFactoryNamespacedAPIKey: string
+                baseFactoryClusterSceopedAPIKey: string
+                baseFactoryNamespacedBuiltinKey: string
+                baseFactoryClusterSceopedBuiltinKey: string
+                baseNamespaceFactoryKey: string
               }
             `}
           />
@@ -3217,24 +3248,64 @@ Factory поддерживает версионность API. Вы можете
     <tr>
       <th>Блок</th>
       <th>Назначение</th>
+      <th>Пример</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>customizationId</code></td>
       <td>Уникальный идентификатор, по которому UI находит и&nbsp; применяет переопределенную форму к&nbsp; нужному ресурсу.</td>
+      <td></td>
     </tr>
     <tr>
       <td><code>hidden</code></td>
       <td>Массив путей до скрываемых полей. Например, <code>["spec", "serviceRef", "apiVersion"]</code>. Позволяет убрать из формы технические и&nbsp; чувствительные поля.</td>
+      <td>
+        <YamlModal yamlContent={dedent`
+          ---
+          apiVersion: dashboard.cozystack.io/v1alpha1
+          kind: CustomFormsOverride
+          metadata:
+            name: apps.cozystack.io.v1alpha1.virtualmachines
+          spec:
+            customizationId: default-/v1/services
+            hidden:
+            - - appVersion
+            - - kind
+            - - metadata
+            - - spec
+        `} />
+      </td>
+    </tr>
+    <tr>
+      <td><code>sort</code></td>
+      <td>Массив путей до полей, по которым нужно отсортировать форму. Например, <code>["spec", "serviceRef", "apiVersion"]</code>. Позволяет задать порядок отображения полей в форме.</td>
+      <td>
+        <YamlModal yamlContent={dedent`
+          ---
+          apiVersion: dashboard.cozystack.io/v1alpha1
+          kind: CustomFormsOverride
+          metadata:
+            name: apps.cozystack.io.v1alpha1.virtualmachines
+          spec:
+            customizationId: default-/v1/services
+            sort:
+            - - appVersion
+            - - kind
+            - - metadata
+            - - spec
+        `} />
+      </td>
     </tr>
     <tr>
       <td><code>schema</code></td>
       <td>Переопределение структуры и&nbsp; поведения формы на&nbsp; базе JSON Schema. Здесь задаются типы, описания, required-поля и&nbsp; расширения вроде <code>customProps</code>.</td>
+      <td></td>
     </tr>
     <tr>
       <td><code>strategy</code></td>
       <td>Определяет способ объединения с оригинальной схемой ресурса: <code>merge</code> (объединить) или <code>replace</code> (заменить полностью).</td>
+      <td></td>
     </tr>
   </tbody>
 </table>
@@ -3321,6 +3392,25 @@ Factory поддерживает версионность API. Вы можете
                         - name
                       mode: tag
                       valueUri: "/api/clusters/{clusterName}/k8s/api/v1/namespaces"
+                  name:
+                    description: Name of the referenced object
+                    type: listInput
+                    customProps:
+                      criteria:
+                        keysToValue:
+                          - status
+                          - isBound
+                        type: equals
+                        value: false
+                      keysToLabel:
+                        - metadata
+                        - name
+                      keysToValue:
+                        - metadata
+                        - name
+                      mode: tag
+                      valueUri: "/api/clusters/{clusterName}/k8s/apis/netguard.sgroups.io/v1beta1/namespaces/{relatedFieldValue}/hosts"
+                      relatedValuePath: "spec.namespace | ./namespace | ../foo/namespace"
         `} />
       </td>
     </tr>
@@ -3516,7 +3606,7 @@ Factory поддерживает версионность API. Вы можете
 </table>
 
 
-### Search
+## Search
 
 Страница <code>Search</code> предназначена для поиска ресурсов Kubernetes по имени, типу, лейблам и кастомным полям в рамках выбранного кластера.
 
