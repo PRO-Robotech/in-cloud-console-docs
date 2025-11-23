@@ -306,7 +306,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             - children:
                 - key: pods
                   label: Pods
-                  link: /openapi-ui/{clusterName}/{namespace}/builtin-table/pods
+                  link: /openapi-ui/{cluster}/{namespace}/builtin-table/pods
               key: workloads
               label: Workloads
           `}
@@ -346,7 +346,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           yamlContent={dedent`
             - key: pods
               label: Pods
-              link: /openapi-ui/{clusterName}/{namespace}/builtin-table/pods
+              link: /openapi-ui/{cluster}/{namespace}/builtin-table/pods
           `}
         />
       </td>
@@ -382,9 +382,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {clusterName}   — имя кластера
+            # {cluster}   — имя кластера
             # {namespace}     — пространство имен (или all-namespaces)
-            # {typeName}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
+            # {plural}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
             # {apiGroup}      — группа API (apps, batch, networking.k8s.io)
             # {apiVersion}    — версия API (v1, v1beta1, v1alpha1)
 
@@ -392,31 +392,31 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             link: /openapi-ui/clusters
 
             # default — cluster route
-            link: /openapi-ui/\{clusterName\}
+            link: /openapi-ui/\{cluster\}
 
             # builtin — namespace scope
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-table/pods
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-form/pods
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-table/{typeName}
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-form/{typeName}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/pods
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/pods
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/{plural}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/{plural}
 
             # builtin — cluster scope
-            link: /openapi-ui/\{clusterName\}/builtin-table/pods
-            link: /openapi-ui/\{clusterName\}/builtin-form/pods
-            link: /openapi-ui/\{clusterName\}/builtin-table/{typeName}
-            link: /openapi-ui/\{clusterName\}/builtin-form/{typeName}
+            link: /openapi-ui/\{cluster\}/builtin-table/pods
+            link: /openapi-ui/\{cluster\}/builtin-form/pods
+            link: /openapi-ui/\{cluster\}/builtin-table/{plural}
+            link: /openapi-ui/\{cluster\}/builtin-form/{plural}
 
             # api — namespace scope
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-table/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-form/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-table/{apiGroup}/{apiVersion}/{typeName}
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-form/{apiGroup}/{apiVersion}/{typeName}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/{apiGroup}/{apiVersion}/{plural}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/{apiGroup}/{apiVersion}/{plural}
 
             # api — cluster scope
-            link: /openapi-ui/\{clusterName\}/api-table/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/api-form/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/api-table/{apiGroup}/{apiVersion}/{typeName}
-            link: /openapi-ui/\{clusterName\}/api-form/{apiGroup}/{apiVersion}/{typeName}
+            link: /openapi-ui/\{cluster\}/api-table/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/api-form/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/api-table/{apiGroup}/{apiVersion}/{plural}
+            link: /openapi-ui/\{cluster\}/api-form/{apiGroup}/{apiVersion}/{plural}
           `}
         />
       </td>
@@ -446,103 +446,103 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           - children:
               - key: pods
                 label: Pods
-                link: /openapi-ui/{clusterName}/builtin-table/pods
+                link: /openapi-ui/{cluster}/builtin-table/pods
               - key: deployments
                 label: Deployments
-                link: /openapi-ui/{clusterName}/api-table/apps/v1/deployments
+                link: /openapi-ui/{cluster}/api-table/apps/v1/deployments
               - key: statefulsets
                 label: Statefulsets
-                link: /openapi-ui/{clusterName}/api-table/apps/v1/statefulsets
+                link: /openapi-ui/{cluster}/api-table/apps/v1/statefulsets
               - key: secrets
                 label: Secrets
-                link: /openapi-ui/{clusterName}/builtin-table/secrets
+                link: /openapi-ui/{cluster}/builtin-table/secrets
               - key: configmaps
                 label: ConfigMaps
-                link: /openapi-ui/{clusterName}/builtin-table/configmaps
+                link: /openapi-ui/{cluster}/builtin-table/configmaps
               - key: cronjobs
                 label: CronJobs
-                link: /openapi-ui/{clusterName}/api-table/batch/v1/cronjobs
+                link: /openapi-ui/{cluster}/api-table/batch/v1/cronjobs
               - key: jobs
                 label: Jobs
-                link: /openapi-ui/{clusterName}/api-table/batch/v1/jobs
+                link: /openapi-ui/{cluster}/api-table/batch/v1/jobs
               - key: daemonsets
                 label: Daemonsets
-                link: /openapi-ui/{clusterName}/api-table/apps/v1/daemonsets
+                link: /openapi-ui/{cluster}/api-table/apps/v1/daemonsets
               - key: replicasets
                 label: ReplicaSets
-                link: /openapi-ui/{clusterName}/api-table/apps/v1/replicasets
+                link: /openapi-ui/{cluster}/api-table/apps/v1/replicasets
               - key: replicationcontrollers
                 label: ReplicationControllers
-                link: /openapi-ui/{clusterName}/builtin-table/replicationcontrollers
+                link: /openapi-ui/{cluster}/builtin-table/replicationcontrollers
               - key: horizontalpodautoscalers
                 label: HorizontalPodAutoscalers
-                link: /openapi-ui/{clusterName}/api-table/autoscaling/v2/horizontalpodautoscalers
+                link: /openapi-ui/{cluster}/api-table/autoscaling/v2/horizontalpodautoscalers
               - key: poddisruptionbudgets
                 label: PodDisruptionBudgets
-                link: /openapi-ui/{clusterName}/api-table/policy/v1/poddisruptionbudgets
+                link: /openapi-ui/{cluster}/api-table/policy/v1/poddisruptionbudgets
             key: workloads
             label: Workloads
           - children:
               - key: services
                 label: Services
-                link: /openapi-ui/{clusterName}/builtin-table/services
+                link: /openapi-ui/{cluster}/builtin-table/services
               - key: networkpolicies
                 label: NetworkPolicies
-                link: /openapi-ui/{clusterName}/api-table/networking.k8s.io/v1/networkpolicies
+                link: /openapi-ui/{cluster}/api-table/networking.k8s.io/v1/networkpolicies
               - key: ingresses
                 label: Ingresses
-                link: /openapi-ui/{clusterName}/api-table/networking.k8s.io/v1/ingresses
+                link: /openapi-ui/{cluster}/api-table/networking.k8s.io/v1/ingresses
             key: networking
             label: Networking
           - children:
               - key: persistentvolumes
                 label: PersistentVolumes
-                link: /openapi-ui/{clusterName}/builtin-table/persistentvolumes
+                link: /openapi-ui/{cluster}/builtin-table/persistentvolumes
               - key: persistentvolumeclaims
                 label: PersistentVolumeClaims
-                link: /openapi-ui/{clusterName}/builtin-table/persistentvolumeclaims
+                link: /openapi-ui/{cluster}/builtin-table/persistentvolumeclaims
               - key: storageclasses
                 label: StorageClasses
-                link: /openapi-ui/{clusterName}/api-table/storage.k8s.io/v1/storageclasses
+                link: /openapi-ui/{cluster}/api-table/storage.k8s.io/v1/storageclasses
             key: storage
             label: Storage
           - children:
               - key: nodes
                 label: Nodes
-                link: /openapi-ui/{clusterName}/builtin-table/nodes
+                link: /openapi-ui/{cluster}/builtin-table/nodes
             key: compute
             label: Compute
           - children:
               - key: groups
                 label: ServiceAccounts
-                link: /openapi-ui/{clusterName}/builtin-table/serviceaccounts
+                link: /openapi-ui/{cluster}/builtin-table/serviceaccounts
               - key: roles
                 label: Roles
-                link: /openapi-ui/{clusterName}/api-table/rbac.authorization.k8s.io/v1/roles
+                link: /openapi-ui/{cluster}/api-table/rbac.authorization.k8s.io/v1/roles
               - key: rolebindings
                 label: RoleBindings
-                link: /openapi-ui/{clusterName}/api-table/rbac.authorization.k8s.io/v1/rolebindings
+                link: /openapi-ui/{cluster}/api-table/rbac.authorization.k8s.io/v1/rolebindings
               - key: clusterroles
                 label: ClusterRoles
-                link: /openapi-ui/{clusterName}/api-table/rbac.authorization.k8s.io/v1/clusterroles
+                link: /openapi-ui/{cluster}/api-table/rbac.authorization.k8s.io/v1/clusterroles
               - key: clusterrolebindings
                 label: ClusterRoleBindings
-                link: /openapi-ui/{clusterName}/api-table/rbac.authorization.k8s.io/v1/clusterrolebindings
+                link: /openapi-ui/{cluster}/api-table/rbac.authorization.k8s.io/v1/clusterrolebindings
             key: usermanagement
             label: User Management
           - children:
               - key: namespaces
                 label: Namespaces
-                link: /openapi-ui/{clusterName}/builtin-table/namespaces
+                link: /openapi-ui/{cluster}/builtin-table/namespaces
               - key: limitranges
                 label: LimitRanges
-                link: /openapi-ui/{clusterName}/builtin-table/limitranges
+                link: /openapi-ui/{cluster}/builtin-table/limitranges
               - key: resourcequotas
                 label: ResourceQuotas
-                link: /openapi-ui/{clusterName}/builtin-table/resourcequotas
+                link: /openapi-ui/{cluster}/builtin-table/resourcequotas
               - key: customresourcedefinitions
                 label: CustomResourceDefinitions
-                link: /openapi-ui/{clusterName}/api-table/apiextensions.k8s.io/v1/customresourcedefinitions
+                link: /openapi-ui/{cluster}/api-table/apiextensions.k8s.io/v1/customresourcedefinitions
             key: administration
             label: Administration
   `}
@@ -581,8 +581,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 <p>
   Цепочка формируется декларативно на&nbsp; основе YAML-описания. Каждый элемент имеет ключ, отображаемое имя и&nbsp;
-  ссылку, в которых могут использоваться плейсхолдеры (<code>\{clusterName}</code>, <code>\{namespace}</code>,{' '}
-  <code>\{apiGroup}</code>, <code>\{apiVersion}</code>, <code>\{typeName}</code>). Это позволяет гибко настраивать
+  ссылку, в которых могут использоваться плейсхолдеры (<code>\{cluster}</code>, <code>\{namespace}</code>,{' '}
+  <code>\{apiGroup}</code>, <code>\{apiVersion}</code>, <code>\{plural}</code>). Это позволяет гибко настраивать
   структуру навигации под&nbsp; конкретный сценарий работы.
 </p>
 
@@ -651,14 +651,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 label: "Cluster List"
                 link: "/openapi-ui/clusters"
               - key: cluster
-                label: "{clusterName}"
-                link: "/openapi-ui/clusters/{clusterName}"
+                label: "{cluster}"
+                link: "/openapi-ui/clusters/{cluster}"
               - key: namespaces
                 label: "Namespaces"
               - key: namespace
                 label: "All"
               - key: api
-                label: "{typeName}"
+                label: "{plural}"
           `}
         />
       </td>
@@ -696,9 +696,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {clusterName}   — имя кластера
+            # {cluster}   — имя кластера
             # {namespace}     — пространство имен (или all-namespaces)
-            # {typeName}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
+            # {plural}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
             # {apiGroup}      — группа API (apps, batch, networking.k8s.io)
             # {apiVersion}    — версия API (v1, v1beta1, v1alpha1)
 
@@ -706,31 +706,31 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             link: /openapi-ui/clusters
 
             # default — cluster route
-            link: /openapi-ui/\{clusterName\}
+            link: /openapi-ui/\{cluster\}
 
             # builtin — namespace scope
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-table/pods
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-form/pods
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-table/{typeName}
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/builtin-form/{typeName}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/pods
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/pods
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/{plural}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/{plural}
 
             # builtin — cluster scope
-            link: /openapi-ui/\{clusterName\}/builtin-table/pods
-            link: /openapi-ui/\{clusterName\}/builtin-form/pods
-            link: /openapi-ui/\{clusterName\}/builtin-table/{typeName}
-            link: /openapi-ui/\{clusterName\}/builtin-form/{typeName}
+            link: /openapi-ui/\{cluster\}/builtin-table/pods
+            link: /openapi-ui/\{cluster\}/builtin-form/pods
+            link: /openapi-ui/\{cluster\}/builtin-table/{plural}
+            link: /openapi-ui/\{cluster\}/builtin-form/{plural}
 
             # api — namespace scope
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-table/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-form/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-table/{apiGroup}/{apiVersion}/{typeName}
-            link: /openapi-ui/\{clusterName\}/\{namespace\}/api-form/{apiGroup}/{apiVersion}/{typeName}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/{apiGroup}/{apiVersion}/{plural}
+            link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/{apiGroup}/{apiVersion}/{plural}
 
             # api — cluster scope
-            link: /openapi-ui/\{clusterName\}/api-table/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/api-form/apps/v1/deployments
-            link: /openapi-ui/\{clusterName\}/api-table/{apiGroup}/{apiVersion}/{typeName}
-            link: /openapi-ui/\{clusterName\}/api-form/{apiGroup}/{apiVersion}/{typeName}
+            link: /openapi-ui/\{cluster\}/api-table/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/api-form/apps/v1/deployments
+            link: /openapi-ui/\{cluster\}/api-table/{apiGroup}/{apiVersion}/{plural}
+            link: /openapi-ui/\{cluster\}/api-form/{apiGroup}/{apiVersion}/{plural}
           `}
         />
       </td>
@@ -764,14 +764,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             label: "Cluster List"
             link: "/openapi-ui/clusters"
           - key: cluster
-            label: "{clusterName}"
-            link: "/openapi-ui/clusters/{clusterName}"
+            label: "{cluster}"
+            link: "/openapi-ui/clusters/{cluster}"
           - key: namespaces
             label: "Namespaces"
           - key: namespace
             label: "All"
           - key: api
-            label: "{typeName}"
+            label: "{plural}"
   `}
   </CodeBlock>
 </details>
@@ -1362,18 +1362,18 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {clusterName}   — имя кластера
+            # {cluster}   — имя кластера
             # {namespace}     — пространство имен (или all-namespaces)
-            # {typeName}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
+            # {plural}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
             # {apiGroup}      — группа API (apps, batch, networking.k8s.io)
             # {apiVersion}    — версия API (v1, v1beta1, v1alpha1)
 
             # builtin — ресурсы
             # Примеры шаблонов:
-            # inside-cluster-/v1/{typeName}
-            # inside-namespace-/v1/{typeName}
-            # stock-cluster-/v1/{typeName}
-            # stock-namespace-/v1/{typeName}
+            # inside-cluster-/v1/{plural}
+            # inside-namespace-/v1/{plural}
+            # stock-cluster-/v1/{plural}
+            # stock-namespace-/v1/{plural}
 
             # Примеры:
             id: stock-namespace-/v1/pods
@@ -1381,10 +1381,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
             # api — ресурсы
             # Примеры шаблонов:
-            # inside-cluster-/{apiGroup}/{apiVersion}/{typeName}
-            # inside-namespace-/{apiGroup}/{apiVersion}/{typeName}
-            # stock-cluster-/{apiGroup}/{apiVersion}/{typeName}
-            # stock-namespace-/{apiGroup}/{apiVersion}/{typeName}
+            # inside-cluster-/{apiGroup}/{apiVersion}/{plural}
+            # inside-namespace-/{apiGroup}/{apiVersion}/{plural}
+            # stock-cluster-/{apiGroup}/{apiVersion}/{plural}
+            # stock-namespace-/{apiGroup}/{apiVersion}/{plural}
 
             # Примеры:
             id: stock-namespace-/apps/v1/deployments
@@ -1437,7 +1437,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <YamlModal
           yamlContent={dedent`
-            /openapi-ui/{clusterName}/~recordValueSecond~/factory/pod-details/~recordValue~
+            /openapi-ui/{cluster}/~recordValueSecond~/factory/pod-details/~recordValue~
           `}
         />
       </td>
@@ -1458,7 +1458,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   <tbody>
     <tr>
       <td>
-        <code>\{clusterName}</code>
+        <code>\{cluster}</code>
       </td>
       <td>Выбранный кластер</td>
     </tr>
@@ -1520,7 +1520,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         keysToParse: ".metadata.name"
         keysToParseSecond: ".metadata.namespace"
         id: "stock-cluster-/v1/pods"
-        pathToNavigate: "/openapi-ui/{clusterName}/~recordValueSecond~/factory/pod-details/~recordValue~"
+        pathToNavigate: "/openapi-ui/{cluster}/~recordValueSecond~/factory/pod-details/~recordValue~"
     `}
   </CodeBlock>
 </details>
@@ -1868,16 +1868,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <CodeBlock language="typescript">
           {dedent`
-(string | {
- cluster: string
-  group?: string
-  version: string
-  plural: string
-  namespace?: string
-  fieldSelector?: string
-  labelSelector?: string
-  limit?: number
-  })[]
+            (string | {
+              cluster: string
+              apiGroup?: string
+              apiVersion: string
+              plural: string
+              namespace?: string
+              fieldSelector?: string
+              labelSelector?: string
+              limit?: number
+            })[]
   `}
         </CodeBlock>
       </td>
@@ -2433,18 +2433,30 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   baseApiGroup: front.in‑Cloud.io
                   baseApiVersion: v1alpha1
                   baseprefix: openapi-ui
-                  clusterNamePartOfUrl: "{2}"
+                  cluster: "{2}"
                   id: 311
-                  mpResourceKind: MarketplacePanel
-                  mpResourceName: marketplacepanels
-                  namespacePartOfUrl: "{3}"
+                  marketplaceKind: MarketplacePanel
+                  marketplacePlural: marketplacepanels
+                  namespace: "{3}"
                 type: MarketplaceCard
             `}
           />
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              ---
+              {
+                id: number | string
+                cluster: string
+                namespace: string
+                baseApiGroup: string
+                baseApiVersion: string
+                marketplacePlural: string
+                marketplaceKind: string
+                baseprefix?: string
+                standalone?: boolean
+                forceAddedMode?: boolean
+                showZeroResources?: boolean
+              }
             `}
           />
         </div>
@@ -2793,7 +2805,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 data:
                   id: resources-table
                   fetchUrl: "/api/clusters/{2}/k8s/apis/argoproj.io/v1alpha1/namespaces/{3}/applications/{6}"
-                  clusterNamePartOfUrl: "{2}"
+                  cluster: "{2}"
                   customizationId: "factory-argocd-application-status-resources"
                   baseprefix: "/openapi-ui"
                   withoutControls: true
@@ -2804,7 +2816,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   namespace: "{3}"
                   isNamespaced: true
                   dataForControls:
-                    resource: pods
+                    plural: pods
                     apiVersion: v1
             `}
           />
@@ -2815,13 +2827,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 id: number | string
                 fetchUrl?: string
                 k8sResourceToFetch?: {
-                  group?: string
-                  version: string
+                  apiGroup?: string
+                  apiVersion: string
                   plural: string
                   namespace?: string
                 }
                 pathToItems: string | string[] // jsonpath or keys as string[]
-                clusterNamePartOfUrl: string
+                cluster: string
                 labelsSelector?: Record<string, string>
                 labelsSelectorFull?: {
                   reqIndex: number
@@ -2835,7 +2847,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   syntheticProject?: string
                   pathPrefix: string
                   apiVersion: string
-                  typeName: string
+                  plural: string
                   backlink: string
                   deletePathPrefix: string
                   permissions: {
@@ -2846,7 +2858,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 customizationId?: string
                 forceDefaultAdditionalPrinterColumns?: TAdditionalPrinterColumns
                 k8sResource?: {
-                  resource: string
+                  plural: string
                   apiGroup?: string
                   apiVersion: string
                 }
@@ -2913,7 +2925,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   prefillValuesRequestIndex: 0
                   substractHeight: 400
                   type: apis
-                  typeName: deployments
+                  plural: deployments
                   readOnly: false
             `}
           />
@@ -2927,7 +2939,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 type: 'builtin' | 'apis'
                 apiGroup?: string
                 apiVersion?: string
-                typeName: string
+                plural: string
                 forcedKind?: string
                 prefillValuesRequestIndex: number
                 pathToData?: string | string[] // jsonpath or keys as string[]
@@ -2956,7 +2968,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 data:
                   id: events
                   baseprefix: "/openapi-ui"
-                  clusterNamePartOfUrl: "{2}"
+                  cluster: "{2}"
                   wsUrl: "/api/clusters/{2}/openapi-bff-ws/events/eventsWs"
                   pageSize: 50
                   substractHeight: 315
@@ -2977,7 +2989,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               Events: {
                 id: number | string
                 baseprefix?: string
-                clusterNamePartOfUrl: string
+                cluster: string
                 wsUrl: string
                 pageSize?: number
                 substractHeight?: number
@@ -2993,6 +3005,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 baseFactoryNamespacedBuiltinKey: string
                 baseFactoryClusterSceopedBuiltinKey: string
                 baseNamespaceFactoryKey: string
+                baseNavigationPlural: string
+                baseNavigationName: string
               }
             `}
           />
@@ -3372,8 +3386,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               baseFactoryNamespacedAPIKey: base-factory-namespaced-api
               baseFactoryNamespacedBuiltinKey: base-factory-namespaced-builtin
               baseNamespaceFactoryKey: namespace-details
-              baseNavigationPlural: navigations
-              baseNavigationName: navigation
+              baseNavigationPlural: string
+              baseNavigationName: string
             `}
           />
           <YamlModal
@@ -3804,7 +3818,7 @@ Factory поддерживает версионность API. Вы можете
                         - metadata
                         - name
                       mode: tag
-                      valueUri: "/api/clusters/{clusterName}/k8s/api/v1/namespaces"
+                      valueUri: "/api/clusters/{cluster}/k8s/api/v1/namespaces"
                   name:
                     description: Name of the referenced object
                     type: listInput
@@ -3822,7 +3836,7 @@ Factory поддерживает версионность API. Вы можете
                         - metadata
                         - name
                       mode: tag
-                      valueUri: "/api/clusters/{clusterName}/k8s/apis/netguard.sgroups.io/v1beta1/namespaces/{relatedFieldValue}/hosts"
+                      valueUri: "/api/clusters/{cluster}/k8s/apis/netguard.sgroups.io/v1beta1/namespaces/{relatedFieldValue}/hosts"
                       relatedValuePath: "spec.namespace | ./namespace | ../foo/namespace"
         `}
         />
@@ -3855,21 +3869,21 @@ Factory поддерживает версионность API. Вы можете
                             - limits
                             - cpu
                           type: resourceValue
-                          valueUri: /api/clusters/{clusterName}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
+                          valueUri: /api/clusters/{cluster}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
                         min:
                           type: number
                           value: 0
                         step: 0.1
                       edit:
                         max:
-                          firstValueUri: /api/clusters/{clusterName}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
+                          firstValueUri: /api/clusters/{cluster}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
                           firstValuesKeysToValue:
                             - status
                             - quotasLeft
                             - k8s
                             - limits
                             - cpu
-                          secondValueUri: /api/clusters/{clusterName}/k8s/api/v1/namespaces/{entryName}/resourcequotas/{entryName}-quotas
+                          secondValueUri: /api/clusters/{cluster}/k8s/api/v1/namespaces/{plural}/resourcequotas/{plural}-quotas
                           secondValuesKeysToValue:
                             - status
                             - hard
@@ -3881,7 +3895,7 @@ Factory поддерживает версионность API. Вы можете
                             - used
                             - limits.cpu
                           type: resourceValue
-                          valueUri: /api/clusters/{clusterName}/k8s/api/v1/namespaces/{entryName}/resourcequotas/{entryName}-quotas
+                          valueUri: /api/clusters/{cluster}/k8s/api/v1/namespaces/{plural}/resourcequotas/{plural}-quotas
                         step: 0.1
                       logic: cpuLike
                     type: rangeInputCpu
@@ -3915,21 +3929,21 @@ Factory поддерживает версионность API. Вы можете
                           - limits
                           - memory
                           type: resourceValue
-                          valueUri: /api/clusters/{clusterName}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
+                          valueUri: /api/clusters/{cluster}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
                         min:
                           type: number
                           value: 0
                         step: 0.1
                       edit:
                         max:
-                          firstValueUri: /api/clusters/{clusterName}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
+                          firstValueUri: /api/clusters/{cluster}/k8s/apis/example.com/v1alpha/projectquotas/{namespace}
                           firstValuesKeysToValue:
                           - status
                           - quotasLeft
                           - k8s
                           - limits
                           - memory
-                          secondValueUri: /api/clusters/{clusterName}/k8s/api/v1/namespaces/{entryName}/resourcequotas/{entryName}-quotas
+                          secondValueUri: /api/clusters/{cluster}/k8s/api/v1/namespaces/{plural}/resourcequotas/{plural}-quotas
                           secondValuesKeysToValue:
                           - status
                           - hard
@@ -3941,7 +3955,7 @@ Factory поддерживает версионность API. Вы можете
                           - used
                           - limits.memory
                           type: resourceValue
-                          valueUri: /api/clusters/{clusterName}/k8s/api/v1/namespaces/{entryName}/resourcequotas/{entryName}-quotas
+                          valueUri: /api/clusters/{cluster}/k8s/api/v1/namespaces/{plural}/resourcequotas/{plural}-quotas
                         step: 0.1
                       logic: memoryLike
                     type: rangeInputMemory
@@ -4071,10 +4085,10 @@ Factory поддерживает версионность API. Вы можете
 
 <ul>
   <li>
-    <code>{`/openapi-ui/{clusterName}/{namespace}/search`}</code> — поиск с указанием пространства имён.
+    <code>{`/openapi-ui/{cluster}/{namespace}/search`}</code> — поиск с указанием пространства имён.
   </li>
   <li>
-    <code>{`/openapi-ui/{clusterName}/search`}</code> — глобальный поиск по кластеру.
+    <code>{`/openapi-ui/{cluster}/search`}</code> — глобальный поиск по кластеру.
   </li>
 </ul>
 
