@@ -1770,7 +1770,12 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 <CodeBlock language="yaml" title="Пример с плейсхолдерами">
   {dedent`
     urlsToFetch:
-      - /api/clusters/{2}/k8s/api/v1/namespaces/{3}/pods/{6}
+      - cluster: "{2}"
+        apiGroup: "apps"
+        apiVersion: "v1"
+        namespace: "{3}"
+        plural: "deployments"
+        fieldSelector: "metadata.name={6}"
   `}
 </CodeBlock>
 
@@ -1782,7 +1787,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 <CodeBlock language="yaml">
   {dedent`
-    text: '{reqsJsonPath[0][".metadata.name"]["-"]}'
+    text: '{reqsJsonPath[0][".items.0.metadata.name"]["-"]}'
   `}
 </CodeBlock>
 
@@ -1791,13 +1796,18 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <code>reqsJsonPath[0]</code> — первый элемент из <code>urlsToFetch</code>
   </li>
   <li>
-    <code>[".metadata.name"]</code> — путь к&nbsp; нужному полю
+    <code>[".items.0.metadata.name"]</code> — путь к&nbsp; нужному полю
   </li>
   <li>
     <code>["-"]</code> — Базовое значение если значение не&nbsp; определено
   </li>
 </ul>
 
+:::info
+Просьба обратить внимание на несколько моментов:
+1. urlsToFetch — это массив, в котором каждый элемент содержит результаты выборки, прошедшие через заданные фильтры (labelSelector, fieldSelector).
+2. Если целевой API поддерживает watch и доступен по сокетному соединению, данные приходят потоково в реальном времени. Если такой возможности нет, выполняется обычный REST-запрос.
+:::
 <h3>Типовые применения</h3>
 
 <ul>
@@ -1823,7 +1833,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     spec:
       key: example-details
       urlsToFetch:
-        - /api/clusters/{2}/k8s/api/v1/namespaces/{3}/examples/{6}
+        - cluster: "{2}"
+          apiGroup: "apps"
+          apiVersion: "v1"
+          namespace: "{3}"
+          plural: "deployments"
       data:
         - type: antdText
           data:
@@ -2953,6 +2967,211 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
 
     <tr>
+      <td><code>TogglerSegmented</code></td>
+      <td>Переключатель с сегментами для выбора одного из нескольких значений</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/TogglerSegmented.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: TogglerSegmented
+                data:
+                  id: toggler-segmented
+                  reqIndex: 0
+                  jsonPathToValue: ".spec.togglers.segmentedToggler"
+                  notificationSuccessMessage: Updated successfully
+                  notificationSuccessMessageDescription: String/exist toggler has been updated
+                  notificationErrorMessage: Update error
+                  notificationErrorMessageDescription: String/exist toggler has not been updated
+                  endpoint: /api/clusters/{2}/k8s/apis/{5}/{6}/{7}/{8}
+                  pathToValue: /spec/togglers/segmentedToggler
+                  possibleValues:
+                    - one
+                    - two
+                    - three
+                  valuesMap:
+                    - value: 1
+                      renderedValue: one
+                    - value: 2
+                      renderedValue: two
+                    - value: 3
+                      renderedValue: three
+                  containerStyle:
+                    border: "1px solid red"
+                    padding: "10px"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              TogglerSegmented: {
+                id: number | string
+                reqIndex: string
+                jsonPathToValue: string
+                notificationSuccessMessage?: string
+                notificationErrorMessage?: string
+                notificationSuccessMessageDescription?: string
+                notificationErrorMessageDescription?: string
+                containerStyle?: CSSProperties
+                endpoint: string
+                pathToValue: string
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                possibleValues: any[]
+                valuesMap?: {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  value: any
+                  renderedValue: string | number
+                }[]
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Toggler</code></td>
+      <td>Переключатель для выбора одного из двух значений</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Toggler.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: Toggler
+                data:
+                  id: toggler-boolean
+                  reqIndex: 0
+                  jsonPathToValue: ".spec.togglers.booleanToggler"
+                  criteria:
+                    type: "forSuccess"
+                    operator: "equals"
+                    valueToCompare: "true"
+                  notificationSuccessMessage: Updated successfully
+                  notificationSuccessMessageDescription: Boolean toggler has been updated
+                  notificationErrorMessage: Update error
+                  notificationErrorMessageDescription: Boolean toggler has not been updated
+                  endpoint: /api/clusters/{2}/k8s/apis/{5}/{6}/{7}/{8}
+                  pathToValue: /spec/togglers/booleanToggler
+                  valueToSubmit:
+                    onValue: true
+                    offValue: false
+                    # toRemoveWhenOff: boolean
+                  containerStyle:
+                    border: "1px solid red"
+                    padding: "10px"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              Toggler: {
+                id: number | string
+                reqIndex: string
+                jsonPathToValue: string
+                criteria: {
+                  type: 'forSuccess' | 'forError'
+                  operator: 'exists' | 'equals'
+                  valueToCompare?: string
+                }
+                notificationSuccessMessage?: string
+                notificationErrorMessage?: string
+                notificationSuccessMessageDescription?: string
+                notificationErrorMessageDescription?: string
+                containerStyle?: CSSProperties
+                endpoint: string
+                pathToValue: string
+                valueToSubmit: {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  onValue: any
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  offValue?: any
+                  toRemoveWhenOff?: boolean
+                }
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>OwnerRefs</code></td>
+      <td>Ссылки на владельцев ресурсов</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/OwnerRefs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: OwnerRefs
+                data:
+                  id: refs
+                  baseprefix: /openapi-ui
+                  clusterNamePartOfUrl: '{2}'
+                  reqIndex: 0
+                  errorText: error getting refs
+                  notArrayErrorText: refs on path are not arr
+                  emptyArrayErrorText: no refs
+                  isNotRefsArrayErrorText: objects in arr are not refs
+                  containerStyle:
+                    border: "1px solid red"
+                    padding: "10px"
+                  listFlexProps:
+                    gap: 10
+                  jsonPathToArrayOfRefs: ".spec.customRef"
+                  # keysToForcedLabel?: string | string[] // j
+                  baseFactoryClusterSceopedAPIKey: base-factory-clusterscoped-api
+                  baseFactoryClusterSceopedBuiltinKey: base-factory-clusterscoped-builtin
+                  baseFactoryNamespacedAPIKey: base-factory-namespaced-api
+                  baseFactoryNamespacedBuiltinKey: base-factory-namespaced-builtin
+                  baseNamespaceFactoryKey: namespace-details
+                  baseNavigationPluralName: navigations
+                  baseNavigationSpecificName: navigation
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              OwnerRefs: {
+                id: number | string
+                baseprefix?: string
+                clusterNamePartOfUrl: string
+                reqIndex: string // full object for forced labels
+                errorText: string
+                notArrayErrorText: string
+                emptyArrayErrorText: string
+                isNotRefsArrayErrorText: string
+                containerStyle?: CSSProperties
+                listFlexProps?: FlexProps
+                jsonPathToArrayOfRefs: string
+                keysToForcedLabel?: string | string[] // jsonpath or keys as string[]
+                forcedRelatedValuePath?: string
+                baseFactoryNamespacedAPIKey: string
+                baseFactoryClusterSceopedAPIKey: string
+                baseFactoryNamespacedBuiltinKey: string
+                baseFactoryClusterSceopedBuiltinKey: string
+                baseNavigationPluralName: string
+                baseNavigationSpecificName: string
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+
+    <tr>
       <td><code>Events</code></td>
       <td>Редактор YAML для одного ресурса (prefill через API)</td>
       <td>
@@ -3351,202 +3570,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 cluster: string
                 nodeName: string
                 substractHeight?: number
-              }
-            `}
-          />
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td><code>OwnerRefs</code></td>
-      <td>OwnerRef с ссылкой на фабрику</td>
-      <td>
-        <figure style={{ textAlign: 'center', display: 'contents' }}>
-          {/* <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} /> */}
-          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-          </figcaption>
-        </figure>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-          <YamlModal
-            yamlContent={dedent`
-          - type: OwnerRefs
-            data:
-              id: refs
-              baseprefix: /openapi-ui
-              cluster: '{2}'
-              reqIndex: 0
-              errorText: error getting refs
-              notArrayErrorText: refs on path are not arr
-              emptyArrayErrorText: no refs
-              isNotRefsArrayErrorText: objects in arr are not refs
-              jsonPathToArrayOfRefs: ".spec.customRef"
-              baseFactoryClusterSceopedAPIKey: base-factory-clusterscoped-api
-              baseFactoryClusterSceopedBuiltinKey: base-factory-clusterscoped-builtin
-              baseFactoryNamespacedAPIKey: base-factory-namespaced-api
-              baseFactoryNamespacedBuiltinKey: base-factory-namespaced-builtin
-              baseNamespaceFactoryKey: namespace-details
-              baseNavigationPlural: string
-              baseNavigationName: string
-            `}
-          />
-          <YamlModal
-            buttonLabel="Пример структуры"
-            yamlContent={dedent`
-              {
-                id: number | string
-                baseprefix?: string
-                cluster: string
-                reqIndex: string // full object for forced labels
-                errorText: string
-                notArrayErrorText: string
-                emptyArrayErrorText: string
-                isNotRefsArrayErrorText: string
-                containerStyle?: CSSProperties
-                listFlexProps?: FlexProps
-                jsonPathToArrayOfRefs: string
-                forcedApiVersion?: {
-                  kind: string
-                  apiVersion: string
-                }[]
-                forcedNamespace?: string
-                keysToForcedLabel?: string | string[] // jsonpath or keys as string[]
-                forcedRelatedValuePath?: string
-                baseFactoryNamespacedAPIKey: string
-                baseFactoryClusterSceopedAPIKey: string
-                baseFactoryNamespacedBuiltinKey: string
-                baseFactoryClusterSceopedBuiltinKey: string
-                baseNavigationPlural: string
-                baseNavigationName: string
-              }
-            `}
-          />
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td><code>Toggler</code></td>
-      <td>Компонент переключения состояния</td>
-      <td>
-        <figure style={{ textAlign: 'center', display: 'contents' }}>
-          {/* <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} /> */}
-          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-          </figcaption>
-        </figure>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-          <YamlModal
-            yamlContent={dedent`
-            - type: Toggler
-              data:
-                id: toggler-boolean
-                reqIndex: 0
-                jsonPathToValue: ".spec.togglers.booleanToggler"
-                criteria:
-                  type: "forSuccess"
-                  operator: "equals"
-                  valueToCompare: "true"
-                notificationSuccessMessage: Updated successfully
-                notificationSuccessMessageDescription: Boolean toggler has been updated
-                notificationErrorMessage: Update error
-                notificationErrorMessageDescription: Boolean toggler has not been updated
-                endpoint: /api/clusters/{2}/k8s/apis/{5}/{6}/{7}/{8}
-                pathToValue: /spec/togglers/booleanToggler
-                valueToSubmit:
-                  onValue: true
-                  offValue: false
-            `}
-          />
-          <YamlModal
-            buttonLabel="Пример структуры"
-            yamlContent={dedent`
-              {
-                  id: number | string
-                  reqIndex: string
-                  jsonPathToValue: string
-                  criteria: {
-                    type: 'forSuccess' | 'forError'
-                    operator: 'exists' | 'equals'
-                    valueToCompare?: string
-                  }
-                  notificationSuccessMessage?: string
-                  notificationErrorMessage?: string
-                  notificationSuccessMessageDescription?: string
-                  notificationErrorMessageDescription?: string
-                  containerStyle?: CSSProperties
-                  endpoint: string
-                  pathToValue: string
-                  valueToSubmit: {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    onValue: any
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    offValue?: any
-                    toRemoveWhenOff?: boolean
-                  }
-              }
-            `}
-          />
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td><code>TogglerSegmented</code></td>
-      <td>Компонент переключения состояния из множества возможных</td>
-      <td>
-        <figure style={{ textAlign: 'center', display: 'contents' }}>
-          {/* <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} /> */}
-          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-          </figcaption>
-        </figure>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-          <YamlModal
-            yamlContent={dedent`
-              - type: TogglerSegmented
-                data:
-                  id: toggler-segmented
-                  reqIndex: 0
-                  jsonPathToValue: ".spec.togglers.segmentedToggler"
-                  notificationSuccessMessage: Updated successfully
-                  notificationSuccessMessageDescription: String/exist toggler has been updated
-                  notificationErrorMessage: Update error
-                  notificationErrorMessageDescription: String/exist toggler has not been updated
-                  endpoint: /api/clusters/{2}/k8s/apis/{5}/{6}/{7}/{8}
-                  pathToValue: /spec/togglers/segmentedToggler
-                  possibleValues:
-                    - one
-                    - two
-                    - three
-                  valuesMap:
-                    - value: 1
-                      renderedValue: one
-                    - value: 2
-                      renderedValue: two
-                    - value: 3
-                      renderedValue: three
-            `}
-          />
-          <YamlModal
-            buttonLabel="Пример структуры"
-            yamlContent={dedent`
-              {
-                id: number | string
-                reqIndex: string
-                jsonPathToValue: string
-                notificationSuccessMessage?: string
-                notificationErrorMessage?: string
-                notificationSuccessMessageDescription?: string
-                notificationErrorMessageDescription?: string
-                containerStyle?: CSSProperties
-                endpoint: string
-                pathToValue: string
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                possibleValues: any[]
-                valuesMap?: {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  value: any
-                  renderedValue: string | number
-                }[]
               }
             `}
           />
