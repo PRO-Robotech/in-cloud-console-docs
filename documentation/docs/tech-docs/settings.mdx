@@ -1142,6 +1142,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       spec:
         additionalPrinterColumns:
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - children:
@@ -1163,6 +1164,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: Name
           type: factory
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
               - type: ResourceBadge
@@ -1183,6 +1185,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: Namespace
           type: factory
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - children:
@@ -1213,6 +1216,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: QOS
           type: string
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - data:
@@ -1275,6 +1279,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: Status
           type: factory
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - children:
@@ -1805,10 +1810,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 :::info
 Просьба обратить внимание на несколько моментов:
+
 1. urlsToFetch — это массив, в котором каждый элемент содержит результаты выборки, прошедшие через заданные фильтры (labelSelector, fieldSelector).
 2. Если целевой API поддерживает watch и доступен по сокетному соединению, данные приходят потоково в реальном времени. Если такой возможности нет, выполняется обычный REST-запрос.
-:::
-<h3>Типовые применения</h3>
+   :::
+   <h3>Типовые применения</h3>
 
 <ul>
   <li>Страницы деталей ресурсов (Pods, Deployments, Nodes)</li>
