@@ -1787,12 +1787,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 <h3>Обработка данных</h3>
 
 <p>
-  Данные, полученные из <code>urlsToFetch</code>, доступны во всех компонентах через JSONPath с синтаксисом:
+  Данные, полученные из <code>urlsToFetch</code>, доступны во всех компонентах через JSONPath с синтаксисом
+  (поддерживает вложенность):
 </p>
 
 <CodeBlock language="yaml">
   {dedent`
     text: '{reqsJsonPath[0][".items.0.metadata.name"]["-"]}'
+  `}
+</CodeBlock>
+
+<CodeBlock language="yaml">
+  {dedent`
+    text: |
+        {reqsJsonPath[0]['.additionalReqsData.0.items[?(@.metadata.name=="{reqsJsonPath[0][".metadata.name"]["-"]}")].containers.0.usage.cpu']['-']}-CUSTOM!!!
   `}
 </CodeBlock>
 
