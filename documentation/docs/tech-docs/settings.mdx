@@ -2426,7 +2426,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             yamlContent={dedent`
               {
                 id: number | string
-                bytesValue: string // reqs
+                bytesValue: string | string[] // reqs
                 unit?: TUnitInput // do not enter if wanna auto format
                 /** If true, returns "12.3 GiB" instead of just 12.3 */
                 format?: boolean
@@ -2437,6 +2437,54 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 standard?: 'si' | 'iec'
                 notANumberText?: string
                 style?: CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>ConverterCores</code></td>
+      <td>Конвертирует core в читаемый размер</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ConverterBytes.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+
+          <YamlModal
+            yamlContent={dedent`
+              - type: ConverterCores
+                data:
+                  id: example-converter-cores
+                  coresValue: "{reqsJsonPath[0]['.sizeCores']['-']}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                /** Raw text that may contain a number or number+unit like "0.5", "500m", "2 vcpu" */
+                coresValue: string | string[]
+                /** Target unit; omit to auto format (core vs mcore) */
+                unit?: TCoreUnitInput
+                /** If true, returns "500 mcore" instead of just 500 */
+                format?: boolean
+                /** Max fraction digits when formatting (default 2) */
+                precision?: number
+                /** Locale for number formatting (default: undefined => user agent) */
+                locale?: string
+                notANumberText?: string
+                style?: CSSProperties
+                /** If provided, value is in this unit instead of raw "cores" */
+                fromUnit?: TCoreUnitInput
+                /** If provided, convert to this explicit unit; omit for auto-format */
+                toUnit?: TCoreUnitInput
+                /** If omitted and toUnit is missing, use auto-scaling (core vs mcore) */
               }
             `}
           />
