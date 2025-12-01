@@ -902,6 +902,19 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
+    <tr>
+      <td><code>spec.additionalPrinterColumnsDisableSortersAndFilters[]</code></td>
+      <td>array</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            additionalPrinterColumnsDisableSortersAndFilters:
+              - CPU
+          `}
+        />
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
@@ -920,8 +933,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </dt>
 <dd>Подстановка значений по умолчанию, если вычисленное значение пустое или не&nbsp; определено.</dd>
 
-  <dt><code>spec.additionalPrinterColumnsTrimLengths[]</code></dt>
-  <dd>Правила обрезки строковых значений по длине для указанных колонок.</dd>
+<dt>
+  <code>spec.additionalPrinterColumnsTrimLengths[]</code>
+</dt>
+<dd>Правила обрезки строковых значений по длине для указанных колонок.</dd>
+
+<dt><code>spec.additionalPrinterColumnsDisableSortersAndFilters[]</code></dt>
+<dd>Правила отключения сортировок и фильтров на колонке таблицы.</dd>
 </dl>
 
 <h3>
