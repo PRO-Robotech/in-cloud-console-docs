@@ -903,13 +903,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
 
     <tr>
-      <td><code>spec.additionalPrinterColumnsDisableSortersAndFilters[]</code></td>
+      <td><code>spec.additionalPrinterColumnsCustomSortersAndFilters[]</code></td>
       <td>array</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            additionalPrinterColumnsDisableSortersAndFilters:
-              - CPU
+            additionalPrinterColumnsCustomSortersAndFilters:
+              - key: Namespace
+                type: disabled
           `}
         />
       </td>
@@ -938,8 +939,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </dt>
 <dd>Правила обрезки строковых значений по длине для указанных колонок.</dd>
 
-<dt><code>spec.additionalPrinterColumnsDisableSortersAndFilters[]</code></dt>
-<dd>Правила отключения сортировок и фильтров на колонке таблицы.</dd>
+<dt><code>spec.additionalPrinterColumnsCustomSortersAndFilters[]</code></dt>
+<dd>Правила сортировок, либо отключение сортировок и фильтров на колонке таблицы.</dd>
 </dl>
 
 <h3>
