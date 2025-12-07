@@ -1668,6 +1668,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
     <tr>
       <td>
+        <code>spec.projects.aliasPath</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.uid']}
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
         <code>spec.instances.clear</code>
       </td>
       <td>string</td>
@@ -1696,6 +1710,34 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
     <tr>
       <td>
+        <code>spec.instances.mapOptionsPattern</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к value.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.namespace']}-{reqsJsonPath[0]['.metadata.name']}
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.instances.aliasPath</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.uid']}
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
         <code>spec.namespaces.clear</code>
       </td>
       <td>string</td>
@@ -1718,6 +1760,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <YamlModal
           yamlContent={dedent`
             /openapi-ui/\{selectedCluster}/\{value}/builtin-table/pods
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.namespaces.aliasPath</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.uid']}
           `}
         />
       </td>
