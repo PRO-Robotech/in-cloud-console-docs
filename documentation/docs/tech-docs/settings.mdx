@@ -3715,6 +3715,43 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
+    <tr>
+      <td><code>VMVNC</code></td>
+      <td>VNC websockify streaming</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: VMVNC
+                data:
+                  id: VMVNC
+                  cluster: "{2}"
+                  namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                  vmName: virtual-machine-{reqsJsonPath[0]['.metadata.name']['-']}
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                cluster?: string
+                namespace?: string
+                vmName?: string
+                forcedFullWsPath?: string
+                substractHeight?: number
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
