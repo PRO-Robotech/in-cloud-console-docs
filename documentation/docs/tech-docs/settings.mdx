@@ -3025,7 +3025,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>VisibilityContainer</code></td>
-      <td>Показывает блок при наличии содержимого (обычно из <code>value</code>)</td>
+      <td>Показывает блок при наличии содержимого (обычно из <code>value</code>). Можно задавать критерии</td>
       <td>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <YamlModal
@@ -3038,6 +3038,17 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                     margin: 0
                     padding: 0
                   children: []
+              - type: VisibilityContainer
+                data:
+                  id: vc-pod-running
+                  value: "{reqsJsonPath[0]['.status.phase']['-']}"
+                  criteria: "equals"
+                  valueToCompare: ["Running"]
+                children:
+                  - type: antdText
+                    data:
+                      id: vc-pod-running-text
+                      text: "Pod phase == Running"
             `}
           />
           <YamlModal
@@ -3046,6 +3057,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               {
                 id: number | string
                 value: string
+                criteria?: 'equals' | 'notEquals' | 'exists' | 'notExists'
+                valueToCompare?: string | string[]
               }
             `}
           />
