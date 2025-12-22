@@ -3765,6 +3765,112 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
+    <tr>
+      <td><code>PrometheusGraph</code></td>
+      <td>PromQL Graphs</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: PrometheusGraph
+                data:
+                  id: PrometheusGraph
+                  type: MatrixToAreaSingle
+                  baseUrl: http://localhost:9090/api/v1/
+                  query: 'container_memory_usage_bytes'
+                  range: '1h'
+                  height: 500px
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                type:
+                  | 'MatrixToAreaMulti'
+                  | 'MatrixToAreaSingle'
+                  | 'MatrixToAreaStacked'
+                  | 'MatrixToLineMulti'
+                  | 'MatrixToLineSingle'
+                  | 'MatrixToReducedBar'
+                  | 'MatrixToTableRows'
+                  | 'VectorToBarGauge'
+                  | 'VectorToBarHorizontal'
+                  | 'VectorToBarVertical'
+                  | 'VectorToGaugeRadial'
+                  | 'VectorToPie'
+                  | 'VectorToTableRows'
+                  | 'ScalarToGauge'
+                  | 'ScalarToStat'
+                width?: CSSProperties['width']
+                height?: CSSProperties['height']
+                baseUrl?: string
+                query?: string
+                refetchInterval?: number | false
+                range?: string
+                title?: string
+                min?: number
+                max?: number
+                mode?: 'last' | 'avg' | 'sum' | 'max' | 'min'
+                topN?: number
+              }
+            `}
+          />
+          <YamlModal
+            buttonLabel="Как собираются типы"
+            yamlContent={dedent`
+              type TBaseContainerSizeProps = {
+                width?: CSSProperties['width']
+                height?: CSSProperties['height']
+              }
+              type TBasePromQueryProps = {
+                baseUrl?: string
+                query?: string
+                refetchInterval?: number | false
+              }
+              type TBaseRangeProps = {
+                range?: string
+              }
+              type TBaseTitleProps = {
+                title?: string
+              }
+              type TBaseMinMaxProps = {
+                min?: number
+                max?: number
+              }
+              type TBaseModeProps = {
+                mode?: 'last' | 'avg' | 'sum' | 'max' | 'min'
+              }
+              type TBaseTopNProps = {
+                topN?: number
+              }
+              type TMatrixToLineSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToLineMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToAreaSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToAreaMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToAreaStackedProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToReducedBarProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps & TBaseModeProps
+              type TMatrixToTableRowsProps = TBasePromQueryProps & TBaseRangeProps & TBaseTitleProps
+              type TVectorToBarVerticalProps = TBaseContainerSizeProps & TBasePromQueryProps
+              type TVectorToBarHorizontalProps = TBaseContainerSizeProps & TBasePromQueryProps
+              type TVectorToPieProps = TBaseContainerSizeProps & TBasePromQueryProps
+              type TVectorToTableRowsProps = TBasePromQueryProps & TBaseTitleProps
+              type TVectorToBarGaugeProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseTopNProps
+              type TVectorToGaugeRadialProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
+              type TScalarToStatProps = TBasePromQueryProps & TBaseTitleProps
+              type TScalarToGaugeProps = TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
