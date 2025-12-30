@@ -3786,6 +3786,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   baseUrl: http://localhost:9090/api/v1/
                   query: 'container_memory_usage_bytes'
                   range: '1h'
+                  formatter: 'bytes'
                   height: 500px
             `}
           />
@@ -3821,6 +3822,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 max?: number
                 mode?: 'last' | 'avg' | 'sum' | 'max' | 'min'
                 topN?: number
+                formatter: 'bytes' | 'cores' | 'unit' | 'none'
+                unit?: string
               }
             `}
           />
