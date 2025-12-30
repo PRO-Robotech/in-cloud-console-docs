@@ -3824,6 +3824,50 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 topN?: number
                 formatter: 'bytes' | 'cores' | 'unit' | 'none'
                 unit?: string
+                dateFormatter?:  {
+                  style?:
+                    | 'date'
+                    | 'time'
+                    | 'datetime'
+                    | 'timestamp' // date+time+seconds
+                    | 'full' // date+time+seconds+tz
+                    | 'relative'
+                    | 'iso' // normalized ISO string
+                    | 'custom'
+                  locale?: string
+                  timeZone?: string
+                  hour12?: boolean
+                  timeZoneName?: 'short' | 'long' | 'shortOffset' | 'longOffset' | 'shortGeneric' | 'longGeneric'
+                  relative?: {
+                    unit?:  // default chosen automatically
+                      | "year"
+                      | "years"
+                      | "quarter"
+                      | "quarters"
+                      | "month"
+                      | "months"
+                      | "week"
+                      | "weeks"
+                      | "day"
+                      | "days"
+                      | "hour"
+                      | "hours"
+                      | "minute"
+                      | "minutes"
+                      | "second"
+                      | "seconds"
+                    numeric?: 'always' | 'auto'
+                    // if provided, compare against this "now" (useful for tests)
+                    now?: string | number | Date
+                  }
+                  intl?: {
+                      formatMatcher?: "basic" | "best fit" | "best fit" | undefined;
+                      dateStyle?: "full" | "long" | "medium" | "short" | undefined;
+                      timeStyle?: "full" | "long" | "medium" | "short" | undefined;
+                      dayPeriod?: "narrow" | "short" | "long" | undefined;
+                      fractionalSecondDigits?: 1 | 2 | 3 | undefined;
+                  }
+                }
               }
             `}
           />
