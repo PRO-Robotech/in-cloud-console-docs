@@ -902,6 +902,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
+    <tr>
+      <td><code>spec.additionalPrinterColumnsCustomSortersAndFilters[]</code></td>
+      <td>array</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            additionalPrinterColumnsCustomSortersAndFilters:
+              - key: Namespace
+                type: disabled
+          `}
+        />
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
@@ -920,8 +934,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </dt>
 <dd>Подстановка значений по умолчанию, если вычисленное значение пустое или не&nbsp; определено.</dd>
 
-  <dt><code>spec.additionalPrinterColumnsTrimLengths[]</code></dt>
-  <dd>Правила обрезки строковых значений по длине для указанных колонок.</dd>
+<dt>
+  <code>spec.additionalPrinterColumnsTrimLengths[]</code>
+</dt>
+<dd>Правила обрезки строковых значений по длине для указанных колонок.</dd>
+
+<dt><code>spec.additionalPrinterColumnsCustomSortersAndFilters[]</code></dt>
+<dd>Правила сортировок, либо отключение сортировок и фильтров на колонке таблицы.</dd>
 </dl>
 
 <h3>
@@ -1142,6 +1161,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       spec:
         additionalPrinterColumns:
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - children:
@@ -1163,6 +1183,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: Name
           type: factory
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
               - type: ResourceBadge
@@ -1183,6 +1204,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: Namespace
           type: factory
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - children:
@@ -1213,6 +1235,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: QOS
           type: string
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - data:
@@ -1275,6 +1298,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           name: Status
           type: factory
         - customProps:
+            # supports urlsToFetch. Row data will be req0. First fetch will be req1
             disableEventBubbling: true
             items:
             - children:
@@ -1645,6 +1669,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
     <tr>
       <td>
+        <code>spec.projects.aliasPath</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.uid']}
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
         <code>spec.instances.clear</code>
       </td>
       <td>string</td>
@@ -1673,6 +1711,34 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
     <tr>
       <td>
+        <code>spec.instances.mapOptionsPattern</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к value.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.namespace']}-{reqsJsonPath[0]['.metadata.name']}
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.instances.aliasPath</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.uid']}
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
         <code>spec.namespaces.clear</code>
       </td>
       <td>string</td>
@@ -1695,6 +1761,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <YamlModal
           yamlContent={dedent`
             /openapi-ui/\{selectedCluster}/\{value}/builtin-table/pods
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.namespaces.aliasPath</code>
+      </td>
+      <td>string</td>
+      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            {reqsJsonPath[0]['.metadata.uid']}
           `}
         />
       </td>
@@ -1782,12 +1862,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 <h3>Обработка данных</h3>
 
 <p>
-  Данные, полученные из <code>urlsToFetch</code>, доступны во всех компонентах через JSONPath с синтаксисом:
+  Данные, полученные из <code>urlsToFetch</code>, доступны во всех компонентах через JSONPath с синтаксисом
+  (поддерживает вложенность):
 </p>
 
 <CodeBlock language="yaml">
   {dedent`
     text: '{reqsJsonPath[0][".items.0.metadata.name"]["-"]}'
+  `}
+</CodeBlock>
+
+<CodeBlock language="yaml">
+  {dedent`
+    text: |
+        {reqsJsonPath[0]['.additionalReqsData.0.items[?(@.metadata.name=="{reqsJsonPath[0][".metadata.name"]["-"]}")].containers.0.usage.cpu']['-']}-CUSTOM!!!
   `}
 </CodeBlock>
 
@@ -1805,10 +1893,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 :::info
 Просьба обратить внимание на несколько моментов:
+
 1. urlsToFetch — это массив, в котором каждый элемент содержит результаты выборки, прошедшие через заданные фильтры (labelSelector, fieldSelector).
 2. Если целевой API поддерживает watch и доступен по сокетному соединению, данные приходят потоково в реальном времени. Если такой возможности нет, выполняется обычный REST-запрос.
-:::
-<h3>Типовые применения</h3>
+   :::
+   <h3>Типовые применения</h3>
 
 <ul>
   <li>Страницы деталей ресурсов (Pods, Deployments, Nodes)</li>
@@ -2412,7 +2501,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             yamlContent={dedent`
               {
                 id: number | string
-                bytesValue: string // reqs
+                bytesValue: string | string[] // reqs
                 unit?: TUnitInput // do not enter if wanna auto format
                 /** If true, returns "12.3 GiB" instead of just 12.3 */
                 format?: boolean
@@ -2423,6 +2512,54 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 standard?: 'si' | 'iec'
                 notANumberText?: string
                 style?: CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>ConverterCores</code></td>
+      <td>Конвертирует core в читаемый размер</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ConverterBytes.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+
+          <YamlModal
+            yamlContent={dedent`
+              - type: ConverterCores
+                data:
+                  id: example-converter-cores
+                  coresValue: "{reqsJsonPath[0]['.sizeCores']['-']}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                /** Raw text that may contain a number or number+unit like "0.5", "500m", "2 vcpu" */
+                coresValue: string | string[]
+                /** Target unit; omit to auto format (core vs mcore) */
+                unit?: TCoreUnitInput
+                /** If true, returns "500 mcore" instead of just 500 */
+                format?: boolean
+                /** Max fraction digits when formatting (default 2) */
+                precision?: number
+                /** Locale for number formatting (default: undefined => user agent) */
+                locale?: string
+                notANumberText?: string
+                style?: CSSProperties
+                /** If provided, value is in this unit instead of raw "cores" */
+                fromUnit?: TCoreUnitInput
+                /** If provided, convert to this explicit unit; omit for auto-format */
+                toUnit?: TCoreUnitInput
+                /** If omitted and toUnit is missing, use auto-scaling (core vs mcore) */
               }
             `}
           />
@@ -2847,6 +2984,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   namespace?: string
                 }
                 pathToItems: string | string[] // jsonpath or keys as string[]
+                additionalReqsDataToEachItem?: number[]
                 cluster: string
                 labelsSelector?: Record<string, string>
                 labelsSelectorFull?: {
@@ -2854,6 +2992,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   pathToLabels: string | string[] // jsonpath or keys as string[]
                 }
                 fieldSelector?: Record<string, string>
+                pathToKey?: string // jsonpath for each row
                 baseprefix?: string
                 resourceSchema?: TJSON
                 dataForControls?: {
@@ -2887,7 +3026,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>VisibilityContainer</code></td>
-      <td>Показывает блок при наличии содержимого (обычно из <code>value</code>)</td>
+      <td>Показывает блок при наличии содержимого (обычно из <code>value</code>). Можно задавать критерии</td>
       <td>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <YamlModal
@@ -2900,6 +3039,17 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                     margin: 0
                     padding: 0
                   children: []
+              - type: VisibilityContainer
+                data:
+                  id: vc-pod-running
+                  value: "{reqsJsonPath[0]['.status.phase']['-']}"
+                  criteria: "equals"
+                  valueToCompare: ["Running"]
+                children:
+                  - type: antdText
+                    data:
+                      id: vc-pod-running-text
+                      text: "Pod phase == Running"
             `}
           />
           <YamlModal
@@ -2908,6 +3058,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               {
                 id: number | string
                 value: string
+                criteria?: 'equals' | 'notEquals' | 'exists' | 'notExists'
+                valueToCompare?: string | string[]
               }
             `}
           />
@@ -3569,8 +3721,199 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 id: number | string
                 cluster: string
                 nodeName: string
+                listPodTemplatesNs?: string
                 substractHeight?: number
               }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>VMVNC</code></td>
+      <td>VNC websockify streaming</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: VMVNC
+                data:
+                  id: VMVNC
+                  cluster: "{2}"
+                  namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                  vmName: virtual-machine-{reqsJsonPath[0]['.metadata.name']['-']}
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                cluster?: string
+                namespace?: string
+                vmName?: string
+                forcedFullWsPath?: string
+                substractHeight?: number
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>PrometheusGraph</code></td>
+      <td>PromQL Graphs</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: PrometheusGraph
+                data:
+                  id: PrometheusGraph
+                  type: MatrixToAreaSingle
+                  baseUrl: http://localhost:9090/api/v1/
+                  query: 'container_memory_usage_bytes'
+                  range: '1h'
+                  formatter: 'bytes'
+                  height: 500px
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                type:
+                  | 'MatrixToAreaMulti'
+                  | 'MatrixToAreaSingle'
+                  | 'MatrixToAreaStacked'
+                  | 'MatrixToLineMulti'
+                  | 'MatrixToLineSingle'
+                  | 'MatrixToReducedBar'
+                  | 'MatrixToTableRows'
+                  | 'VectorToBarGauge'
+                  | 'VectorToBarHorizontal'
+                  | 'VectorToBarVertical'
+                  | 'VectorToGaugeRadial'
+                  | 'VectorToPie'
+                  | 'VectorToTableRows'
+                  | 'ScalarToGauge'
+                  | 'ScalarToStat'
+                width?: CSSProperties['width']
+                height?: CSSProperties['height']
+                baseUrl?: string
+                query?: string
+                refetchInterval?: number | false
+                range?: string
+                title?: string
+                min?: number
+                max?: number
+                mode?: 'last' | 'avg' | 'sum' | 'max' | 'min'
+                topN?: number
+                formatter: 'bytes' | 'cores' | 'unit' | 'none'
+                unit?: string
+                dateFormatter?:  {
+                  style?:
+                    | 'date'
+                    | 'time'
+                    | 'datetime'
+                    | 'timestamp' // date+time+seconds
+                    | 'full' // date+time+seconds+tz
+                    | 'relative'
+                    | 'iso' // normalized ISO string
+                    | 'custom'
+                  locale?: string
+                  timeZone?: string
+                  hour12?: boolean
+                  timeZoneName?: 'short' | 'long' | 'shortOffset' | 'longOffset' | 'shortGeneric' | 'longGeneric'
+                  relative?: {
+                    unit?:  // default chosen automatically
+                      | "year"
+                      | "years"
+                      | "quarter"
+                      | "quarters"
+                      | "month"
+                      | "months"
+                      | "week"
+                      | "weeks"
+                      | "day"
+                      | "days"
+                      | "hour"
+                      | "hours"
+                      | "minute"
+                      | "minutes"
+                      | "second"
+                      | "seconds"
+                    numeric?: 'always' | 'auto'
+                    // if provided, compare against this "now" (useful for tests)
+                    now?: string | number | Date
+                  }
+                  intl?: {
+                      formatMatcher?: "basic" | "best fit" | "best fit" | undefined;
+                      dateStyle?: "full" | "long" | "medium" | "short" | undefined;
+                      timeStyle?: "full" | "long" | "medium" | "short" | undefined;
+                      dayPeriod?: "narrow" | "short" | "long" | undefined;
+                      fractionalSecondDigits?: 1 | 2 | 3 | undefined;
+                  }
+                }
+              }
+            `}
+          />
+          <YamlModal
+            buttonLabel="Как собираются типы"
+            yamlContent={dedent`
+              type TBaseContainerSizeProps = {
+                width?: CSSProperties['width']
+                height?: CSSProperties['height']
+              }
+              type TBasePromQueryProps = {
+                baseUrl?: string
+                query?: string
+                refetchInterval?: number | false
+              }
+              type TBaseRangeProps = {
+                range?: string
+              }
+              type TBaseTitleProps = {
+                title?: string
+              }
+              type TBaseMinMaxProps = {
+                min?: number
+                max?: number
+              }
+              type TBaseModeProps = {
+                mode?: 'last' | 'avg' | 'sum' | 'max' | 'min'
+              }
+              type TBaseTopNProps = {
+                topN?: number
+              }
+              type TMatrixToLineSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToLineMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToAreaSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToAreaMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToAreaStackedProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
+              type TMatrixToReducedBarProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps & TBaseModeProps
+              type TMatrixToTableRowsProps = TBasePromQueryProps & TBaseRangeProps & TBaseTitleProps
+              type TVectorToBarVerticalProps = TBaseContainerSizeProps & TBasePromQueryProps
+              type TVectorToBarHorizontalProps = TBaseContainerSizeProps & TBasePromQueryProps
+              type TVectorToPieProps = TBaseContainerSizeProps & TBasePromQueryProps
+              type TVectorToTableRowsProps = TBasePromQueryProps & TBaseTitleProps
+              type TVectorToBarGaugeProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseTopNProps
+              type TVectorToGaugeRadialProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
+              type TScalarToStatProps = TBasePromQueryProps & TBaseTitleProps
+              type TScalarToGaugeProps = TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
             `}
           />
         </div>
