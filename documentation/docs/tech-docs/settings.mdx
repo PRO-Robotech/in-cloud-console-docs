@@ -3697,7 +3697,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>NodeTerminal</code></td>
-      <td>Exec в отдельный Pod на&nbsp; выбранной ноде</td>
+      <td>Exec в отдельный Pod на&nbsp; выбранной ноде. Предварительно необходимо описать PodTemplate в NS, который будет указан в параметрах</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3721,8 +3721,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 id: number | string
                 cluster: string
                 nodeName: string
-                listPodTemplatesNs?: string
                 substractHeight?: number
+                listPodTemplatesNs: string // Required - namespace where PodTemplates are stored
               }
             `}
           />
@@ -4473,6 +4473,83 @@ Factory поддерживает версионность API. Вы можете
 :::note
 Страница <code>Search</code> является частью общей системы визуализации Factory и использует единый механизм отображения данных, включая поддержку фильтрации, подсветку совпадений и контекстные переходы.
 :::
+
+## Plugins
+
+Есть два типа поддерживаемых плагинов:
+
+- Плагины с фиксированным названием: `plugin-header`, `plugin-navigation`, `plugin-sidebar`, отвечающие за соответствующие блоки в ui.
+- Плагины с динамическим именем, доступные по адресу: `:prefix/:cluster/:namespace?/:syntheticProject?/plugins/:pluginName/*`
+
+Репозиторий с [примером плагина](https://github.com/PRO-Robotech/openapi-ui-plugin-example)
+
+Плагины должны быть настроены в чарте таким образом, чтобы `remoteEntry.js` был доступен пользователю из браузера.
+
+Плагины настраиваются через манифест в виде JSON, указанный в качестве ENV-переменной:
+
+<table>
+  <thead>
+    <tr>
+      <th>Тип</th>
+      <th>Где указывать</th>
+      <th>Пример env</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <p>С фиксированным</p>
+      </td>
+      <td>
+        <p>UI</p>
+      </td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+          MF_PLUGINS_NO_CLUSTER='{
+              "plugin-header": {
+                "name": "plugin-example",
+                "entry": "путь/до/remoteEntry.js",
+                "exposedModule": "./App"
+              },
+              "plugin-navigation": {
+                "name": "plugin-example",
+                "entry": "путь/до/remoteEntry.js",
+                "exposedModule": "./App"
+              },
+              "plugin-sidebar": {
+                "name": "plugin-example",
+                "entry": "путь/до/remoteEntry.js",
+                "exposedModule": "./App"
+              }
+            }'
+        `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>С динамическом</p>
+      </td>
+      <td>
+        <p>BFF</p>
+      </td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+          MF_PLUGINS_JSON='{
+            "plugin-example": {
+              "name": "plugin-example",
+              "entry": "путь/до/remoteEntry.js",
+              "exposedModule": "./App"
+            }
+          }'
+        `}
+        />
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
