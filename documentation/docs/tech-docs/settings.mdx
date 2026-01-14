@@ -3903,17 +3903,30 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               type TBaseTopNProps = {
                 topN?: number
               }
+              type TMatrixTableColumnsConfig = {
+                series?: boolean // shown by default
+                min?: boolean // shown by default
+                max?: boolean // shown by default
+                mean?: boolean
+                current?: boolean // shown by default
+                currentTs?: boolean // shown by default
+              }
+              type TVectorTableColumnsConfig = {
+                id?: boolean // shown by default
+                value?: boolean // shown by default
+                timestamp?: boolean // shown by default
+              }
               type TMatrixToLineSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToLineMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToAreaSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToAreaMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToAreaStackedProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToReducedBarProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps & TBaseModeProps
-              type TMatrixToTableRowsProps = TBasePromQueryProps & TBaseRangeProps & TBaseTitleProps
+              type TMatrixToTableRowsProps = TBasePromQueryProps & TBaseRangeProps & TBaseTitleProps & { tableColumns?: TMatrixTableColumnsConfig }
               type TVectorToBarVerticalProps = TBaseContainerSizeProps & TBasePromQueryProps
               type TVectorToBarHorizontalProps = TBaseContainerSizeProps & TBasePromQueryProps
               type TVectorToPieProps = TBaseContainerSizeProps & TBasePromQueryProps
-              type TVectorToTableRowsProps = TBasePromQueryProps & TBaseTitleProps
+              type TVectorToTableRowsProps = TBasePromQueryProps & TBaseTitleProps & { tableColumns?: TVectorTableColumnsConfig }
               type TVectorToBarGaugeProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseTopNProps
               type TVectorToGaugeRadialProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
               type TScalarToStatProps = TBasePromQueryProps & TBaseTitleProps
