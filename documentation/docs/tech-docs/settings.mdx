@@ -3697,7 +3697,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>NodeTerminal</code></td>
-      <td>Exec в отдельный Pod на&nbsp; выбранной ноде</td>
+      <td>Exec в отдельный Pod на&nbsp; выбранной ноде. Предварительно необходимо описать PodTemplate в NS, который будет указан в параметрах</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3721,8 +3721,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 id: number | string
                 cluster: string
                 nodeName: string
-                listPodTemplatesNs?: string
                 substractHeight?: number
+                listPodTemplatesNs: string // Required - namespace where PodTemplates are stored
               }
             `}
           />
