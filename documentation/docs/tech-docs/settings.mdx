@@ -4069,7 +4069,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
-
     <tr>
       <td><code>AggregatedCounterCard</code></td>
       <td>Multi proposal counter card</td>
@@ -4390,6 +4389,105 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                         }
                     activeType?: TActiveTypeUnion
                   }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>antdIcons</code></td>
+      <td>Icons from Antd Icons package to use</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: antdIcons
+                data:
+                  id: example-antd-icons
+                  iconName: UserOutlined
+                  iconProps:
+                    style:
+                      fontSize: 24
+                  containerStyle:
+                    display: inline-flex
+                    alignItems: center
+                    gap: 8
+              - type: antdIcons
+                data:
+                  id: example-antd-icons-spinning
+                  iconName: LoadingOutlined
+                  iconProps:
+                    spin: true
+                    style:
+                      fontSize: 24
+                  containerStyle:
+                    display: inline-flex
+                    alignItems: center
+                    gap: 8
+              - type: antdIcons
+                data:
+                  id: example-antd-icons-rotated-colored
+                  iconName: SettingOutlined
+                  iconProps:
+                    rotate: 45
+                    style:
+                      fontSize: 24
+                      color: "#1677ff"
+                  containerStyle:
+                    display: inline-flex
+                    alignItems: center
+                    gap: 8
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                iconName: Exclude<keyof typeof AntIcons, 'createFromIconfontCN'> // https://5x.ant.design/components/icon/
+                iconProps?: AntdIconProps // color can be like token.colorSuccess
+                containerStyle?: React.CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Base64Icon</code></td>
+      <td>Base 64 encoded icon</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: Base64Icon
+                data:
+                  id: example-base64-icon-dark
+                  base64Icon: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfMTk1M18yNDAzNCkiPjxwYXRoIGQ9Ik0yMy40MTEgMTAuNTcxN0wyMi42MTgxIDIuMTk4NDRDMjIuNTc3OSAxLjc2NDUxIDIyLjIzMjQgMS40MjE2NSAyMS43OTg1IDEuMzc4NzlMMTMuNDI1MiAwLjU4NTkzOEgxMy40MTQ1QzEzLjMyODggMC41ODU5MzggMTMuMjYxOCAwLjYxMjcyMyAxMy4yMTEgMC42NjM2MTZMMC42NjcyIDEzLjIwNzRDMC42NDIzNjkgMTMuMjMyMSAwLjYyMjY2OSAxMy4yNjE2IDAuNjA5MjI3IDEzLjI5NEMwLjU5NTc4NiAxMy4zMjY0IDAuNTg4ODY3IDEzLjM2MTEgMC41ODg4NjcgMTMuMzk2MkMwLjU4ODg2NyAxMy40MzEzIDAuNTk1Nzg2IDEzLjQ2NiAwLjYwOTIyNyAxMy40OTg0QzAuNjIyNjY5IDEzLjUzMDggMC42NDIzNjkgMTMuNTYwMyAwLjY2NzIgMTMuNTg1TDEwLjQxMTggMjMuMzI5N0MxMC40NjI3IDIzLjM4MDYgMTAuNTI5NyAyMy40MDc0IDEwLjYwMiAyMy40MDc0QzEwLjY3NDMgMjMuNDA3NCAxMC43NDEzIDIzLjM4MDYgMTAuNzkyMiAyMy4zMjk3TDIzLjMzNiAxMC43ODU5QzIzLjM4OTUgMTAuNzI5NyAyMy40MTYzIDEwLjY1MiAyMy40MTEgMTAuNTcxN1pNMTAuNTk5MyAyMC42NDA0TDMuMzU2NDkgMTMuMzk3NUwxNC4wNjI3IDIuNjkxM0wyMC42Nzg4IDMuMzE4MDhMMjEuMzA1NiA5LjkzNDE1TDEwLjU5OTMgMjAuNjQwNFpNMTYuNTAwMiA1LjEzOTUxQzE1LjIwMTEgNS4xMzk1MSAxNC4xNDMxIDYuMTk3NTUgMTQuMTQzMSA3LjQ5NjY1QzE0LjE0MzEgOC43OTU3NiAxNS4yMDExIDkuODUzOCAxNi41MDAyIDkuODUzOEMxNy43OTkzIDkuODUzOCAxOC44NTc0IDguNzk1NzYgMTguODU3NCA3LjQ5NjY1QzE4Ljg1NzQgNi4xOTc1NSAxNy43OTkzIDUuMTM5NTEgMTYuNTAwMiA1LjEzOTUxWk0xNi41MDAyIDguMzUzOEMxNi4wMjYxIDguMzUzOCAxNS42NDMxIDcuOTcwNzYgMTUuNjQzMSA3LjQ5NjY1QzE1LjY0MzEgNy4wMjI1NSAxNi4wMjYxIDYuNjM5NTEgMTYuNTAwMiA2LjYzOTUxQzE2Ljk3NDMgNi42Mzk1MSAxNy4zNTc0IDcuMDIyNTUgMTcuMzU3NCA3LjQ5NjY1QzE3LjM1NzQgNy45NzA3NiAxNi45NzQzIDguMzUzOCAxNi41MDAyIDguMzUzOFoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvZz48ZGVmcz48Y2xpcFBhdGggaWQ9ImNsaXAwXzE5NTNfMjQwMzQiPjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiLz48L2NsaXBQYXRoPjwvZGVmcz48L3N2Zz4=
+                  containerStyle:
+                    color: token.colorSuccess
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                base64Icon: string
+                containerStyle?: React.CSSProperties // color can be like token.colorSuccess
+              }
             `}
           />
         </div>
