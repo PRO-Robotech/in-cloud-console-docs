@@ -4494,6 +4494,279 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
+    <tr>
+      <td><code>ActionsDropdown</code></td>
+      <td>Actions Dropdown</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                    id: resource-actions
+                    buttonText: Actions
+                    actions:
+                      - type: edit
+                        props:
+                          text: Edit
+                          icon: EditOutlined
+                          cluster: "{2}"
+                          apiVersion: "{5}"
+                          plural: "{6}"
+                          name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                          baseprefix: /openapi-ui
+                      - type: editLabels
+                        props:
+                          text: Edit Labels
+                          icon: TagsOutlined
+                          reqIndex: "0"
+                          jsonPathToLabels: ".items.0.metadata.labels"
+                          endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                          pathToValue: "/metadata/labels"
+                          modalTitle: "Edit Labels"
+                      - type: editAnnotations
+                        props:
+                          text: Edit Annotations
+                          icon: FileTextOutlined
+                          reqIndex: "0"
+                          jsonPathToObj: ".items.0.metadata.annotations"
+                          endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                          pathToValue: "/metadata/annotations"
+                          modalTitle: "Edit Annotations"
+                          cols: [11, 11, 2]
+                      - type: editTaints
+                        props:
+                          text: Edit Taints
+                          icon: StopOutlined
+                          reqIndex: "0"
+                          jsonPathToArray: ".items.0.spec.taints"
+                          endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                          pathToValue: "/spec/taints"
+                          modalTitle: "Edit Taints"
+                          cols: [6, 6, 6, 6]
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+                export type TLabelsBaseProps = {
+                    reqIndex: string
+                    jsonPathToLabels: string
+                  }
+                  export type TLabelsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    maxEditTagTextLength?: number
+                    allowClearEditSelect?: boolean
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    paddingContainerEnd?: string
+                  }
+                  export type TAnnotationsBaseProps = {
+                    reqIndex: string
+                    jsonPathToObj: string
+                  }
+                  export type TAnnotationsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 3
+                  }
+                  export type TTaintsBaseProps = {
+                    reqIndex: string
+                    jsonPathToArray: string
+                  }
+                  export type TTaintsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 4
+                  }
+                  export type TTolerationsBaseProps = {
+                    reqIndex: string
+                    jsonPathToArray: string
+                  }
+                  export type TTolerationsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 5
+                  }
+                type TAntIconName = Exclude<keyof typeof AntIcons, 'createFromIconfontCN'>
+                export type TActionBaseProps = {
+                  icon?: TAntIconName
+                  text: string
+                  disabled?: boolean
+                  tooltip?: string
+                  danger?: boolean
+                }
+                export type TEditActionProps = TActionBaseProps & {
+                  cluster: string
+                  namespace?: string
+                  syntheticProject?: string
+                  apiGroup?: string
+                  apiVersion: string
+                  plural: string
+                  name: string
+                  baseprefix?: string
+                }
+                export type TEditLabelsActionProps = TActionBaseProps & TLabelsBaseProps & TLabelsModalProps
+                export type TEditAnnotationsActionProps = TActionBaseProps & TAnnotationsBaseProps & TAnnotationsModalProps
+                export type TEditTaintsActionProps = TActionBaseProps & TTaintsBaseProps & TTaintsModalProps
+                export type TEditTolerationsActionProps = TActionBaseProps & TTolerationsBaseProps & TTolerationsModalProps
+                export type TActionUnion =
+                  | { type: 'edit'; props: TEditActionProps }
+                  | { type: 'editLabels'; props: TEditLabelsActionProps }
+                  | { type: 'editAnnotations'; props: TEditAnnotationsActionProps }
+                  | { type: 'editTaints'; props: TEditTaintsActionProps }
+                  | { type: 'editTolerations'; props: TEditTolerationsActionProps }
+                export type TActionsDropdownProps = {
+                  id: number | string
+                  buttonText?: string
+                  buttonIcon?: string
+                  containerStyle?: CSSProperties
+                  actions: TActionUnion[]
+                }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>UsageGraphCard</code></td>
+      <td>Card with usage graph and request/limit/used gradient bar</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: DefaultDiv
+                data:
+                  style:
+                    display: grid
+                    gridTemplateColumns: repeat(3, 1fr)
+                    gap: 16px
+                children:
+                  - type: UsageGraphCard
+                    data:
+                      title: CPU, core
+                      baseUrl: http://158.160.222.31:8428/api/v1/
+                      valueStrategy: cpu
+                      # query: |
+                        # sum(rate(container_cpu_usage_seconds_total{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"}[5m]))
+                      query: |
+                        sum(rate(container_cpu_usage_seconds_total[5m]))
+                      range: 1h
+                      requestedQuery: |
+                        sum(kube_pod_container_resource_requests{resource="cpu",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      usedQuery: |
+                        sum(rate(container_cpu_usage_seconds_total{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"}[5m]))
+                      # limitQuery: |
+                          # sum(machine_cpu_cores{node="{reqsJsonPath[0]['.items.0.metadata.name']['-']}",cluster=~"{2}"})
+                      limitQuery: |
+                          sum(machine_cpu_cores{instance="cl1ape149ccv0do3snh5-ahyb"})
+                      refetchInterval: 30000
+                  - type: UsageGraphCard
+                    data:
+                      title: Memory, bytes
+                      baseUrl: http://localhost:9090/api/v1/
+                      valueStrategy: memory
+                      query: |
+                        sum(container_memory_working_set_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      range: 1h
+                      requestedQuery: |
+                        sum(kube_pod_container_resource_requests{resource="memory",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      usedQuery: |
+                        sum(container_memory_working_set_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      limitQuery: |
+                        sum(kube_pod_container_resource_limits{resource="memory",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      refetchInterval: 30000
+                  - type: UsageGraphCard
+                    data:
+                      title: Ephemeral storage, bytes
+                      baseUrl: http://localhost:9090/api/v1/
+                      valueStrategy: memory
+                      query: |
+                        sum(container_fs_usage_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      range: 1h
+                      requestedQuery: |
+                        sum(kube_pod_container_resource_requests{resource="ephemeral-storage",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      usedQuery: |
+                        sum(container_fs_usage_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      limitQuery: |
+                        sum(kube_pod_container_resource_limits{resource="ephemeral-storage",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      refetchInterval: 30000
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                title?: string // default: 'CPU, core'
+                series?: TUsageGraphCardDatum[] // can be provided straight forward
+                containerStyle?: CSSProperties
+                valueStrategy?: 'cpu' | 'memory' | 'bytes'
+                valuePrecision?: number // default 2
+                /* colors; defaults are provided */
+                minColor?: string
+                midColor?: string
+                maxColor?: string
+                /* gradient bar */
+                requested?: number
+                requestedQuery?: string
+                used?: number
+                usedQuery?: string
+                limit?: number
+                limitQuery?: string
+                /* prom */
+                baseUrl?: string
+                query?: string
+                refetchInterval?: number | false // default: 30_000
+                range?: string // default: 1h
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
