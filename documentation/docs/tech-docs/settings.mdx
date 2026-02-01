@@ -2505,6 +2505,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 unit?: TUnitInput // do not enter if wanna auto format
                 /** If true, returns "12.3 GiB" instead of just 12.3 */
                 format?: boolean
+                /** If false and format=true, return formatted number without unit */
+                showUnit?: boolean
                 /** Max fraction digits when formatting (default 2) */
                 precision?: number
                 /** Locale for number formatting (default: undefined => user agent) */
@@ -2549,6 +2551,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 unit?: TCoreUnitInput
                 /** If true, returns "500 mcore" instead of just 500 */
                 format?: boolean
+                /** If false and format=true, return formatted number without unit */
+                showUnit?: boolean
                 /** Max fraction digits when formatting (default 2) */
                 precision?: number
                 /** Locale for number formatting (default: undefined => user agent) */
@@ -4821,6 +4825,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   unit?: TUnitInput // do not enter if wanna auto format
                   /** If true, returns "12.3 GiB" instead of just 12.3 */
                   format?: boolean
+                  /** If false and format=true, return formatted number without unit */
+                  showUnit?: boolean
                   /** Max fraction digits when formatting (default 2) */
                   precision?: number
                   /** Locale for number formatting (default: undefined => user agent) */
@@ -4836,11 +4842,6 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 }
                 export type TCoreCanonicalUnit = 'core' | 'mcore' | 'ucore' | 'ncore'
                 export type TCoreUnitInput = string | TCoreCanonicalUnit
-                export type TCoreConvertOptions = {
-                  format?: boolean
-                  precision?: number
-                  locale?: string
-                }
                 export type TConverterCoresProps = {
                   id: number | string
                   /** Raw text that may contain a number or number+unit like "0.5", "500m", "2 vcpu" */
@@ -4849,6 +4850,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   unit?: TCoreUnitInput
                   /** If true, returns "500 mcore" instead of just 500 */
                   format?: boolean
+                  /** If false and format=true, return formatted number without unit */
+                  showUnit?: boolean
                   /** Max fraction digits when formatting (default 2) */
                   precision?: number
                   /** Locale for number formatting (default: undefined => user agent) */
@@ -4869,9 +4872,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   title?: string // default: 'CPU, core'
                   series?: TUsageGraphCardDatum[] // can be provided straight forward
                   containerStyle?: CSSProperties
-                  valueStrategy?: 'cpu' | 'memory' | 'bytes'
-                  valuePrecision?: number // default 2
-                  hideUnit?: boolean // default true
+                  valueStrategy: 'cpu' | 'memory'
                   converterBytesProps?: Partial<Omit<TConverterBytesProps, 'id' | 'bytesValue'>>
                   converterCoresProps?: Partial<Omit<TConverterCoresProps, 'id' | 'coresValue'>>
                   /* colors; defaults are provided */
