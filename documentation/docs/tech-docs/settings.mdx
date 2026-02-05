@@ -3097,6 +3097,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   type: apis
                   plural: deployments
                   readOnly: false
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
@@ -3433,6 +3437,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   reqIndex: 0
                   selectProps:
                     maxTagTextLength: 35
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
@@ -3513,6 +3521,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   pathToValue: /spec/tolerations
                   reqIndex: 0
                   text: ~counter~ Tolerations
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
@@ -3590,8 +3602,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                     - 6
                     - 6
                     - 6
-                  permissions:
-                    canPatch: true
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
@@ -3676,6 +3690,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   pathToValue: /metadata/annotations
                   reqIndex: 0
                   text: ~counter~ Annotations
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
@@ -4283,6 +4301,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                           - 8
                           - 8
                           - 6
+                          permissionContext:
+                            cluster: "{2}"
+                            apiGroup: "{5}"
+                            plural: "{7}"
                   - type: AggregatedCounterCard
                     data:
                       id: conditions-counter-card
