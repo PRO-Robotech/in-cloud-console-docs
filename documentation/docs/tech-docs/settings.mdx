@@ -2609,7 +2609,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 marketplaceKind: string
                 baseprefix?: string
                 standalone?: boolean
-                forceAddedMode?: boolean
+                addedMode?: boolean
                 showZeroResources?: boolean
               }
             `}
@@ -5346,6 +5346,15 @@ Factory поддерживает версионность API. Вы можете
       <td>
         Определяет способ объединения с оригинальной схемой ресурса: <code>merge</code> (объединить) или{' '}
         <code>replace</code> (заменить полностью).
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <code>forceViewMode</code>
+      </td>
+      <td>
+        Необязательный параметр. Определяет способ отображения: <code>OpenAPI</code> или <code>Manual</code>.
       </td>
       <td></td>
     </tr>
