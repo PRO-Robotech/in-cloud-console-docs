@@ -326,6 +326,33 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
     <tr>
+      <td><code>spec.menuItems[].resourcesList</code></td>
+      <td>Object</td>
+      <td>Объект настроект для листинга массива объектов в Sidebar</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            resourcesList:
+              cluster: "{cluster}"
+              apiVersion: "v1"
+              plural: "namespaces"
+              linkToResource: "/openapi-ui/{cluster}/factory/namespace-details/v1/namespaces/{resourceName}"
+              jsonPathToName: ".metadata.name"
+            ---
+              {
+                cluster: string
+                apiGroup?: string
+                apiVersion: string
+                plural: string
+                namespace?: string
+                linkToResource: string
+                jsonPathToName: string
+              }
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
       <td><code>spec.menuItems[].label</code></td>
       <td>string</td>
       <td>Отображаемое имя группы меню</td>
