@@ -330,26 +330,26 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>Object</td>
       <td>Объект настроект для листинга массива объектов в Sidebar</td>
       <td>
-        <CodeBlock language="yaml">
-          {dedent`
+        <YamlModal
+          yamlContent={dedent`
             resourcesList:
               cluster: "{cluster}"
               apiVersion: "v1"
               plural: "namespaces"
               linkToResource: "/openapi-ui/{cluster}/factory/namespace-details/v1/namespaces/{resourceName}"
               jsonPathToName: ".metadata.name"
-          ---
-            {
-              cluster: string
-              apiGroup?: string
-              apiVersion: string
-              plural: string
-              namespace?: string
-              linkToResource: string
-              jsonPathToName: string
-            }
+            ---
+              {
+                cluster: string
+                apiGroup?: string
+                apiVersion: string
+                plural: string
+                namespace?: string
+                linkToResource: string
+                jsonPathToName: string
+              }
           `}
-        </CodeBlock>
+        />
       </td>
     </tr>
     <tr>
