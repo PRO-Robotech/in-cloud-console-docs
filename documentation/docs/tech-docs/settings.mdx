@@ -4903,6 +4903,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   criteria: TActionVisibilityCriteria
                   valueToCompare?: string | string[]
                 }
+                export type TPermissionContext = {
+                  cluster: string
+                  namespace?: string
+                  apiGroup?: string
+                  plural: string
+                  subresource?: string
+                }
                 export type TActionBaseProps = {
                   icon?: TAntIconName
                   text: string
@@ -4910,6 +4917,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   tooltip?: string
                   danger?: boolean
                   visibleWhen?: TActionVisibility
+                  permissionContext?: TPermissionContext
                 }
                 export type TEditActionProps = TActionBaseProps & {
                   cluster: string
@@ -4954,6 +4962,36 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   modalDescriptionText?: string
                   editModalWidth?: number | string
                 }
+                export type TScaleActionProps = TActionBaseProps & {
+                  endpoint: string
+                  currentReplicas: string
+                  name: string
+                  namespace?: string
+                  apiVersion?: string
+                }
+                export type TTriggerRunActionProps = TActionBaseProps & {
+                  createEndpoint: string
+                  cronJobName: string
+                  jobTemplate: string
+                }
+                export type TDeleteChildrenActionProps = TActionBaseProps & {
+                  children: string
+                  childResourceName: string
+                }
+                export type TRerunLastActionProps = TActionBaseProps & {
+                  createEndpoint: string
+                  sourceJobSpec: string
+                  sourceJobName: string
+                }
+                export type TDrainActionProps = TActionBaseProps & {
+                  bffEndpoint: string
+                  nodeName: string
+                }
+                export type TRollbackActionProps = TActionBaseProps & {
+                  bffEndpoint: string
+                  resourceName: string
+                  resourceEndpoint: string
+                }
                 export type TActionUnion =
                   | { type: 'edit'; props: TEditActionProps }
                   | { type: 'editLabels'; props: TEditLabelsActionProps }
@@ -4968,30 +5006,22 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   | { type: 'rolloutRestart'; props: TRolloutRestartActionProps }
                   | { type: 'evict'; props: TEvictActionProps }
                   | { type: 'openKubeletConfig'; props: TOpenKubeletConfigActionProps }
-                export type TActionsPermissions = {
-                    canUpdate?: boolean // For 'edit' action
-                    canPatch?: boolean // For 'editLabels', 'editAnnotations', 'editTaints', 'editTolerations' actions
-                    canDelete?: boolean // For 'delete' action
-                    canGet?: boolean // For 'get' action
-                    canCreate?: boolean // For 'create' action
-                }
-                export type TPermissionContext = {
-                  cluster: string
-                  namespace?: string
-                  apiGroup?: string
-                  plural: string
-                  subresource?: string
-                }
+                  | { type: 'scale'; props: TScaleActionProps }
+                  | { type: 'triggerRun'; props: TTriggerRunActionProps }
+                  | { type: 'deleteChildren'; props: TDeleteChildrenActionProps }
+                  | { type: 'rerunLast'; props: TRerunLastActionProps }
+                  | { type: 'drain'; props: TDrainActionProps }
+                  | { type: 'rollback'; props: TRollbackActionProps }
+                /** Per-action permission map. Key = "$\{actionType\}-$\{index\}", value = whether action is allowed. */
+                export type TActionsPermissions = Record<string, boolean | undefined>
                 export type TActionsDropdownProps = {
                   id: number | string
                   buttonText?: string
                   buttonVariant?: 'default' | 'icon'
                   containerStyle?: CSSProperties
                   actions: TActionUnion[]
-                  /** Manual permission override. Takes priority over permissionContext. */
+                  /** Manual permission override. Takes priority over per-action permissionContext. */
                   permissions?: TActionsPermissions
-                  /** Resource context for automatic permission checking. */
-                  permissionContext?: TPermissionContext
                 }
             `}
           />
@@ -5652,6 +5682,92 @@ Factory поддерживает версионность API. Вы можете
 
 :::info
 Кастомные типы являются расширением стандартных типов <code>string</code>, <code>number</code>, <code>boolean</code> и&nbsp; работают только в рамках UI in‑Cloud.
+:::
+
+---
+
+## CFOMapping
+
+Ресурс <code>CFOMapping</code> используется вместе с <code>CustomFormsOverride</code> для принудительного
+переопределения <code>customizationId</code> при подготовке формы.
+
+В провайдере формы применяется следующая логика резолва:
+
+1. Если существует <code>CustomFormsOverride</code> с исходным <code>customizationId</code>, используется он.
+2. Иначе UI пытается найти маппинг в <code>spec.mappings[customizationId]</code> и проверить, что целевой
+   <code>customizationId</code> реально существует в <code>CustomFormsOverride</code>.
+3. Если ни исходный, ни mapped ID не найдены, используется <code>fallbackId</code>.
+
+:::info
+CFOMapping читается как один именованный ресурс по селектору <code>metadata.name</code>, а сами соответствия
+хранятся в поле <code>spec.mappings</code> в формате <code>ключ -> целевой customizationId</code>.
+:::
+
+<h3>Пример ресурса</h3>
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: front.in‑Cloud.io/v1alpha1
+    kind: CFOMapping
+    metadata:
+      name: default-cfo-mapping
+    spec:
+      mappings:
+        stock-namespace-apps/v1/deployments: stock-namespace-apps/v1/deployments-v2
+        stock-namespace-/v1/services: stock-namespace-/v1/services-override
+  `}
+</CodeBlock>
+
+<h3>Поля ресурса</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Поле</th>
+      <th>Тип</th>
+      <th>Назначение</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>metadata.name</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>Имя mapping-ресурса. Используется в UI для выбора через fieldSelector.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.mappings</code>
+      </td>
+      <td>
+        <code>Record&lt;string, string&gt;</code>
+      </td>
+      <td>
+        Словарь соответствий исходного <code>customizationId</code> к целевому <code>customizationId</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.mappings.&lt;customizationId&gt;</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>
+        Целевой <code>customizationId</code>, на который будет переключена форма, если он существует в
+        <code>CustomFormsOverride</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+:::tip
+Если mapped <code>customizationId</code> отсутствует среди <code>CustomFormsOverride</code>, UI не применит mapping и
+перейдет к <code>fallbackId</code> (если задан).
 :::
 
 ---
