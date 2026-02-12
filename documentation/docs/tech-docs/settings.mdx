@@ -326,6 +326,33 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
     <tr>
+      <td><code>spec.menuItems[].resourcesList</code></td>
+      <td>Object</td>
+      <td>Объект настроект для листинга массива объектов в Sidebar</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            resourcesList:
+              cluster: "{cluster}"
+              apiVersion: "v1"
+              plural: "namespaces"
+              linkToResource: "/openapi-ui/{cluster}/factory/namespace-details/v1/namespaces/{resourceName}"
+              jsonPathToName: ".metadata.name"
+            ---
+              {
+                cluster: string
+                apiGroup?: string
+                apiVersion: string
+                plural: string
+                namespace?: string
+                linkToResource: string
+                jsonPathToName: string
+              }
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
       <td><code>spec.menuItems[].label</code></td>
       <td>string</td>
       <td>Отображаемое имя группы меню</td>
@@ -2174,16 +2201,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
+              export type TLabelsToSearchParamsProps = {
                 id: number | string
-                reqIndex: number
+                reqIndex: string
                 jsonPathToLabels: string
                 linkPrefix: string
+                textLink?: string
                 errorText: string
-                maxTextLength: number
-                textLink: string
-                style?: CSSProperties
-              }
+                maxTextLength?: number
+                renderLabelsAsRows?: boolean
+              } & Omit<LinkProps, 'id' | 'children' | 'href'>
             `}
           />
         </div>
@@ -2227,7 +2254,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
                   # --- Success criteria ---------------------------------------------------
                   criteriaSuccess: notEquals
-                  stategySuccess: every
+                  strategySuccess: every
                   valueToCompareSuccess:
                     - "Preempted"
                     - "Shutdown"
@@ -2285,7 +2312,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 values: string[] // array of reqsJsonPath
                 criteriaSuccess: 'equals' | 'notEquals'
                 criteriaError: 'equals' | 'notEquals'
-                stategySuccess?: 'some' | 'every' // every - default
+                strategySuccess?: 'some' | 'every' // every - default
                 strategyError?: 'some' | 'every' // every - default
                 valueToCompareSuccess: unknown[]
                 valueToCompareError: unknown[]
@@ -2609,7 +2636,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 marketplaceKind: string
                 baseprefix?: string
                 standalone?: boolean
-                forceAddedMode?: boolean
+                addedMode?: boolean
                 showZeroResources?: boolean
               }
             `}
@@ -3530,13 +3557,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
-                id: number | string
-                reqIndex: string
-                jsonPathToArray: string
-                text: string
-                errorText: string
-                containerStyle?: CSSProperties
+              export type TTolerationsPermissions = {
+                canPatch?: boolean
+              }
+              export type TPermissionContext = {
+                cluster: string
+                namespace?: string
+                apiGroup?: string
+                plural: string
+              }
+              export type TTolerationsModalProps = {
                 notificationSuccessMessage?: string
                 notificationSuccessMessageDescription?: string
                 modalTitle?: string
@@ -3548,18 +3578,26 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 pathToValue?: string
                 editModalWidth?: number | string
                 cols: number[] // 5
-                /** Manual permission override. Takes priority over permissionContext. */
-                permissions?: {
-                  canPatch?: boolean
-                }
-                /** Resource context for automatic permission checking. */
-                permissionContext?: {
-                  cluster: string
-                  namespace?: string
-                  apiGroup?: string
-                  plural: string
-                }
               }
+              export type TTolerationsViewProps = {
+                text: string
+                errorText: string
+                readOnly?: true
+                containerStyle?: CSSProperties
+              }
+              export type TTolerationsBaseProps = {
+                reqIndex: string
+                jsonPathToArray: string
+                /** Manual permission override. Takes priority over permissionContext. */
+                permissions?: TTolerationsPermissions
+                /** Resource context for automatic permission checking. */
+                permissionContext?: TPermissionContext
+              }
+              export type TTolerationsProps = {
+                id: number | string
+              } & TTolerationsBaseProps &
+                TTolerationsViewProps &
+                TTolerationsModalProps
             `}
           />
         </div>
@@ -3637,6 +3675,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               text: string
               errorText: string
               style?: CSSProperties
+              readOnly?: true
               containerStyle?: CSSProperties
             }
             export type TTaintsBaseProps = {
@@ -3699,13 +3738,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
-                id: number | string
-                reqIndex: string
-                jsonPathToObj: string
-                text: string
-                errorText: string
-                containerStyle?: CSSProperties
+              export type TAnnotationsPermissions = {
+                canPatch?: boolean
+              }
+              export type TPermissionContext = {
+                cluster: string
+                namespace?: string
+                apiGroup?: string
+                plural: string
+              }
+              export type TAnnotationsModalProps = {
                 notificationSuccessMessage?: string
                 notificationSuccessMessageDescription?: string
                 modalTitle?: string
@@ -3717,18 +3759,26 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 pathToValue?: string
                 editModalWidth?: number | string
                 cols: number[] // 3
-                /** Manual permission override. Takes priority over permissionContext. */
-                permissions?: {
-                  canPatch?: boolean
-                }
-                /** Resource context for automatic permission checking. */
-                permissionContext?: {
-                  cluster: string
-                  namespace?: string
-                  apiGroup?: string
-                  plural: string
-                }
               }
+              export type TAnnotationsViewProps = {
+                text: string
+                errorText: string
+                readOnly?: true
+                containerStyle?: CSSProperties
+              }
+              export type TAnnotationsBaseProps = {
+                reqIndex: string
+                jsonPathToObj: string
+                /** Manual permission override. Takes priority over permissionContext. */
+                permissions?: TAnnotationsPermissions
+                /** Resource context for automatic permission checking. */
+                permissionContext?: TPermissionContext
+              }
+              export type TAnnotationsProps = {
+                id: number | string
+              } & TAnnotationsBaseProps &
+                TAnnotationsViewProps &
+                TAnnotationsModalProps
             `}
           />
         </div>
@@ -5323,6 +5373,15 @@ Factory поддерживает версионность API. Вы можете
       <td>
         Определяет способ объединения с оригинальной схемой ресурса: <code>merge</code> (объединить) или{' '}
         <code>replace</code> (заменить полностью).
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <code>forceViewMode</code>
+      </td>
+      <td>
+        Необязательный параметр. Определяет способ отображения: <code>OpenAPI</code> или <code>Manual</code>.
       </td>
       <td></td>
     </tr>
