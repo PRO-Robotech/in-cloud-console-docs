@@ -4772,6 +4772,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         </figure> */}
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
           <YamlModal
+            buttonLabel="Pod (CCO row) — full"
             yamlContent={dedent`
               - type: ActionsDropdown
                 data:
@@ -4836,6 +4837,257 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                         icon: DeleteOutlined
                         endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
                         name: "{reqsJsonPath[0]['.metadata.name']['-']}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Node (page-level)"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: page-actions
+                  buttonText: Actions
+                  actions:
+                    - type: edit
+                      props:
+                        text: Edit
+                        icon: EditOutlined
+                        cluster: "{2}"
+                        apiVersion: "{5}"
+                        plural: "{6}"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        baseprefix: /openapi-ui
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: editLabels
+                      props:
+                        text: Edit Labels
+                        icon: TagsOutlined
+                        reqIndex: "0"
+                        jsonPathToLabels: ".items.0.metadata.labels"
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/metadata/labels"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: editAnnotations
+                      props:
+                        text: Edit Annotations
+                        icon: FileTextOutlined
+                        reqIndex: "0"
+                        jsonPathToObj: ".items.0.metadata.annotations"
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/metadata/annotations"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: editTaints
+                      props:
+                        text: Edit Taints
+                        iconBase64Encoded: "<...>"
+                        reqIndex: "0"
+                        jsonPathToArray: ".items.0.spec.taints"
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/taints"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: cordon
+                      props:
+                        text: Cordon
+                        icon: StopOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/unschedulable"
+                        value: true
+                        visibleWhen:
+                          value: "{reqsJsonPath[0]['.items.0.spec.unschedulable']['-']}"
+                          criteria: notEquals
+                          valueToCompare: "true"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: uncordon
+                      props:
+                        text: Uncordon
+                        icon: CheckCircleOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/unschedulable"
+                        value: false
+                        visibleWhen:
+                          value: "{reqsJsonPath[0]['.items.0.spec.unschedulable']['-']}"
+                          criteria: equals
+                          valueToCompare: "true"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: openKubeletConfig
+                      props:
+                        text: Kubelet Config
+                        icon: SettingOutlined
+                        url: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}/proxy/configz"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: delete
+                      props:
+                        text: Delete
+                        icon: DeleteOutlined
+                        danger: true
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Pod (CCO row)"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: pod-actions
+                  buttonVariant: icon
+                  actions:
+                    - type: editTolerations
+                      props:
+                        text: Edit Tolerations
+                        iconBase64Encoded: "<...>"
+                        reqIndex: "0"
+                        jsonPathToArray: ".spec.tolerations"
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
+                        pathToValue: "/spec/tolerations"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                          plural: "pods"
+
+                    - type: evict
+                      props:
+                        text: Evict
+                        icon: DisconnectOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}/eviction"
+                        name: "{reqsJsonPath[0]['.metadata.name']['-']}"
+                        namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                        apiVersion: "policy/v1"
+                        gracePeriodSeconds: 30
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                          plural: "pods"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Deployment (page-level)"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: page-actions
+                  actions:
+                    - type: scale
+                      props:
+                        text: Scale
+                        icon: ColumnHeightOutlined
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}/scale"
+                        currentReplicas: "{reqsJsonPath[0]['.items.0.spec.replicas']['-']}"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        namespace: "{3}"
+                        apiVersion: "autoscaling/v1"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+
+                    - type: suspend
+                      props:
+                        text: Suspend
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/paused"
+                        value: true
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+
+                    - type: resume
+                      props:
+                        text: Resume
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/paused"
+                        value: false
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+
+                    - type: rolloutRestart
+                      props:
+                        text: Rollout Restart
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Job (page-level)"
+            yamlContent={dedent`
+              - type: rerunLast
+                props:
+                  text: Rerun Last
+                  icon: ReloadOutlined
+                  createEndpoint: "/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs"
+                  sourceJobName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  sourceJobSpec: "{reqs[0]['items','0']}"
+                  permissionContext:
+                    apiGroup: batch
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    plural: jobs
+            `}
+          />
+          <YamlModal
+            buttonLabel="CronJob (page-level)"
+            yamlContent={dedent`
+              - type: triggerRun
+                props:
+                  text: Trigger Run
+                  icon: PlayCircleOutlined
+                  createEndpoint: "/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs"
+                  cronJobName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  jobTemplate: "{reqs[0]['items','0','spec','jobTemplate']}"
+                  permissionContext:
+                    apiGroup: batch
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    plural: jobs
+
+              - type: deleteChildren
+                props:
+                  text: Delete Active Job
+                  icon: DeleteOutlined
+                  childResourceName: Jobs
+                  children: '[{"name":"{reqs[0][''items'',''0'',''status'',''active'',''0'',''name''][''-'']}","endpoint":"/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs/{reqs[0][''items'',''0'',''status'',''active'',''0'',''name''][''-'']}"}]'
+                  visibleWhen:
+                    criteria: notEquals
+                    value: "{reqs[0]['items','0','status','active','0','name']['-']}"
+                    valueToCompare: "-"
+                  permissionContext:
+                    apiGroup: batch
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    plural: jobs
             `}
           />
           <YamlModal
