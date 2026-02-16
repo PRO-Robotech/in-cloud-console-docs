@@ -11,42 +11,26 @@ import dedent from 'ts-dedent'
 # С чего начать
 
 ---
+
 ## Что такое in-Cloud?
 
 **in-Cloud** — это фреймворк для создания собственного пользовательского интерфейса к&nbsp;Kubernetes-API. Вы можете построить интерфейс, который соответствует вашему видению — от&nbsp;минималистичного дашборда до&nbsp;аналога OpenShift Console. Все элементы собираются из&nbsp;готовых компонентов, а&nbsp;логика описывается декларативно.
 
-
 ---
-## Как установить?
 
-Установка разделена на&nbsp;этапы — вы выбираете нужные.
+## Установка in-Cloud Console
 
-
-### 1. Установка in-Cloud Console
-> На&nbsp;этом этапе вы устанавливаете основное приложение. Возможна настройка как&nbsp;базового варианта, так&nbsp;и&nbsp;полноценной версии «под&nbsp;ключ» — с&nbsp;oAuth-Proxy и&nbsp;Dex.
+> На&nbsp;этом этапе вы устанавливаете основное приложение. Возможна настройка как&nbsp;базового варианта, так&nbsp;и&nbsp;полноценной версии «под&nbsp;ключ» — с&nbsp;oAuth-Proxy и&nbsp;Dex. Здесь также добавляется интерфейсная надстройка — готовый пресет, с&nbsp;которого удобно начать знакомство с&nbsp;системой.
 
 <CodeBlock language="bash">
   {dedent`
     helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/incloud-web-chart  \\
-      --version=1.2.0-24d9b36 \\
+      --version=1.3.0-9b1cdc4 \\
       --namespace in-cloud-web \\
       --install \\
       --set incloud-web-resources.enabled=false \\
       --set fullnameOverride=in-cloud-web \\
       --create-namespace
-  `}
-</CodeBlock>
-
-
-### 2. Установка визуальной конфигурации
-> Здесь добавляется интерфейсная надстройка — готовый пресет, с&nbsp;которого удобно начать знакомство с&nbsp;системой.
-
-<CodeBlock language="bash">
-  {dedent`
-    helm upgrade in-cloud-web-resources oci://registry-1.docker.io/prorobotech/incloud-web-resources \\
-      --version=1.2.0-76abba6 \\
-      --namespace in-cloud-web \\
-      --install
   `}
 </CodeBlock>
 
