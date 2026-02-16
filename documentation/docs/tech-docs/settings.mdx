@@ -326,6 +326,33 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
     <tr>
+      <td><code>spec.menuItems[].resourcesList</code></td>
+      <td>Object</td>
+      <td>Объект настроект для листинга массива объектов в Sidebar</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            resourcesList:
+              cluster: "{cluster}"
+              apiVersion: "v1"
+              plural: "namespaces"
+              linkToResource: "/openapi-ui/{cluster}/factory/namespace-details/v1/namespaces/{resourceName}"
+              jsonPathToName: ".metadata.name"
+            ---
+              {
+                cluster: string
+                apiGroup?: string
+                apiVersion: string
+                plural: string
+                namespace?: string
+                linkToResource: string
+                jsonPathToName: string
+              }
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
       <td><code>spec.menuItems[].label</code></td>
       <td>string</td>
       <td>Отображаемое имя группы меню</td>
@@ -2174,16 +2201,19 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
+              export type TLabelsToSearchParamsProps = {
                 id: number | string
-                reqIndex: number
+                reqIndex: string
                 jsonPathToLabels: string
+                // Base URL only (for example: "/workloads"); component appends ?labels= automatically.
                 linkPrefix: string
+                textLink?: string
                 errorText: string
-                maxTextLength: number
-                textLink: string
-                style?: CSSProperties
-              }
+                // errorText: show plain text fallback, default: show linkPrefix fallback without selectors.
+                errorMode?: 'errorText' | 'default'
+                maxTextLength?: number
+                renderLabelsAsRows?: boolean
+              } & Omit<LinkProps, 'id' | 'children' | 'href'>
             `}
           />
         </div>
@@ -2227,7 +2257,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
                   # --- Success criteria ---------------------------------------------------
                   criteriaSuccess: notEquals
-                  stategySuccess: every
+                  strategySuccess: every
                   valueToCompareSuccess:
                     - "Preempted"
                     - "Shutdown"
@@ -2285,7 +2315,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 values: string[] // array of reqsJsonPath
                 criteriaSuccess: 'equals' | 'notEquals'
                 criteriaError: 'equals' | 'notEquals'
-                stategySuccess?: 'some' | 'every' // every - default
+                strategySuccess?: 'some' | 'every' // every - default
                 strategyError?: 'some' | 'every' // every - default
                 valueToCompareSuccess: unknown[]
                 valueToCompareError: unknown[]
@@ -2505,6 +2535,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 unit?: TUnitInput // do not enter if wanna auto format
                 /** If true, returns "12.3 GiB" instead of just 12.3 */
                 format?: boolean
+                /** If false and format=true, return formatted number without unit */
+                showUnit?: boolean
                 /** Max fraction digits when formatting (default 2) */
                 precision?: number
                 /** Locale for number formatting (default: undefined => user agent) */
@@ -2549,6 +2581,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 unit?: TCoreUnitInput
                 /** If true, returns "500 mcore" instead of just 500 */
                 format?: boolean
+                /** If false and format=true, return formatted number without unit */
+                showUnit?: boolean
                 /** Max fraction digits when formatting (default 2) */
                 precision?: number
                 /** Locale for number formatting (default: undefined => user agent) */
@@ -2605,7 +2639,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 marketplaceKind: string
                 baseprefix?: string
                 standalone?: boolean
-                forceAddedMode?: boolean
+                addedMode?: boolean
                 showZeroResources?: boolean
               }
             `}
@@ -2637,10 +2671,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
+              export type TSecretBase64PlainProps = {
                 id: number | string
-                base64Value?: string // reqs | one of required
-                plainTextValue?: string // reqs | one of required
+                type?: 'base64' | 'plain'
+                value?: string // primary single-value input
+                reqIndex?: string
+                jsonPathToSecrets?: string
+                base64Value?: string // deprecated: use value + type='base64'
+                plainTextValue?: string // deprecated: use value + type='plain'
+                multiline?: boolean
+                multilineRows?: number
+                shownByDefault?: boolean
+                hideEye?: boolean
+                textStyle?: CSSProperties
+                emptyText?: string
                 containerStyle?: CSSProperties
                 inputContainerStyle?: CSSProperties
                 flexProps?: Omit<FlexProps, 'children'>
@@ -3093,12 +3137,25 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   type: apis
                   plural: deployments
                   readOnly: false
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
+             export type TYamlEditorSingletonPermissions = {
+                canUpdate?: boolean
+              }
+              export type TPermissionContext = {
+                cluster: string
+                namespace?: string
+                apiGroup?: string
+                plural: string
+              }
+              export type TYamlEditorSingletonProps = {
                 id: number | string
                 cluster: string
                 isNameSpaced: boolean
@@ -3111,6 +3168,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 pathToData?: string | string[] // jsonpath or keys as string[]
                 substractHeight?: number
                 readOnly?: boolean
+                /** Manual permission override. Takes priority over permissionContext. */
+                permissions?: TYamlEditorSingletonPermissions
+                /** Resource context for automatic permission checking. */
+                permissionContext?: TPermissionContext
               }
             `}
           />
@@ -3416,6 +3477,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   reqIndex: 0
                   selectProps:
                     maxTagTextLength: 35
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
@@ -3441,6 +3506,17 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   pathToValue?: string
                   editModalWidth?: number | string
                   paddingContainerEnd?: string
+                  /** Manual permission override. Takes priority over permissionContext. */
+                  permissions?: {
+                    canPatch?: boolean
+                  }
+                  /** Resource context for automatic permission checking. */
+                  permissionContext?: {
+                    cluster: string
+                    namespace?: string
+                    apiGroup?: string
+                    plural: string
+                  }
                 }
             `}
           />
@@ -3485,18 +3561,25 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   pathToValue: /spec/tolerations
                   reqIndex: 0
                   text: ~counter~ Tolerations
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
-                id: number | string
-                reqIndex: string
-                jsonPathToArray: string
-                text: string
-                errorText: string
-                containerStyle?: CSSProperties
+              export type TTolerationsPermissions = {
+                canPatch?: boolean
+              }
+              export type TPermissionContext = {
+                cluster: string
+                namespace?: string
+                apiGroup?: string
+                plural: string
+              }
+              export type TTolerationsModalProps = {
                 notificationSuccessMessage?: string
                 notificationSuccessMessageDescription?: string
                 modalTitle?: string
@@ -3509,6 +3592,118 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 editModalWidth?: number | string
                 cols: number[] // 5
               }
+              export type TTolerationsViewProps = {
+                text: string
+                errorText: string
+                readOnly?: true
+                containerStyle?: CSSProperties
+              }
+              export type TTolerationsBaseProps = {
+                reqIndex: string
+                jsonPathToArray: string
+                /** Manual permission override. Takes priority over permissionContext. */
+                permissions?: TTolerationsPermissions
+                /** Resource context for automatic permission checking. */
+                permissionContext?: TPermissionContext
+              }
+              export type TTolerationsProps = {
+                id: number | string
+              } & TTolerationsBaseProps &
+                TTolerationsViewProps &
+                TTolerationsModalProps
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Taints</code></td>
+      <td>Просмотр и&nbsp; редактирование taint'ов</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Tolerations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: Taints
+                data:
+                  id: example-taints
+                  reqIndex: "0"
+                  jsonPathToArray: .spec['tolerations_like_taints']
+                  text: Taints (~counter~)
+                  errorText: No taints information
+                  style:
+                    color: red
+                  notificationSuccessMessage: Taints updated
+                  notificationSuccessMessageDescription: Taints were successfully patched
+                  modalTitle: Edit taints
+                  modalDescriptionText: Add, edit or remove taints for this node
+                  inputLabel: Taints
+                  containerStyle:
+                    fontSize: 14
+                  endpoint: /api/mock/taints
+                  pathToValue: .spec.taints
+                  editModalWidth: 720
+                  cols:
+                    - 6
+                    - 6
+                    - 6
+                    - 6
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+             export type TTaintsPermissions = {
+              canPatch?: boolean
+            }
+            export type TPermissionContext = {
+              cluster: string
+              namespace?: string
+              apiGroup?: string
+              plural: string
+            }
+            export type TTaintsModalProps = {
+              notificationSuccessMessage?: string
+              notificationSuccessMessageDescription?: string
+              modalTitle?: string
+              modalDescriptionText?: string
+              modalDescriptionTextStyle?: CSSProperties
+              inputLabel?: string
+              inputLabelStyle?: CSSProperties
+              endpoint?: string
+              pathToValue?: string
+              editModalWidth?: number | string
+              cols: number[] // 4
+            }
+            export type TTaintsViewProps = {
+              text: string
+              errorText: string
+              style?: CSSProperties
+              readOnly?: true
+              containerStyle?: CSSProperties
+            }
+            export type TTaintsBaseProps = {
+              reqIndex: string
+              jsonPathToArray: string
+              /** Manual permission override. Takes priority over permissionContext. */
+              permissions?: TTaintsPermissions
+              /** Resource context for automatic permission checking. */
+              permissionContext?: TPermissionContext
+            }
+            export type TTaintsProps = {
+              id: number | string
+            } & TTaintsBaseProps &
+              TTaintsViewProps &
+              TTaintsModalProps
             `}
           />
         </div>
@@ -3547,18 +3742,25 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   pathToValue: /metadata/annotations
                   reqIndex: 0
                   text: ~counter~ Annotations
+                  permissionContext:
+                    cluster: "{2}"
+                    apiGroup: "{5}"
+                    plural: "{7}"
             `}
           />
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
-                id: number | string
-                reqIndex: string
-                jsonPathToObj: string
-                text: string
-                errorText: string
-                containerStyle?: CSSProperties
+              export type TAnnotationsPermissions = {
+                canPatch?: boolean
+              }
+              export type TPermissionContext = {
+                cluster: string
+                namespace?: string
+                apiGroup?: string
+                plural: string
+              }
+              export type TAnnotationsModalProps = {
                 notificationSuccessMessage?: string
                 notificationSuccessMessageDescription?: string
                 modalTitle?: string
@@ -3571,6 +3773,25 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 editModalWidth?: number | string
                 cols: number[] // 3
               }
+              export type TAnnotationsViewProps = {
+                text: string
+                errorText: string
+                readOnly?: true
+                containerStyle?: CSSProperties
+              }
+              export type TAnnotationsBaseProps = {
+                reqIndex: string
+                jsonPathToObj: string
+                /** Manual permission override. Takes priority over permissionContext. */
+                permissions?: TAnnotationsPermissions
+                /** Resource context for automatic permission checking. */
+                permissionContext?: TPermissionContext
+              }
+              export type TAnnotationsProps = {
+                id: number | string
+              } & TAnnotationsBaseProps &
+                TAnnotationsViewProps &
+                TAnnotationsModalProps
             `}
           />
         </div>
@@ -3651,6 +3872,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 namespace: string
                 podName: string
                 substractHeight?: number
+                tailLines?: number
+                sinceSeconds?: number
+                sinceTime?: string // RFC3339 timestamp (e.g., "2024-01-01T00:00:00Z")
+                limitBytes?: number
               }
             `}
           />
@@ -3697,7 +3922,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>NodeTerminal</code></td>
-      <td>Exec в отдельный Pod на&nbsp; выбранной ноде</td>
+      <td>Exec в отдельный Pod на&nbsp; выбранной ноде. Предварительно необходимо описать PodTemplate в NS, который будет указан в параметрах</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3721,8 +3946,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 id: number | string
                 cluster: string
                 nodeName: string
-                listPodTemplatesNs?: string
                 substractHeight?: number
+                listPodTemplatesNs: string // Required - namespace where PodTemplates are stored
               }
             `}
           />
@@ -3868,6 +4093,17 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                       fractionalSecondDigits?: 1 | 2 | 3 | undefined;
                   }
                 }
+                tableColumns?: {
+                    series?: boolean
+                    min?: boolean
+                    max?: boolean
+                    mean?: boolean
+                    current?: boolean
+                    currentTs?: boolean
+                    id?: boolean
+                    value?: boolean
+                    timestamp?: boolean
+                }
               }
             `}
           />
@@ -3899,21 +4135,1388 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               type TBaseTopNProps = {
                 topN?: number
               }
+              type TMatrixTableColumnsConfig = {
+                series?: boolean // shown by default
+                min?: boolean // shown by default
+                max?: boolean // shown by default
+                mean?: boolean
+                current?: boolean // shown by default
+                currentTs?: boolean // shown by default
+              }
+              type TVectorTableColumnsConfig = {
+                id?: boolean // shown by default
+                value?: boolean // shown by default
+                timestamp?: boolean // shown by default
+              }
               type TMatrixToLineSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToLineMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToAreaSingleProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToAreaMultiProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToAreaStackedProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps
               type TMatrixToReducedBarProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseRangeProps & TBaseModeProps
-              type TMatrixToTableRowsProps = TBasePromQueryProps & TBaseRangeProps & TBaseTitleProps
+              type TMatrixToTableRowsProps = TBasePromQueryProps & TBaseRangeProps & TBaseTitleProps & { tableColumns?: TMatrixTableColumnsConfig }
               type TVectorToBarVerticalProps = TBaseContainerSizeProps & TBasePromQueryProps
               type TVectorToBarHorizontalProps = TBaseContainerSizeProps & TBasePromQueryProps
               type TVectorToPieProps = TBaseContainerSizeProps & TBasePromQueryProps
-              type TVectorToTableRowsProps = TBasePromQueryProps & TBaseTitleProps
+              type TVectorToTableRowsProps = TBasePromQueryProps & TBaseTitleProps & { tableColumns?: TVectorTableColumnsConfig }
               type TVectorToBarGaugeProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseTopNProps
               type TVectorToGaugeRadialProps = TBaseContainerSizeProps & TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
               type TScalarToStatProps = TBasePromQueryProps & TBaseTitleProps
               type TScalarToGaugeProps = TBasePromQueryProps & TBaseTitleProps & TBaseMinMaxProps
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>DefaultIframe</code></td>
+      <td>Iframe</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: DefaultIframe
+                data:
+                  id: DefaultIframe
+                  src: 'https://example.com'
+                  width: 100%
+                  height: 500px
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              { id: number | string } & React.DetailedHTMLProps<
+                React.IframeHTMLAttributes<HTMLIFrameElement>,
+                HTMLIFrameElement
+              >
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>DropdownRedirect</code></td>
+      <td>Item selector to navigate to</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: DropdownRedirect
+                data:
+                  id: pod-dropdown
+                  cluster: "{2}"
+                  apiVersion: "v1"
+                  namespace: "{3}"
+                  plural: "pods"
+                  jsonPath: ".metadata.name"
+                  redirectUrl: "/openapi-ui/{2}/{3}/factory/pod-details/v1/pods/{chosenEntryValue}"
+                  currentValue: "{8}"
+                  placeholder: "Select pod..."
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                cluster: string
+                apiVersion: string
+                apiGroup?: string
+                namespace?: string
+                plural: string
+                jsonPath: string
+                redirectUrl: string
+                currentValue?: string
+                placeholder?: string
+                style?: CSSProperties
+                showSearch?: boolean
+                loading?: boolean
+                popupMatchSelectWidth?: boolean | number
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>CopyButton</code></td>
+      <td>Button to copy text</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: CopyButton
+                data:
+                  id: copy-pod-name
+                  copyText: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  successMessage: "Pod name copied!"
+                  tooltip: "Copy pod name"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                copyText: string
+                successMessage?: string
+                errorMessage?: string
+                buttonType?: 'text' | 'link' | 'default' | 'primary' | 'dashed'
+                tooltip?: string
+                style?: CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>AggregatedCounterCard</code></td>
+      <td>Multi proposal counter card</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: DefaultDiv
+                data:
+                  id: cards-container
+                  style:
+                    display: grid
+                    grid-template-columns: repeat(2, 234px)
+                    column-gap: 16
+                    row-gap: 10
+                    margin-bottom: 16px
+                children:
+                  - type: AggregatedCounterCard
+                    data:
+                      id: labels-counter-card
+                      text: Labels
+                      iconBase64Encoded: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfMTk1M18yNDAzNCkiPjxwYXRoIGQ9Ik0yMy40MTEgMTAuNTcxN0wyMi42MTgxIDIuMTk4NDRDMjIuNTc3OSAxLjc2NDUxIDIyLjIzMjQgMS40MjE2NSAyMS43OTg1IDEuMzc4NzlMMTMuNDI1MiAwLjU4NTkzOEgxMy40MTQ1QzEzLjMyODggMC41ODU5MzggMTMuMjYxOCAwLjYxMjcyMyAxMy4yMTEgMC42NjM2MTZMMC42NjcyIDEzLjIwNzRDMC42NDIzNjkgMTMuMjMyMSAwLjYyMjY2OSAxMy4yNjE2IDAuNjA5MjI3IDEzLjI5NEMwLjU5NTc4NiAxMy4zMjY0IDAuNTg4ODY3IDEzLjM2MTEgMC41ODg4NjcgMTMuMzk2MkMwLjU4ODg2NyAxMy40MzEzIDAuNTk1Nzg2IDEzLjQ2NiAwLjYwOTIyNyAxMy40OTg0QzAuNjIyNjY5IDEzLjUzMDggMC42NDIzNjkgMTMuNTYwMyAwLjY2NzIgMTMuNTg1TDEwLjQxMTggMjMuMzI5N0MxMC40NjI3IDIzLjM4MDYgMTAuNTI5NyAyMy40MDc0IDEwLjYwMiAyMy40MDc0QzEwLjY3NDMgMjMuNDA3NCAxMC43NDEzIDIzLjM4MDYgMTAuNzkyMiAyMy4zMjk3TDIzLjMzNiAxMC43ODU5QzIzLjM4OTUgMTAuNzI5NyAyMy40MTYzIDEwLjY1MiAyMy40MTEgMTAuNTcxN1pNMTAuNTk5MyAyMC42NDA0TDMuMzU2NDkgMTMuMzk3NUwxNC4wNjI3IDIuNjkxM0wyMC42Nzg4IDMuMzE4MDhMMjEuMzA1NiA5LjkzNDE1TDEwLjU5OTMgMjAuNjQwNFpNMTYuNTAwMiA1LjEzOTUxQzE1LjIwMTEgNS4xMzk1MSAxNC4xNDMxIDYuMTk3NTUgMTQuMTQzMSA3LjQ5NjY1QzE0LjE0MzEgOC43OTU3NiAxNS4yMDExIDkuODUzOCAxNi41MDAyIDkuODUzOEMxNy43OTkzIDkuODUzOCAxOC44NTc0IDguNzk1NzYgMTguODU3NCA3LjQ5NjY1QzE4Ljg1NzQgNi4xOTc1NSAxNy43OTkzIDUuMTM5NTEgMTYuNTAwMiA1LjEzOTUxWk0xNi41MDAyIDguMzUzOEMxNi4wMjYxIDguMzUzOCAxNS42NDMxIDcuOTcwNzYgMTUuNjQzMSA3LjQ5NjY1QzE1LjY0MzEgNy4wMjI1NSAxNi4wMjYxIDYuNjM5NTEgMTYuNTAwMiA2LjYzOTUxQzE2Ljk3NDMgNi42Mzk1MSAxNy4zNTc0IDcuMDIyNTUgMTcuMzU3NCA3LjQ5NjY1QzE3LjM1NzQgNy45NzA3NiAxNi45NzQzIDguMzUzOCAxNi41MDAyIDguMzUzOFoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvZz48ZGVmcz48Y2xpcFBhdGggaWQ9ImNsaXAwXzE5NTNfMjQwMzQiPjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiLz48L2NsaXBQYXRoPjwvZGVmcz48L3N2Zz4=
+                      counter:
+                        type: 'key'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToObj: .items.0.metadata.labels
+                      activeType:
+                        type: 'labels'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToLabels: .items.0.metadata.labels
+                          notificationSuccessMessage: Updated successfully
+                          notificationSuccessMessageDescription: Labels have been updated
+                          modalTitle: Edit labels
+                          modalDescriptionText: ""
+                          inputLabel: ""
+                          maxEditTagTextLength: 35
+                          endpoint: /api/clusters/{2}/k8s/api/v1/nodes/{5}
+                          pathToValue: /metadata/labels
+                          editModalWidth: 650
+                          paddingContainerEnd: 24px
+                  - type: AggregatedCounterCard
+                    data:
+                      id: taints-counter-card
+                      text: Taints
+                      iconBase64Encoded: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDIyIDIzIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTcuNTI4NiAxNy43OTE4QzE4LjY5OTEgMTcuNzkxOCAxOS42NTU0IDE2LjgyMjEgMTkuNjU1NCAxNS42MzU1QzE5LjY1NTQgMTQuMjAyNSAxNy41Mjg2IDExLjg2NDEgMTcuNTI4NiAxMS44NjQxQzE3LjUyODYgMTEuODY0MSAxNS40MDE4IDE0LjIwMjUgMTUuNDAxOCAxNS42MzU1QzE1LjQwMTggMTYuODIyMSAxNi4zNTggMTcuNzkxOCAxNy41Mjg2IDE3Ljc5MThaTTcuNDI3NjggMTYuNjEwNUM3LjYxNzg2IDE2LjgwMDcgNy45MjU4OSAxNi44MDA3IDguMTEzMzkgMTYuNjEwNUwxNC45NzMyIDkuNzUzNEMxNS4xNjM0IDkuNTYzMjIgMTUuMTYzNCA5LjI1NTE4IDE0Ljk3MzIgOS4wNjc2OEw4LjExNjA3IDIuMjEwNTRDOC4xIDIuMTk0NDcgOC4wODEyNSAyLjE3ODQgOC4wNjI1IDIuMTY1TDUuOTY3ODYgMC4wNzAzNjAxQzUuOTIyMTkgMC4wMjUyNzggNS44NjA2IDAgNS43OTY0MyAwQzUuNzMyMjYgMCA1LjY3MDY3IDAuMDI1Mjc4IDUuNjI1IDAuMDcwMzYwMUw0LjMzOTI5IDEuMzU2MDdDNC4yOTQyIDEuNDAxNzQgNC4yNjg5MyAxLjQ2MzMzIDQuMjY4OTMgMS41Mjc1QzQuMjY4OTMgMS41OTE2NyA0LjI5NDIgMS42NTMyNiA0LjMzOTI5IDEuNjk4OTNMNi4xMzkyOSAzLjQ5ODkzTDAuNTczMjE0IDkuMDY3NjhDMC4zODMwMzYgOS4yNTc4NiAwLjM4MzAzNiA5LjU2NTkgMC41NzMyMTQgOS43NTM0TDcuNDI3NjggMTYuNjEwNVpNNy43NzMyMiA0LjU5NDQ3TDEyLjU2NTIgOS4zODY0M0gyLjk4MzkzTDcuNzczMjIgNC41OTQ0N1pNMjEuMjE0MyAxOS43MTIzSDAuMjE0Mjg2QzAuMDk2NDI4NiAxOS43MTIzIDAgMTkuODA4OCAwIDE5LjkyNjZWMjIuMDY5NUMwIDIyLjE4NzMgMC4wOTY0Mjg2IDIyLjI4MzggMC4yMTQyODYgMjIuMjgzOEgyMS4yMTQzQzIxLjMzMjEgMjIuMjgzOCAyMS40Mjg2IDIyLjE4NzMgMjEuNDI4NiAyMi4wNjk1VjE5LjkyNjZDMjEuNDI4NiAxOS44MDg4IDIxLjMzMjEgMTkuNzEyMyAyMS4yMTQzIDE5LjcxMjNaIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48L3N2Zz4=
+                      counter:
+                        type: 'item'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToArray: .items.0.spec.taints
+                      activeType:
+                        type: 'taints'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToArray: .items.0.spec.taints
+                          notificationSuccessMessage: Updated successfully
+                          notificationSuccessMessageDescription: Taints have been updated
+                          modalTitle: Edit taints
+                          modalDescriptionText: ""
+                          inputLabel: ""
+                          endpoint: /api/clusters/{2}/k8s/api/v1/nodes/{5}
+                          pathToValue: /spec/taints
+                          editModalWidth: 800px
+                          cols:
+                          - 8
+                          - 8
+                          - 6
+                          permissionContext:
+                            cluster: "{2}"
+                            apiGroup: "{5}"
+                            plural: "{7}"
+                  - type: AggregatedCounterCard
+                    data:
+                      id: conditions-counter-card
+                      text: Conditions
+                      iconBase64Encoded: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNMjEuMTc2MiA2LjAxNjA3TDE1LjQxMTkgMC4yNTE3ODZDMTUuMjUxMiAwLjA5MTA3MTUgMTUuMDM0MiAwIDE0LjgwNjUgMEgzLjQyNzk0QzIuOTUzODQgMCAyLjU3MDggMC4zODMwMzYgMi41NzA4IDAuODU3MTQzVjIzLjE0MjlDMi41NzA4IDIzLjYxNyAyLjk1Mzg0IDI0IDMuNDI3OTQgMjRIMjAuNTcwOEMyMS4wNDQ5IDI0IDIxLjQyNzkgMjMuNjE3IDIxLjQyNzkgMjMuMTQyOVY2LjYyNDExQzIxLjQyNzkgNi4zOTY0MyAyMS4zMzY5IDYuMTc2NzkgMjEuMTc2MiA2LjAxNjA3Wk0xOS40NTEyIDcuMDE3ODZIMTQuNDEwMVYxLjk3Njc5TDE5LjQ1MTIgNy4wMTc4NlpNMTkuNDk5NCAyMi4wNzE0SDQuNDk5MzdWMS45Mjg1N0gxMi41ODg3VjcuNzE0MjlDMTIuNTg4NyA4LjAxMjY1IDEyLjcwNzIgOC4yOTg4IDEyLjkxODIgOC41MDk3OEMxMy4xMjkxIDguNzIwNzYgMTMuNDE1MyA4LjgzOTI5IDEzLjcxMzcgOC44MzkyOUgxOS40OTk0VjIyLjA3MTRaTTEwLjkyNzkgMTguMjE0M0MxMC45Mjc5IDE4LjQ5ODQgMTEuMDQwOCAxOC43NzEgMTEuMjQxOCAxOC45NzE5QzExLjQ0MjcgMTkuMTcyOCAxMS43MTUyIDE5LjI4NTcgMTEuOTk5NCAxOS4yODU3QzEyLjI4MzUgMTkuMjg1NyAxMi41NTYxIDE5LjE3MjggMTIuNzU3IDE4Ljk3MTlDMTIuOTU3OSAxOC43NzEgMTMuMDcwOCAxOC40OTg0IDEzLjA3MDggMTguMjE0M0MxMy4wNzA4IDE3LjkzMDEgMTIuOTU3OSAxNy42NTc2IDEyLjc1NyAxNy40NTY3QzEyLjU1NjEgMTcuMjU1NyAxMi4yODM1IDE3LjE0MjkgMTEuOTk5NCAxNy4xNDI5QzExLjcxNTIgMTcuMTQyOSAxMS40NDI3IDE3LjI1NTcgMTEuMjQxOCAxNy40NTY3QzExLjA0MDggMTcuNjU3NiAxMC45Mjc5IDE3LjkzMDEgMTAuOTI3OSAxOC4yMTQzWk0xMS4zNTY1IDE1LjQyODZIMTIuNjQyMkMxMi43NjAxIDE1LjQyODYgMTIuODU2NSAxNS4zMzIxIDEyLjg1NjUgMTUuMjE0M1YxMC4yODU3QzEyLjg1NjUgMTAuMTY3OSAxMi43NjAxIDEwLjA3MTQgMTIuNjQyMiAxMC4wNzE0SDExLjM1NjVDMTEuMjM4NyAxMC4wNzE0IDExLjE0MjIgMTAuMTY3OSAxMS4xNDIyIDEwLjI4NTdWMTUuMjE0M0MxMS4xNDIyIDE1LjMzMjEgMTEuMjM4NyAxNS40Mjg2IDExLjM1NjUgMTUuNDI4NloiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvc3ZnPg==
+                      counter:
+                        type: 'item'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToArray: .items.0.status.conditions
+                      activeType:
+                        type: 'table'
+                        props:
+                          modalTitle: 'Conditions'
+                          editModalWidth: 80vw
+                          baseprefix: /openapi-ui
+                          cluster: '{2}'
+                          customizationId: factory-status-conditions
+                          fieldSelector:
+                            metadata.name: '{7}'
+                          id: conditions-table
+                          k8sResourceToFetch:
+                            apiVersion: v1
+                            plural: nodes
+                          pathToItems: .items.0.status.conditions
+                  - type: AggregatedCounterCard
+                    data:
+                      id: annotations-counter-card
+                      text: Annotations
+                      iconBase64Encoded: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOSIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDE5IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTguNjA1NCA2LjAxNjA3TDEyLjg0MTEgMC4yNTE3ODZDMTIuNjgwNCAwLjA5MTA3MTUgMTIuNDYzNCAwIDEyLjIzNTcgMEgwLjg1NzE0M0MwLjM4MzAzNiAwIDAgMC4zODMwMzYgMCAwLjg1NzE0M1YyMy4xNDI5QzAgMjMuNjE3IDAuMzgzMDM2IDI0IDAuODU3MTQzIDI0SDE4QzE4LjQ3NDEgMjQgMTguODU3MSAyMy42MTcgMTguODU3MSAyMy4xNDI5VjYuNjI0MTFDMTguODU3MSA2LjM5NjQzIDE4Ljc2NjEgNi4xNzY3OSAxOC42MDU0IDYuMDE2MDdaTTE2Ljg4MDQgNy4wMTc4NkgxMS44MzkzVjEuOTc2NzlMMTYuODgwNCA3LjAxNzg2Wk0xNi45Mjg2IDIyLjA3MTRIMS45Mjg1N1YxLjkyODU3SDEwLjAxNzlWNy43MTQyOUMxMC4wMTc5IDguMDEyNjUgMTAuMTM2NCA4LjI5ODggMTAuMzQ3NCA4LjUwOTc4QzEwLjU1ODMgOC43MjA3NiAxMC44NDQ1IDguODM5MjkgMTEuMTQyOSA4LjgzOTI5SDE2LjkyODZWMjIuMDcxNFpNOS4yMTQyOSAxNC44MzkzSDQuMjg1NzJDNC4xNjc4NiAxNC44MzkzIDQuMDcxNDMgMTQuOTM1NyA0LjA3MTQzIDE1LjA1MzZWMTYuMzM5M0M0LjA3MTQzIDE2LjQ1NzEgNC4xNjc4NiAxNi41NTM2IDQuMjg1NzIgMTYuNTUzNkg5LjIxNDI5QzkuMzMyMTQgMTYuNTUzNiA5LjQyODU3IDE2LjQ1NzEgOS40Mjg1NyAxNi4zMzkzVjE1LjA1MzZDOS40Mjg1NyAxNC45MzU3IDkuMzMyMTQgMTQuODM5MyA5LjIxNDI5IDE0LjgzOTNaTTQuMDcxNDMgMTEuNDEwN1YxMi42OTY0QzQuMDcxNDMgMTIuODE0MyA0LjE2Nzg2IDEyLjkxMDcgNC4yODU3MiAxMi45MTA3SDE0LjU3MTRDMTQuNjg5MyAxMi45MTA3IDE0Ljc4NTcgMTIuODE0MyAxNC43ODU3IDEyLjY5NjRWMTEuNDEwN0MxNC43ODU3IDExLjI5MjkgMTQuNjg5MyAxMS4xOTY0IDE0LjU3MTQgMTEuMTk2NEg0LjI4NTcyQzQuMTY3ODYgMTEuMTk2NCA0LjA3MTQzIDExLjI5MjkgNC4wNzE0MyAxMS40MTA3WiIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+
+                      counter:
+                        type: 'key'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToObj: .items.0.metadata.annotations
+                      activeType:
+                        type: 'annotations'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToObj: .items.0.metadata.annotations
+                          notificationSuccessMessage: Updated successfully
+                          notificationSuccessMessageDescription: Annotations have been updated
+                          modalTitle: Edit annotations
+                          modalDescriptionText: ""
+                          inputLabel: ""
+                          endpoint: /api/clusters/{2}/k8s/api/v1/nodes/{5}
+                          pathToValue: /metadata/annotations
+                          editModalWidth: 650
+                          cols: [8, 12, 4]
+                  - type: AggregatedCounterCard
+                    data:
+                      id: images-counter-card
+                      text: Images
+                      iconBase64Encoded: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNMjMuMTQyOSAyLjU2NjQxSDAuODU3MTQzQzAuMzgzMDM2IDIuNTY2NDEgMCAyLjk0OTQ0IDAgMy40MjM1NVYyMC41NjY0QzAgMjEuMDQwNSAwLjM4MzAzNiAyMS40MjM2IDAuODU3MTQzIDIxLjQyMzZIMjMuMTQyOUMyMy42MTcgMjEuNDIzNiAyNCAyMS4wNDA1IDI0IDIwLjU2NjRWMy40MjM1NUMyNCAyLjk0OTQ0IDIzLjYxNyAyLjU2NjQxIDIzLjE0MjkgMi41NjY0MVpNMjIuMDcxNCAxOS40OTVIMS45Mjg1N1YxOC40MjYyTDUuNjM4MzkgMTQuMDI1M0w5LjY1ODkzIDE4Ljc5MzJMMTUuOTEzNCAxMS4zNzg5TDIyLjA3MTQgMTguNjgwN1YxOS40OTVaTTIyLjA3MTQgMTYuMDE4MkwxNi4wNzY4IDguOTA5MjZDMTUuOTkxMSA4LjgwNzQ4IDE1LjgzNTcgOC44MDc0OCAxNS43NSA4LjkwOTI2TDkuNjU4OTMgMTYuMTMwN0w1LjgwMTc5IDExLjU1ODRDNS43MTYwNyAxMS40NTY2IDUuNTYwNzEgMTEuNDU2NiA1LjQ3NSAxMS41NTg0TDEuOTI4NTcgMTUuNzYzN1Y0LjQ5NDk4SDIyLjA3MTRWMTYuMDE4MlpNNi40Mjg1NyAxMC40OTVDNi43MzgxMiAxMC40OTUgNy4wNDQ2MyAxMC40MzQgNy4zMzA2MSAxMC4zMTU2QzcuNjE2NTkgMTAuMTk3MSA3Ljg3NjQ0IDEwLjAyMzUgOC4wOTUzMiA5LjgwNDU5QzguMzE0MiA5LjU4NTcxIDguNDg3ODMgOS4zMjU4NiA4LjYwNjI5IDkuMDM5ODhDOC43MjQ3NCA4Ljc1Mzg5IDguNzg1NzEgOC40NDczOCA4Ljc4NTcxIDguMTM3ODRDOC43ODU3MSA3LjgyODI5IDguNzI0NzQgNy41MjE3OCA4LjYwNjI5IDcuMjM1OEM4LjQ4NzgzIDYuOTQ5ODEgOC4zMTQyIDYuNjg5OTYgOC4wOTUzMiA2LjQ3MTA4QzcuODc2NDQgNi4yNTIyIDcuNjE2NTkgNi4wNzg1OCA3LjMzMDYxIDUuOTYwMTJDNy4wNDQ2MyA1Ljg0MTY2IDYuNzM4MTIgNS43ODA2OSA2LjQyODU3IDUuNzgwNjlDNS44MDM0MiA1Ljc4MDY5IDUuMjAzODcgNi4wMjkwMyA0Ljc2MTgyIDYuNDcxMDhDNC4zMTk3NyA2LjkxMzEzIDQuMDcxNDMgNy41MTI2OCA0LjA3MTQzIDguMTM3ODRDNC4wNzE0MyA4Ljc2Mjk5IDQuMzE5NzcgOS4zNjI1NCA0Ljc2MTgyIDkuODA0NTlDNS4yMDM4NyAxMC4yNDY2IDUuODAzNDIgMTAuNDk1IDYuNDI4NTcgMTAuNDk1Wk02LjQyODU3IDcuMzg3ODRDNi44NDM3NSA3LjM4Nzg0IDcuMTc4NTcgNy43MjI2NiA3LjE3ODU3IDguMTM3ODRDNy4xNzg1NyA4LjU1MzAxIDYuODQzNzUgOC44ODc4NCA2LjQyODU3IDguODg3ODRDNi4wMTMzOSA4Ljg4Nzg0IDUuNjc4NTcgOC41NTMwMSA1LjY3ODU3IDguMTM3ODRDNS42Nzg1NyA3LjcyMjY2IDYuMDEzMzkgNy4zODc4NCA2LjQyODU3IDcuMzg3ODRaIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48L3N2Zz4=
+                      counter:
+                        type: 'item'
+                        props:
+                          reqIndex: "0"
+                          jsonPathToArray: .items.0.status.images
+                      activeType:
+                        type: 'table'
+                        props:
+                          modalTitle: 'Images'
+                          editModalWidth: 80vw
+                          baseprefix: /openapi-ui
+                          cluster: '{2}'
+                          customizationId: factory-node-images
+                          fieldSelector:
+                            metadata.name: '{7}'
+                          id: images-table
+                          k8sResourceToFetch:
+                            apiVersion: v1
+                            plural: nodes
+                          pathToItems: .items.0.status.images
+                          pathToKey: .names[0]
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+                export type TKeyCounterProps = {
+                    id: number | string
+                    reqIndex: string
+                    jsonPathToObj: string
+                    text: string
+                    errorText: string
+                    style?: CSSProperties
+                  }
+                  export type TItemCounterProps = {
+                    id: number | string
+                    reqIndex: string
+                    jsonPathToArray: string
+                    text: string
+                    errorText: string
+                    style?: CSSProperties
+                  }
+                  export type TLabelsBaseProps = {
+                    reqIndex: string
+                    jsonPathToLabels: string
+                    /** Manual permission override. Takes priority over permissionContext. */
+                    permissions?: {
+                      canPatch?: boolean
+                    }
+                    /** Resource context for automatic permission checking. */
+                    permissionContext?: {
+                      cluster: string
+                      namespace?: string
+                      apiGroup?: string
+                      plural: string
+                    }
+                  }
+                  export type TLabelsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    maxEditTagTextLength?: number
+                    allowClearEditSelect?: boolean
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    paddingContainerEnd?: string
+                  }
+                  export type TAnnotationsBaseProps = {
+                    reqIndex: string
+                    jsonPathToObj: string
+                    /** Manual permission override. Takes priority over permissionContext. */
+                    permissions?: {
+                      canPatch?: boolean
+                    }
+                    /** Resource context for automatic permission checking. */
+                    permissionContext?: {
+                      cluster: string
+                      namespace?: string
+                      apiGroup?: string
+                      plural: string
+                    }
+                  }
+                  export type TAnnotationsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 3
+                  }
+                  export type TTaintsBaseProps = {
+                    reqIndex: string
+                    jsonPathToArray: string
+                    /** Manual permission override. Takes priority over permissionContext. */
+                    permissions?: {
+                      canPatch?: boolean
+                    }
+                    /** Resource context for automatic permission checking. */
+                    permissionContext?: {
+                      cluster: string
+                      namespace?: string
+                      apiGroup?: string
+                      plural: string
+                    }
+                  }
+                  export type TTaintsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 4
+                  }
+                  export type TTolerationsBaseProps = {
+                    reqIndex: string
+                    jsonPathToArray: string
+                    /** Manual permission override. Takes priority over permissionContext. */
+                    permissions?: {
+                      canPatch?: boolean
+                    }
+                    /** Resource context for automatic permission checking. */
+                    permissionContext?: {
+                      cluster: string
+                      namespace?: string
+                      apiGroup?: string
+                      plural: string
+                    }
+                  }
+                  export type TTolerationsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 5
+                  }
+                  export type TEnrichedTableProviderProps = {
+                    namespace?: string
+                    baseprefix?: string
+                    resourceSchema?: TJSON
+                    k8sResource?: {
+                      plural: string
+                      apiGroup?: string
+                      apiVersion: string
+                    }
+                    dataForControls?: {
+                      cluster: string
+                      syntheticProject?: string
+                      plural: string
+                      apiGroup?: string
+                      apiVersion: string
+                    }
+                    customizationId?: string
+                    forceDefaultAdditionalPrinterColumns?: TAdditionalPrinterColumns
+                    withoutControls?: boolean
+                    /* primary key */
+                    pathToKey?: string
+                  }
+                  export type TEnrichedTableProps = {
+                    id: number | string
+                    fetchUrl?: string
+                    k8sResourceToFetch?: {
+                      apiGroup?: string
+                      apiVersion: string
+                      plural: string
+                      namespace?: string
+                    }
+                    pathToItems: string | string[] // jsonpath or keys as string[]
+                    additionalReqsDataToEachItem?: number[]
+                    cluster: string
+                    labelSelector?: Record<string, string>
+                    labelSelectorFull?: {
+                      reqIndex: number
+                      pathToLabels: string | string[] // jsonpath or keys as string[]
+                    }
+                    fieldSelector?: Record<string, string>
+                    pathToKey?: string // jsonpath for each row
+                  } & Omit<
+                    TEnrichedTableProviderProps,
+                    | 'tableMappingsReplaceValues'
+                    | 'withoutControls'
+                    | 'cluster'
+                    | 'theme'
+                    | 'tableProps'
+                    | 'dataItems'
+                    | 'dataForControlsInternal'
+                  >
+                  export type TActiveTypeUnion =
+                    | { type: 'labels'; props: TLabelsBaseProps & TLabelsModalProps }
+                    | { type: 'annotations'; props: TAnnotationsBaseProps & TAnnotationsModalProps }
+                    | { type: 'taints'; props: TTaintsBaseProps & TTaintsModalProps }
+                    | { type: 'tolerations'; props: TTolerationsBaseProps & TTolerationsModalProps }
+                    | {
+                        type: 'table'
+                        props: {
+                          modalTitle?: string
+                          modalDescriptionText?: string
+                          modalDescriptionTextStyle?: CSSProperties
+                          editModalWidth?: number | string
+                        } & TEnrichedTableProps
+                      }
+                  export type TAggregatedCounterCardProps = {
+                    id: number | string
+                    iconBase64Encoded?: string
+                    text: string
+                    counter:
+                      | {
+                          type: 'key'
+                          props: Omit<TKeyCounterProps, 'id' | 'text'>
+                        }
+                      | {
+                          type: 'item'
+                          props: Omit<TItemCounterProps, 'id' | 'text'>
+                        }
+                    activeType?: TActiveTypeUnion
+                  }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>antdIcons</code></td>
+      <td>Icons from Antd Icons package to use</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: antdIcons
+                data:
+                  id: example-antd-icons
+                  iconName: UserOutlined
+                  iconProps:
+                    style:
+                      fontSize: 24
+                  containerStyle:
+                    display: inline-flex
+                    alignItems: center
+                    gap: 8
+              - type: antdIcons
+                data:
+                  id: example-antd-icons-spinning
+                  iconName: LoadingOutlined
+                  iconProps:
+                    spin: true
+                    style:
+                      fontSize: 24
+                  containerStyle:
+                    display: inline-flex
+                    alignItems: center
+                    gap: 8
+              - type: antdIcons
+                data:
+                  id: example-antd-icons-rotated-colored
+                  iconName: SettingOutlined
+                  iconProps:
+                    rotate: 45
+                    style:
+                      fontSize: 24
+                      color: "#1677ff"
+                  containerStyle:
+                    display: inline-flex
+                    alignItems: center
+                    gap: 8
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                iconName: Exclude<keyof typeof AntIcons, 'createFromIconfontCN'> // https://5x.ant.design/components/icon/
+                iconProps?: AntdIconProps // color can be like token.colorSuccess
+                containerStyle?: React.CSSProperties
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Base64Icon</code></td>
+      <td>Base 64 encoded icon</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: Base64Icon
+                data:
+                  id: example-base64-icon-dark
+                  base64Icon: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfMTk1M18yNDAzNCkiPjxwYXRoIGQ9Ik0yMy40MTEgMTAuNTcxN0wyMi42MTgxIDIuMTk4NDRDMjIuNTc3OSAxLjc2NDUxIDIyLjIzMjQgMS40MjE2NSAyMS43OTg1IDEuMzc4NzlMMTMuNDI1MiAwLjU4NTkzOEgxMy40MTQ1QzEzLjMyODggMC41ODU5MzggMTMuMjYxOCAwLjYxMjcyMyAxMy4yMTEgMC42NjM2MTZMMC42NjcyIDEzLjIwNzRDMC42NDIzNjkgMTMuMjMyMSAwLjYyMjY2OSAxMy4yNjE2IDAuNjA5MjI3IDEzLjI5NEMwLjU5NTc4NiAxMy4zMjY0IDAuNTg4ODY3IDEzLjM2MTEgMC41ODg4NjcgMTMuMzk2MkMwLjU4ODg2NyAxMy40MzEzIDAuNTk1Nzg2IDEzLjQ2NiAwLjYwOTIyNyAxMy40OTg0QzAuNjIyNjY5IDEzLjUzMDggMC42NDIzNjkgMTMuNTYwMyAwLjY2NzIgMTMuNTg1TDEwLjQxMTggMjMuMzI5N0MxMC40NjI3IDIzLjM4MDYgMTAuNTI5NyAyMy40MDc0IDEwLjYwMiAyMy40MDc0QzEwLjY3NDMgMjMuNDA3NCAxMC43NDEzIDIzLjM4MDYgMTAuNzkyMiAyMy4zMjk3TDIzLjMzNiAxMC43ODU5QzIzLjM4OTUgMTAuNzI5NyAyMy40MTYzIDEwLjY1MiAyMy40MTEgMTAuNTcxN1pNMTAuNTk5MyAyMC42NDA0TDMuMzU2NDkgMTMuMzk3NUwxNC4wNjI3IDIuNjkxM0wyMC42Nzg4IDMuMzE4MDhMMjEuMzA1NiA5LjkzNDE1TDEwLjU5OTMgMjAuNjQwNFpNMTYuNTAwMiA1LjEzOTUxQzE1LjIwMTEgNS4xMzk1MSAxNC4xNDMxIDYuMTk3NTUgMTQuMTQzMSA3LjQ5NjY1QzE0LjE0MzEgOC43OTU3NiAxNS4yMDExIDkuODUzOCAxNi41MDAyIDkuODUzOEMxNy43OTkzIDkuODUzOCAxOC44NTc0IDguNzk1NzYgMTguODU3NCA3LjQ5NjY1QzE4Ljg1NzQgNi4xOTc1NSAxNy43OTkzIDUuMTM5NTEgMTYuNTAwMiA1LjEzOTUxWk0xNi41MDAyIDguMzUzOEMxNi4wMjYxIDguMzUzOCAxNS42NDMxIDcuOTcwNzYgMTUuNjQzMSA3LjQ5NjY1QzE1LjY0MzEgNy4wMjI1NSAxNi4wMjYxIDYuNjM5NTEgMTYuNTAwMiA2LjYzOTUxQzE2Ljk3NDMgNi42Mzk1MSAxNy4zNTc0IDcuMDIyNTUgMTcuMzU3NCA3LjQ5NjY1QzE3LjM1NzQgNy45NzA3NiAxNi45NzQzIDguMzUzOCAxNi41MDAyIDguMzUzOFoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvZz48ZGVmcz48Y2xpcFBhdGggaWQ9ImNsaXAwXzE5NTNfMjQwMzQiPjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiLz48L2NsaXBQYXRoPjwvZGVmcz48L3N2Zz4=
+                  containerStyle:
+                    color: token.colorSuccess
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              {
+                id: number | string
+                base64Icon: string
+                containerStyle?: React.CSSProperties // color can be like token.colorSuccess
+              }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>ActionsDropdown</code></td>
+      <td>Actions Dropdown</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            buttonLabel="Pod (CCO row) — full"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: pod-actions
+                  buttonText: ""
+                  buttonVariant: icon
+                  containerStyle:
+                    display: flex
+                    justifyContent: center
+                  actions:
+                    - type: edit
+                      props:
+                        text: Edit
+                        icon: EditOutlined
+                        cluster: "{2}"
+                        namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                        apiVersion: "v1"
+                        plural: "pods"
+                        name: "{reqsJsonPath[0]['.metadata.name']['-']}"
+                        baseprefix: "/openapi-ui"
+                    - type: editLabels
+                      props:
+                        text: Edit Labels
+                        icon: TagsOutlined
+                        reqIndex: "0"
+                        jsonPathToLabels: ".metadata.labels"
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
+                        pathToValue: "/metadata/labels"
+                        modalTitle: "Edit Pod Labels"
+                        editModalWidth: 650
+                        notificationSuccessMessage: "Labels updated"
+                        notificationSuccessMessageDescription: "Pod labels have been updated successfully"
+                    - type: editAnnotations
+                      props:
+                        text: Edit Annotations
+                        icon: FileTextOutlined
+                        reqIndex: "0"
+                        jsonPathToObj: ".metadata.annotations"
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
+                        pathToValue: "/metadata/annotations"
+                        modalTitle: "Edit Pod Annotations"
+                        editModalWidth: 720
+                        notificationSuccessMessage: "Annotations updated"
+                        notificationSuccessMessageDescription: "Pod annotations have been updated successfully"
+                        cols: [12, 12]
+                    - type: editTolerations
+                      props:
+                        text: Edit Tolerations
+                        iconBase64Encoded: "PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjgxNDcgMTguMjE5NUMxOS45ODUyIDE4LjIxOTUgMjAuOTQxNSAxNy4yNDk5IDIwLjk0MTUgMTYuMDYzM0MyMC45NDE1IDE0LjYzMDIgMTguODE0NyAxMi4yOTE4IDE4LjgxNDcgMTIuMjkxOEMxOC44MTQ3IDEyLjI5MTggMTYuNjg3OSAxNC42MzAyIDE2LjY4NzkgMTYuMDYzM0MxNi42ODc5IDE3LjI0OTkgMTcuNjQ0MiAxOC4yMTk1IDE4LjgxNDcgMTguMjE5NVpNOC43MTM4MSAxNy4wMzgzQzguOTAzOTkgMTcuMjI4NSA5LjIxMjAzIDE3LjIyODUgOS4zOTk1MyAxNy4wMzgzTDE2LjI1OTMgMTAuMTgxMUMxNi40NDk1IDkuOTkwOTUgMTYuNDQ5NSA5LjY4MjkyIDE2LjI1OTMgOS40OTU0Mkw5LjQwMjIgMi42MzgyN0M5LjM4NjEzIDIuNjIyMiA5LjM2NzM4IDIuNjA2MTMgOS4zNDg2MyAyLjU5Mjc0TDcuMjUzOTkgMC40OTgwOTRDNy4yMDgzMiAwLjQ1MzAxMiA3LjE0NjczIDAuNDI3NzM0IDcuMDgyNTYgMC40Mjc3MzRDNy4wMTgzOSAwLjQyNzczNCA2Ljk1NjggMC40NTMwMTIgNi45MTExMyAwLjQ5ODA5NEw1LjYyNTQyIDEuNzgzODFDNS41ODAzNCAxLjgyOTQ4IDUuNTU1MDYgMS44OTEwNyA1LjU1NTA2IDEuOTU1MjRDNS41NTUwNiAyLjAxOTQxIDUuNTgwMzQgMi4wODEgNS42MjU0MiAyLjEyNjY3TDcuNDI1NDIgMy45MjY2N0wxLjg1OTM1IDkuNDk1NDJDMS42NjkxNyA5LjY4NTYgMS42NjkxNyA5Ljk5MzYzIDEuODU5MzUgMTAuMTgxMUw4LjcxMzgxIDE3LjAzODNaTTkuMDU5MzUgNS4wMjIyTDEzLjg1MTMgOS44MTQxN0g0LjI3MDA2TDkuMDU5MzUgNS4wMjIyWk0yMi41MDA0IDIwLjE0MDFIMS41MDA0MkMxLjM4MjU2IDIwLjE0MDEgMS4yODYxMyAyMC4yMzY1IDEuMjg2MTMgMjAuMzU0M1YyMi40OTcyQzEuMjg2MTMgMjIuNjE1MSAxLjM4MjU2IDIyLjcxMTUgMS41MDA0MiAyMi43MTE1SDIyLjUwMDRDMjIuNjE4MyAyMi43MTE1IDIyLjcxNDcgMjIuNjE1MSAyMi43MTQ3IDIyLjQ5NzJWMjAuMzU0M0MyMi43MTQ3IDIwLjIzNjUgMjIuNjE4MyAyMC4xNDAxIDIyLjUwMDQgMjAuMTQwMVoiIGZpbGw9e3Rva2VuLmNvbG9yVGV4dH0vPgo8L3N2Zz4K"
+                        reqIndex: "0"
+                        jsonPathToArray: ".spec.tolerations"
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
+                        pathToValue: "/spec/tolerations"
+                        modalTitle: "Edit Pod Tolerations"
+                        editModalWidth: 900
+                        notificationSuccessMessage: "Tolerations updated"
+                        notificationSuccessMessageDescription: "Pod tolerations have been updated successfully"
+                        cols: [5, 5, 5, 5, 4]
+                    - type: delete
+                      props:
+                        text: Delete
+                        icon: DeleteOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
+                        name: "{reqsJsonPath[0]['.metadata.name']['-']}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Node (page-level)"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: page-actions
+                  buttonText: Actions
+                  actions:
+                    - type: edit
+                      props:
+                        text: Edit
+                        icon: EditOutlined
+                        cluster: "{2}"
+                        apiVersion: "{5}"
+                        plural: "{6}"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        baseprefix: /openapi-ui
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: editLabels
+                      props:
+                        text: Edit Labels
+                        icon: TagsOutlined
+                        reqIndex: "0"
+                        jsonPathToLabels: ".items.0.metadata.labels"
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/metadata/labels"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: editAnnotations
+                      props:
+                        text: Edit Annotations
+                        icon: FileTextOutlined
+                        reqIndex: "0"
+                        jsonPathToObj: ".items.0.metadata.annotations"
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/metadata/annotations"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: editTaints
+                      props:
+                        text: Edit Taints
+                        iconBase64Encoded: "<...>"
+                        reqIndex: "0"
+                        jsonPathToArray: ".items.0.spec.taints"
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/taints"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: cordon
+                      props:
+                        text: Cordon
+                        icon: StopOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/unschedulable"
+                        value: true
+                        visibleWhen:
+                          value: "{reqsJsonPath[0]['.items.0.spec.unschedulable']['-']}"
+                          criteria: notEquals
+                          valueToCompare: "true"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: uncordon
+                      props:
+                        text: Uncordon
+                        icon: CheckCircleOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/unschedulable"
+                        value: false
+                        visibleWhen:
+                          value: "{reqsJsonPath[0]['.items.0.spec.unschedulable']['-']}"
+                          criteria: equals
+                          valueToCompare: "true"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: openKubeletConfig
+                      props:
+                        text: Kubelet Config
+                        icon: SettingOutlined
+                        url: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}/proxy/configz"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+
+                    - type: delete
+                      props:
+                        text: Delete
+                        icon: DeleteOutlined
+                        danger: true
+                        endpoint: "/api/clusters/{2}/k8s/api/{5}/{6}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          plural: "{6}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Pod (CCO row)"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: pod-actions
+                  buttonVariant: icon
+                  actions:
+                    - type: editTolerations
+                      props:
+                        text: Edit Tolerations
+                        iconBase64Encoded: "<...>"
+                        reqIndex: "0"
+                        jsonPathToArray: ".spec.tolerations"
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}"
+                        pathToValue: "/spec/tolerations"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                          plural: "pods"
+
+                    - type: evict
+                      props:
+                        text: Evict
+                        icon: DisconnectOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{reqsJsonPath[0]['.metadata.namespace']['-']}/pods/{reqsJsonPath[0]['.metadata.name']['-']}/eviction"
+                        name: "{reqsJsonPath[0]['.metadata.name']['-']}"
+                        namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                        apiVersion: "policy/v1"
+                        gracePeriodSeconds: 30
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{reqsJsonPath[0]['.metadata.namespace']['-']}"
+                          plural: "pods"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Deployment (page-level)"
+            yamlContent={dedent`
+              - type: ActionsDropdown
+                data:
+                  id: page-actions
+                  actions:
+                    - type: scale
+                      props:
+                        text: Scale
+                        icon: ColumnHeightOutlined
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}/scale"
+                        currentReplicas: "{reqsJsonPath[0]['.items.0.spec.replicas']['-']}"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        namespace: "{3}"
+                        apiVersion: "autoscaling/v1"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+
+                    - type: suspend
+                      props:
+                        text: Suspend
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/paused"
+                        value: true
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+
+                    - type: resume
+                      props:
+                        text: Resume
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        pathToValue: "/spec/paused"
+                        value: false
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+
+                    - type: rolloutRestart
+                      props:
+                        text: Rollout Restart
+                        endpoint: "/api/clusters/{2}/k8s/apis/{6}/{7}/namespaces/{3}/{8}/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          apiGroup: "apps"
+                          plural: "{8}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Job (page-level)"
+            yamlContent={dedent`
+              - type: rerunLast
+                props:
+                  text: Rerun Last
+                  icon: ReloadOutlined
+                  createEndpoint: "/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs"
+                  sourceJobName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  sourceJobSpec: "{reqs[0]['items','0']}"
+                  permissionContext:
+                    apiGroup: batch
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    plural: jobs
+            `}
+          />
+          <YamlModal
+            buttonLabel="CronJob (page-level)"
+            yamlContent={dedent`
+              - type: triggerRun
+                props:
+                  text: Trigger Run
+                  icon: PlayCircleOutlined
+                  createEndpoint: "/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs"
+                  cronJobName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  jobTemplate: "{reqs[0]['items','0','spec','jobTemplate']}"
+                  permissionContext:
+                    apiGroup: batch
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    plural: jobs
+
+              - type: deleteChildren
+                props:
+                  text: Delete Active Job
+                  icon: DeleteOutlined
+                  childResourceName: Jobs
+                  children: '[{"name":"{reqs[0][''items'',''0'',''status'',''active'',''0'',''name''][''-'']}","endpoint":"/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs/{reqs[0][''items'',''0'',''status'',''active'',''0'',''name''][''-'']}"}]'
+                  visibleWhen:
+                    criteria: notEquals
+                    value: "{reqs[0]['items','0','status','active','0','name']['-']}"
+                    valueToCompare: "-"
+                  permissionContext:
+                    apiGroup: batch
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    plural: jobs
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+                  export type TLabelsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    maxEditTagTextLength?: number
+                    allowClearEditSelect?: boolean
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    paddingContainerEnd?: string
+                  }
+                  export type TLabelsBaseProps = {
+                      reqIndex: string
+                      jsonPathToLabels: string
+                  }
+                  export type TAnnotationsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 3
+                  }
+                  export type TAnnotationsBaseProps = {
+                    reqIndex: string
+                    jsonPathToObj: string
+                  }
+                  export type TTaintsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 4
+                  }
+                  export type TTaintsBaseProps = {
+                    reqIndex: string
+                    jsonPathToArray: string
+                  }
+                  export type TTolerationsModalProps = {
+                    notificationSuccessMessage?: string
+                    notificationSuccessMessageDescription?: string
+                    modalTitle?: string
+                    modalDescriptionText?: string
+                    modalDescriptionTextStyle?: CSSProperties
+                    inputLabel?: string
+                    inputLabelStyle?: CSSProperties
+                    endpoint?: string
+                    pathToValue?: string
+                    editModalWidth?: number | string
+                    cols: number[] // 5
+                  }
+                type TAntIconName = Exclude<keyof typeof AntIcons, 'createFromIconfontCN'>
+                export type TActionVisibilityCriteria = 'equals' | 'notEquals' | 'exists' | 'notExists'
+                export type TActionVisibility = {
+                  value: string
+                  criteria: TActionVisibilityCriteria
+                  valueToCompare?: string | string[]
+                }
+                export type TPermissionContext = {
+                  cluster: string
+                  namespace?: string
+                  apiGroup?: string
+                  plural: string
+                  subresource?: string
+                }
+                export type TActionBaseProps = {
+                  icon?: TAntIconName
+                  text: string
+                  disabled?: boolean
+                  tooltip?: string
+                  danger?: boolean
+                  visibleWhen?: TActionVisibility
+                  permissionContext?: TPermissionContext
+                }
+                export type TEditActionProps = TActionBaseProps & {
+                  cluster: string
+                  namespace?: string
+                  syntheticProject?: string
+                  apiGroup?: string
+                  apiVersion: string
+                  plural: string
+                  name: string
+                  baseprefix?: string
+                }
+                export type TEditLabelsActionProps = TActionBaseProps & TLabelsBaseProps & TLabelsModalProps
+                export type TEditAnnotationsActionProps = TActionBaseProps & TAnnotationsBaseProps & TAnnotationsModalProps
+                export type TEditTaintsActionProps = TActionBaseProps & TTaintsBaseProps & TTaintsModalProps
+                export type TEditTolerationsActionProps = TActionBaseProps & TTolerationsBaseProps & TTolerationsModalProps
+                export type TDeleteActionProps = TActionBaseProps & {
+                  endpoint: string
+                  name: string
+                  redirectTo?: string
+                }
+                export type TPatchFieldActionProps = TActionBaseProps & {
+                  endpoint: string
+                  pathToValue: string
+                  value: unknown
+                }
+                export type TRolloutRestartActionProps = TActionBaseProps & {
+                  endpoint: string
+                  annotationKey?: string
+                  timestamp?: string
+                }
+                export type TEvictActionProps = TActionBaseProps & {
+                  endpoint: string
+                  name: string
+                  namespace?: string
+                  apiVersion?: string
+                  gracePeriodSeconds?: number
+                  dryRun?: string[]
+                }
+                export type TOpenKubeletConfigActionProps = TActionBaseProps & {
+                  url: string
+                  modalTitle?: string
+                  modalDescriptionText?: string
+                  editModalWidth?: number | string
+                }
+                export type TScaleActionProps = TActionBaseProps & {
+                  endpoint: string
+                  currentReplicas: string
+                  name: string
+                  namespace?: string
+                  apiVersion?: string
+                }
+                export type TTriggerRunActionProps = TActionBaseProps & {
+                  createEndpoint: string
+                  cronJobName: string
+                  jobTemplate: string
+                }
+                export type TDeleteChildrenActionProps = TActionBaseProps & {
+                  children: string
+                  childResourceName: string
+                }
+                export type TRerunLastActionProps = TActionBaseProps & {
+                  createEndpoint: string
+                  sourceJobSpec: string
+                  sourceJobName: string
+                }
+                export type TDrainActionProps = TActionBaseProps & {
+                  bffEndpoint: string
+                  nodeName: string
+                }
+                export type TRollbackActionProps = TActionBaseProps & {
+                  bffEndpoint: string
+                  resourceName: string
+                  resourceEndpoint: string
+                }
+                export type TActionUnion =
+                  | { type: 'edit'; props: TEditActionProps }
+                  | { type: 'editLabels'; props: TEditLabelsActionProps }
+                  | { type: 'editAnnotations'; props: TEditAnnotationsActionProps }
+                  | { type: 'editTaints'; props: TEditTaintsActionProps }
+                  | { type: 'editTolerations'; props: TEditTolerationsActionProps }
+                  | { type: 'delete'; props: TDeleteActionProps }
+                  | { type: 'cordon'; props: TPatchFieldActionProps }
+                  | { type: 'uncordon'; props: TPatchFieldActionProps }
+                  | { type: 'suspend'; props: TPatchFieldActionProps }
+                  | { type: 'resume'; props: TPatchFieldActionProps }
+                  | { type: 'rolloutRestart'; props: TRolloutRestartActionProps }
+                  | { type: 'evict'; props: TEvictActionProps }
+                  | { type: 'openKubeletConfig'; props: TOpenKubeletConfigActionProps }
+                  | { type: 'scale'; props: TScaleActionProps }
+                  | { type: 'triggerRun'; props: TTriggerRunActionProps }
+                  | { type: 'deleteChildren'; props: TDeleteChildrenActionProps }
+                  | { type: 'rerunLast'; props: TRerunLastActionProps }
+                  | { type: 'drain'; props: TDrainActionProps }
+                  | { type: 'rollback'; props: TRollbackActionProps }
+                /** Per-action permission map. Key = "$\{actionType\}-$\{index\}", value = whether action is allowed. */
+                export type TActionsPermissions = Record<string, boolean | undefined>
+                export type TActionsDropdownProps = {
+                  id: number | string
+                  buttonText?: string
+                  buttonVariant?: 'default' | 'icon'
+                  containerStyle?: CSSProperties
+                  actions: TActionUnion[]
+                  /** Manual permission override. Takes priority over per-action permissionContext. */
+                  permissions?: TActionsPermissions
+                }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>UsageGraphCard</code></td>
+      <td>Card with usage graph and request/limit/used gradient bar</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+              - type: DefaultDiv
+                data:
+                  style:
+                    display: grid
+                    gridTemplateColumns: repeat(3, 1fr)
+                    gap: 16px
+                children:
+                  - type: UsageGraphCard
+                    data:
+                      title: CPU, core
+                      baseUrl: http://158.160.222.31:8428/api/v1/
+                      valueStrategy: cpu
+                      # query: |
+                        # sum(rate(container_cpu_usage_seconds_total{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"}[5m]))
+                      query: |
+                        sum(rate(container_cpu_usage_seconds_total[5m]))
+                      range: 1h
+                      requestedQuery: |
+                        sum(kube_pod_container_resource_requests{resource="cpu",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      usedQuery: |
+                        sum(rate(container_cpu_usage_seconds_total{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"}[5m]))
+                      # limitQuery: |
+                          # sum(machine_cpu_cores{node="{reqsJsonPath[0]['.items.0.metadata.name']['-']}",cluster=~"{2}"})
+                      limitQuery: |
+                          sum(machine_cpu_cores{instance="cl1ape149ccv0do3snh5-ahyb"})
+                      refetchInterval: 30000
+                  - type: UsageGraphCard
+                    data:
+                      title: Memory, bytes
+                      baseUrl: http://localhost:9090/api/v1/
+                      valueStrategy: memory
+                      query: |
+                        sum(container_memory_working_set_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      range: 1h
+                      requestedQuery: |
+                        sum(kube_pod_container_resource_requests{resource="memory",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      usedQuery: |
+                        sum(container_memory_working_set_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      limitQuery: |
+                        sum(kube_pod_container_resource_limits{resource="memory",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      refetchInterval: 30000
+                  - type: UsageGraphCard
+                    data:
+                      title: Ephemeral storage, bytes
+                      baseUrl: http://localhost:9090/api/v1/
+                      valueStrategy: memory
+                      query: |
+                        sum(container_fs_usage_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      range: 1h
+                      requestedQuery: |
+                        sum(kube_pod_container_resource_requests{resource="ephemeral-storage",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      usedQuery: |
+                        sum(container_fs_usage_bytes{node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      limitQuery: |
+                        sum(kube_pod_container_resource_limits{resource="ephemeral-storage",node=~"{reqsJsonPath[0]['.items.0.metadata.name']['-']}"})
+                      refetchInterval: 30000
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+                export type TCanonicalUnit =
+                  | 'B'
+                  | 'kB'
+                  | 'MB'
+                  | 'GB'
+                  | 'TB'
+                  | 'PB'
+                  | 'EB'
+                  | 'KiB'
+                  | 'MiB'
+                  | 'GiB'
+                  | 'TiB'
+                  | 'PiB'
+                  | 'EiB'
+                export type TUnitInput =
+                  | TCanonicalUnit
+                  // SI aliases (single letters)
+                  | 'b'
+                  | 'byte'
+                  | 'bytes'
+                  | 'k'
+                  | 'm'
+                  | 'g'
+                  | 't'
+                  | 'p'
+                  | 'e'
+                  // SI upper-case shortcuts
+                  | 'K'
+                  | 'M'
+                  | 'G'
+                  | 'T'
+                  | 'P'
+                  | 'E'
+                  // SI two-letter variants (upper & lower)
+                  | 'kb'
+                  | 'KB'
+                  | 'mb'
+                  | 'Mb'
+                  | 'MB'
+                  | 'gb'
+                  | 'Gb'
+                  | 'GB'
+                  | 'tb'
+                  | 'Tb'
+                  | 'TB'
+                  | 'pb'
+                  | 'Pb'
+                  | 'PB'
+                  | 'eb'
+                  | 'Eb'
+                  | 'EB'
+                  // IEC aliases
+                  | 'ki'
+                  | 'mi'
+                  | 'gi'
+                  | 'ti'
+                  | 'pi'
+                  | 'ei'
+                  | 'kib'
+                  | 'mib'
+                  | 'gib'
+                  | 'tib'
+                  | 'pib'
+                  | 'eib'
+                  // IEC canonical/upper variants
+                  | 'Ki'
+                  | 'Mi'
+                  | 'Gi'
+                  | 'Ti'
+                  | 'Pi'
+                  | 'Ei'
+                  | 'KiB'
+                  | 'MiB'
+                  | 'GiB'
+                  | 'TiB'
+                  | 'PiB'
+                  | 'EiB'
+                export type TConverterBytesProps = {
+                  id: number | string
+                  bytesValue: string | string[] // reqs
+                  unit?: TUnitInput // do not enter if wanna auto format
+                  /** If true, returns "12.3 GiB" instead of just 12.3 */
+                  format?: boolean
+                  /** If false and format=true, return formatted number without unit */
+                  showUnit?: boolean
+                  /** Max fraction digits when formatting (default 2) */
+                  precision?: number
+                  /** Locale for number formatting (default: undefined => user agent) */
+                  locale?: string
+                  standard?: 'si' | 'iec'
+                  notANumberText?: string
+                  style?: CSSProperties
+                  /** If provided, value is in this unit instead of raw bytes */
+                  fromUnit?: TUnitInput
+                  /** If provided, convert to this explicit unit */
+                  toUnit?: TUnitInput // do not enter if wanna auto format
+                  /** If omitted and toUnit is missing, use auto-scaling */
+                }
+                export type TCoreCanonicalUnit = 'core' | 'mcore' | 'ucore' | 'ncore'
+                export type TCoreUnitInput = string | TCoreCanonicalUnit
+                export type TConverterCoresProps = {
+                  id: number | string
+                  /** Raw text that may contain a number or number+unit like "0.5", "500m", "2 vcpu" */
+                  coresValue: string | string[]
+                  /** Target unit; omit to auto format (core vs mcore) */
+                  unit?: TCoreUnitInput
+                  /** If true, returns "500 mcore" instead of just 500 */
+                  format?: boolean
+                  /** If false and format=true, return formatted number without unit */
+                  showUnit?: boolean
+                  /** Max fraction digits when formatting (default 2) */
+                  precision?: number
+                  /** Locale for number formatting (default: undefined => user agent) */
+                  locale?: string
+                  notANumberText?: string
+                  style?: CSSProperties
+                  /** If provided, value is in this unit instead of raw "cores" */
+                  fromUnit?: TCoreUnitInput
+                  /** If provided, convert to this explicit unit; omit for auto-format */
+                  toUnit?: TCoreUnitInput
+                  /** If omitted and toUnit is missing, use auto-scaling (core vs mcore) */
+                }
+                export type TUsageGraphCardDatum = {
+                  value: number
+                  label?: string | number
+                }
+                export type TUsageGraphCardProps = {
+                  title?: string // default: 'CPU, core'
+                  series?: TUsageGraphCardDatum[] // can be provided straight forward
+                  containerStyle?: CSSProperties
+                  valueStrategy: 'cpu' | 'memory'
+                  converterBytesProps?: Partial<Omit<TConverterBytesProps, 'id' | 'bytesValue'>>
+                  converterCoresProps?: Partial<Omit<TConverterCoresProps, 'id' | 'coresValue'>>
+                  /* colors; defaults are provided */
+                  minColor?: string
+                  midColor?: string
+                  maxColor?: string
+                  /* gradient bar */
+                  requested?: number
+                  requestedQuery?: string
+                  used?: number
+                  usedQuery?: string
+                  limit?: number
+                  limitQuery?: string
+                  /* prom */
+                  baseUrl?: string
+                  query?: string
+                  refetchInterval?: number | false // default: 30_000
+                  range?: string // default: 1h
+                }
             `}
           />
         </div>
@@ -4065,6 +5668,15 @@ Factory поддерживает версионность API. Вы можете
       <td>
         Определяет способ объединения с оригинальной схемой ресурса: <code>merge</code> (объединить) или{' '}
         <code>replace</code> (заменить полностью).
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <code>forceViewMode</code>
+      </td>
+      <td>
+        Необязательный параметр. Определяет способ отображения: <code>OpenAPI</code> или <code>Manual</code>.
       </td>
       <td></td>
     </tr>
@@ -4339,6 +5951,92 @@ Factory поддерживает версионность API. Вы можете
 
 ---
 
+## CFOMapping
+
+Ресурс <code>CFOMapping</code> используется вместе с <code>CustomFormsOverride</code> для принудительного
+переопределения <code>customizationId</code> при подготовке формы.
+
+В провайдере формы применяется следующая логика резолва:
+
+1. Если существует <code>CustomFormsOverride</code> с исходным <code>customizationId</code>, используется он.
+2. Иначе UI пытается найти маппинг в <code>spec.mappings[customizationId]</code> и проверить, что целевой
+   <code>customizationId</code> реально существует в <code>CustomFormsOverride</code>.
+3. Если ни исходный, ни mapped ID не найдены, используется <code>fallbackId</code>.
+
+:::info
+CFOMapping читается как один именованный ресурс по селектору <code>metadata.name</code>, а сами соответствия
+хранятся в поле <code>spec.mappings</code> в формате <code>ключ -> целевой customizationId</code>.
+:::
+
+<h3>Пример ресурса</h3>
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: front.in‑Cloud.io/v1alpha1
+    kind: CFOMapping
+    metadata:
+      name: default-cfo-mapping
+    spec:
+      mappings:
+        stock-namespace-apps/v1/deployments: stock-namespace-apps/v1/deployments-v2
+        stock-namespace-/v1/services: stock-namespace-/v1/services-override
+  `}
+</CodeBlock>
+
+<h3>Поля ресурса</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Поле</th>
+      <th>Тип</th>
+      <th>Назначение</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>metadata.name</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>Имя mapping-ресурса. Используется в UI для выбора через fieldSelector.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.mappings</code>
+      </td>
+      <td>
+        <code>Record&lt;string, string&gt;</code>
+      </td>
+      <td>
+        Словарь соответствий исходного <code>customizationId</code> к целевому <code>customizationId</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.mappings.&lt;customizationId&gt;</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>
+        Целевой <code>customizationId</code>, на который будет переключена форма, если он существует в
+        <code>CustomFormsOverride</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+:::tip
+Если mapped <code>customizationId</code> отсутствует среди <code>CustomFormsOverride</code>, UI не применит mapping и
+перейдет к <code>fallbackId</code> (если задан).
+:::
+
+---
+
 ## CustomFormsPrefill
 
 Ресурс <code>CustomFormsPrefill</code> позволяет заранее подставлять значения в кастомные формы UI in‑Cloud.
@@ -4473,6 +6171,83 @@ Factory поддерживает версионность API. Вы можете
 :::note
 Страница <code>Search</code> является частью общей системы визуализации Factory и использует единый механизм отображения данных, включая поддержку фильтрации, подсветку совпадений и контекстные переходы.
 :::
+
+## Plugins
+
+Есть два типа поддерживаемых плагинов:
+
+- Плагины с фиксированным названием: `plugin-header`, `plugin-navigation`, `plugin-sidebar`, отвечающие за соответствующие блоки в ui.
+- Плагины с динамическим именем, доступные по адресу: `:prefix/:cluster/:namespace?/:syntheticProject?/plugins/:pluginName/*`
+
+Репозиторий с [примером плагина](https://github.com/PRO-Robotech/openapi-ui-plugin-example)
+
+Плагины должны быть настроены в чарте таким образом, чтобы `remoteEntry.js` был доступен пользователю из браузера.
+
+Плагины настраиваются через манифест в виде JSON, указанный в качестве ENV-переменной:
+
+<table>
+  <thead>
+    <tr>
+      <th>Тип</th>
+      <th>Где указывать</th>
+      <th>Пример env</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <p>С фиксированным</p>
+      </td>
+      <td>
+        <p>UI</p>
+      </td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+          MF_PLUGINS_NO_CLUSTER='{
+              "plugin-header": {
+                "name": "plugin-example",
+                "entry": "путь/до/remoteEntry.js",
+                "exposedModule": "./App"
+              },
+              "plugin-navigation": {
+                "name": "plugin-example",
+                "entry": "путь/до/remoteEntry.js",
+                "exposedModule": "./App"
+              },
+              "plugin-sidebar": {
+                "name": "plugin-example",
+                "entry": "путь/до/remoteEntry.js",
+                "exposedModule": "./App"
+              }
+            }'
+        `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>С динамическом</p>
+      </td>
+      <td>
+        <p>BFF</p>
+      </td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+          MF_PLUGINS_JSON='{
+            "plugin-example": {
+              "name": "plugin-example",
+              "entry": "путь/до/remoteEntry.js",
+              "exposedModule": "./App"
+            }
+          }'
+        `}
+        />
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
