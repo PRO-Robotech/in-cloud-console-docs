@@ -5114,6 +5114,72 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
+            buttonLabel="Deployment — rollback (page-level)"
+            yamlContent={dedent`
+              - type: rollback
+                props:
+                  text: Rollback
+                  icon: RollbackOutlined
+                  danger: true
+                  bffEndpoint: "/api/clusters/{2}/openapi-bff/actions/rollback"
+                  resourceName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  resourceEndpoint: "/apis/{6}/{7}/namespaces/{3}/deployments/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  permissionContext:
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    apiGroup: "apps"
+                    plural: "{8}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Deployment — rollback (CCO row)"
+            yamlContent={dedent`
+              - type: rollback
+                props:
+                  text: Rollback
+                  icon: RollbackOutlined
+                  danger: true
+                  bffEndpoint: "/api/clusters/{2}/openapi-bff/actions/rollback"
+                  resourceName: "{reqsJsonPath[0]['.metadata.name']['-']}"
+                  resourceEndpoint: "/apis/apps/v1/namespaces/{3}/deployments/{reqsJsonPath[0]['.metadata.name']['-']}"
+                  permissionContext:
+                    cluster: "{2}"
+                    namespace: "{3}"
+                    apiGroup: "apps"
+                    plural: "deployments"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Node — drain (page-level)"
+            yamlContent={dedent`
+              - type: drain
+                props:
+                  text: Drain
+                  icon: CloudDownloadOutlined
+                  danger: true
+                  bffEndpoint: "/api/clusters/{2}/openapi-bff/actions/drain"
+                  nodeName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                  permissionContext:
+                    cluster: "{2}"
+                    plural: "{6}"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Node — drain (CCO row)"
+            yamlContent={dedent`
+              - type: drain
+                props:
+                  text: Drain
+                  icon: CloudDownloadOutlined
+                  danger: true
+                  bffEndpoint: "/api/clusters/{2}/openapi-bff/actions/drain"
+                  nodeName: "{reqsJsonPath[0]['.metadata.name']['-']}"
+                  permissionContext:
+                    cluster: "{2}"
+                    plural: "nodes"
+            `}
+          />
+          <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
                   export type TLabelsModalProps = {
