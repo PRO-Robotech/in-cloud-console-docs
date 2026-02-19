@@ -1820,6 +1820,34 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         />
       </td>
     </tr>
+    <tr>
+      <td>
+        <code>spec.baseFactoriesMapping</code>
+      </td>
+      <td>Record\<string, string\></td>
+      <td>Замена id фабрики по-умолчанию на целевой id</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            base-factory-namespaced-api-metrics.k8s.io-v1beta1-pods: pods-metrics
+          `}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>spec.pathToNavigateFromClusterList</code>
+      </td>
+      <td>string</td>
+      <td>`~recordValue~` для подмены из колонки name при клике.</td>
+      <td>
+        <YamlModal
+          yamlContent={dedent`
+            /openapi-ui/~recordValue~/builtin-table/nodes
+          `}
+        />
+      </td>
+    </tr>
   </tbody>
 </table>
 
