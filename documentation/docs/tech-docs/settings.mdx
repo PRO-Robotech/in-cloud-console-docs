@@ -5044,6 +5044,68 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
+            buttonLabel="ConfigMap/Secret (page-level file actions)"
+            yamlContent={dedent`
+              # ConfigMap (page-level)
+              - type: ActionsDropdown
+                data:
+                  id: cm-page-actions
+                  buttonText: Actions
+                  actions:
+                    - type: downloadAsFiles
+                      props:
+                        text: Download as files
+                        icon: DownloadOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/configmaps/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        resourceKind: "ConfigMap"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "configmaps"
+                    - type: createFromFiles
+                      props:
+                        text: Create from files
+                        icon: UploadOutlined
+                        createEndpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/configmaps"
+                        namespace: "{3}"
+                        resourceKind: "ConfigMap"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "configmaps"
+
+              # Secret (page-level)
+              - type: ActionsDropdown
+                data:
+                  id: sec-page-actions
+                  buttonText: Actions
+                  actions:
+                    - type: downloadAsFiles
+                      props:
+                        text: Download as files
+                        icon: DownloadOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/secrets/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        resourceKind: "Secret"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "secrets"
+                    - type: createFromFiles
+                      props:
+                        text: Create from files
+                        icon: UploadOutlined
+                        createEndpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/secrets"
+                        namespace: "{3}"
+                        resourceKind: "Secret"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "secrets"
+            `}
+          />
+          <YamlModal
             buttonLabel="Deployment (page-level)"
             yamlContent={dedent`
               - type: ActionsDropdown
