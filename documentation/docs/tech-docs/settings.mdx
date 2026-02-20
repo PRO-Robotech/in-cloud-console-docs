@@ -5044,6 +5044,68 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
+            buttonLabel="ConfigMap/Secret (page-level file actions)"
+            yamlContent={dedent`
+              # ConfigMap (page-level)
+              - type: ActionsDropdown
+                data:
+                  id: cm-page-actions
+                  buttonText: Actions
+                  actions:
+                    - type: downloadAsFiles
+                      props:
+                        text: Download as files
+                        icon: DownloadOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/configmaps/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        resourceKind: "ConfigMap"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "configmaps"
+                    - type: createFromFiles
+                      props:
+                        text: Create from files
+                        icon: UploadOutlined
+                        createEndpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/configmaps"
+                        namespace: "{3}"
+                        resourceKind: "ConfigMap"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "configmaps"
+
+              # Secret (page-level)
+              - type: ActionsDropdown
+                data:
+                  id: sec-page-actions
+                  buttonText: Actions
+                  actions:
+                    - type: downloadAsFiles
+                      props:
+                        text: Download as files
+                        icon: DownloadOutlined
+                        endpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/secrets/{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        resourceKind: "Secret"
+                        name: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "secrets"
+                    - type: createFromFiles
+                      props:
+                        text: Create from files
+                        icon: UploadOutlined
+                        createEndpoint: "/api/clusters/{2}/k8s/api/v1/namespaces/{3}/secrets"
+                        namespace: "{3}"
+                        resourceKind: "Secret"
+                        permissionContext:
+                          cluster: "{2}"
+                          namespace: "{3}"
+                          plural: "secrets"
+            `}
+          />
+          <YamlModal
             buttonLabel="Deployment (page-level)"
             yamlContent={dedent`
               - type: ActionsDropdown
@@ -5301,6 +5363,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 }
                 export type TActionBaseProps = {
                   icon?: TAntIconName
+                  iconBase64Encoded?: string
                   text: string
                   disabled?: boolean
                   tooltip?: string
@@ -5381,6 +5444,18 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   resourceName: string
                   resourceEndpoint: string
                 }
+                export type TResourceKind = 'ConfigMap' | 'Secret'
+                export type TDownloadAsFilesActionProps = TActionBaseProps & {
+                  endpoint: string
+                  resourceKind: TResourceKind
+                  name: string
+                }
+                export type TCreateFromFilesActionProps = TActionBaseProps & {
+                  createEndpoint: string
+                  namespace: string
+                  resourceKind: TResourceKind
+                  apiVersion?: string
+                }
                 export type TActionUnion =
                   | { type: 'edit'; props: TEditActionProps }
                   | { type: 'editLabels'; props: TEditLabelsActionProps }
@@ -5401,6 +5476,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   | { type: 'rerunLast'; props: TRerunLastActionProps }
                   | { type: 'drain'; props: TDrainActionProps }
                   | { type: 'rollback'; props: TRollbackActionProps }
+                  | { type: 'downloadAsFiles'; props: TDownloadAsFilesActionProps }
+                  | { type: 'createFromFiles'; props: TCreateFromFilesActionProps }
                 /** Per-action permission map. Key = "$\{actionType\}-$\{index\}", value = whether action is allowed. */
                 export type TActionsPermissions = Record<string, boolean | undefined>
                 export type TActionsDropdownProps = {
