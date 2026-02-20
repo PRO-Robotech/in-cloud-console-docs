@@ -5363,6 +5363,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 }
                 export type TActionBaseProps = {
                   icon?: TAntIconName
+                  iconBase64Encoded?: string
                   text: string
                   disabled?: boolean
                   tooltip?: string
@@ -5443,6 +5444,18 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   resourceName: string
                   resourceEndpoint: string
                 }
+                export type TResourceKind = 'ConfigMap' | 'Secret'
+                export type TDownloadAsFilesActionProps = TActionBaseProps & {
+                  endpoint: string
+                  resourceKind: TResourceKind
+                  name: string
+                }
+                export type TCreateFromFilesActionProps = TActionBaseProps & {
+                  createEndpoint: string
+                  namespace: string
+                  resourceKind: TResourceKind
+                  apiVersion?: string
+                }
                 export type TActionUnion =
                   | { type: 'edit'; props: TEditActionProps }
                   | { type: 'editLabels'; props: TEditLabelsActionProps }
@@ -5463,6 +5476,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   | { type: 'rerunLast'; props: TRerunLastActionProps }
                   | { type: 'drain'; props: TDrainActionProps }
                   | { type: 'rollback'; props: TRollbackActionProps }
+                  | { type: 'downloadAsFiles'; props: TDownloadAsFilesActionProps }
+                  | { type: 'createFromFiles'; props: TCreateFromFilesActionProps }
                 /** Per-action permission map. Key = "$\{actionType\}-$\{index\}", value = whether action is allowed. */
                 export type TActionsPermissions = Record<string, boolean | undefined>
                 export type TActionsDropdownProps = {
