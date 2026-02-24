@@ -5171,7 +5171,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   icon: ReloadOutlined
                   createEndpoint: "/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs"
                   sourceJobName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
-                  sourceJobSpec: "{reqs[0]['items','0']}"
+                  # Object source is configured via reqIndex + jsonPathToObj
+                  reqIndex: "0"
+                  jsonPathToObj: ".items.0"
                   permissionContext:
                     apiGroup: batch
                     cluster: "{2}"
@@ -5188,7 +5190,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   icon: PlayCircleOutlined
                   createEndpoint: "/api/clusters/{2}/k8s/apis/batch/v1/namespaces/{3}/jobs"
                   cronJobName: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
-                  jobTemplate: "{reqs[0]['items','0','spec','jobTemplate']}"
+                  # Object source is configured via reqIndex + jsonPathToObj
+                  reqIndex: "0"
+                  jsonPathToObj: ".items.0.spec.jobTemplate"
                   permissionContext:
                     apiGroup: batch
                     cluster: "{2}"
@@ -5424,7 +5428,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 export type TTriggerRunActionProps = TActionBaseProps & {
                   createEndpoint: string
                   cronJobName: string
-                  jobTemplate: string
+                  reqIndex: string
+                  jsonPathToObj: string
                 }
                 export type TDeleteChildrenActionProps = TActionBaseProps & {
                   children: string
@@ -5432,8 +5437,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 }
                 export type TRerunLastActionProps = TActionBaseProps & {
                   createEndpoint: string
-                  sourceJobSpec: string
                   sourceJobName: string
+                  reqIndex: string
+                  jsonPathToObj: string
                 }
                 export type TDrainActionProps = TActionBaseProps & {
                   bffEndpoint: string
