@@ -6274,6 +6274,43 @@ CFOMapping читается как один именованный ресурс 
   `}
 </CodeBlock>
 
+<h3>Пример ресурса (формат через объект)</h3>
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: front.in‑Cloud.io/v1alpha1
+    kind: CustomFormsPrefill
+    metadata:
+      name: v1.service
+    spec:
+      customizationId: stock-namespace-/v1/services
+      values:
+        metadata:
+          name: example-service
+          namespace: default
+        spec:
+          hosts:
+            "*":
+              kind: bar
+  `}
+</CodeBlock>
+
+:::info
+Оба формата поддерживаются. На стороне BFF объектный формат нормализуется в канонический
+<code>spec.values[]</code> (массив <code>{`{ path, value }`}</code>), который используется всеми потребителями.
+
+Пример нормализации:
+<ul>
+  <li>
+    <code>metadata.name</code> → <code>{`{ path: ["metadata","name"], value: "example-service" }`}</code>
+  </li>
+  <li>
+    <code>spec.hosts.*.kind</code> → <code>{`{ path: ["spec","hosts","*","kind"], value: "bar" }`}</code>
+  </li>
+</ul>
+:::
+
 <h3>Поля ресурса</h3>
 
 <table>
@@ -6307,12 +6344,18 @@ CFOMapping читается как один именованный ресурс 
     </tr>
     <tr>
       <td>
-        <code>spec.values[]</code>
+        <code>spec.values</code>
       </td>
       <td>
-        <code>array</code>
+        <code>array | object</code>
       </td>
-      <td>Массив подстановок для полей формы.</td>
+      <td>
+        Подстановки для полей формы:
+        <ul>
+          <li>канонический формат — массив <code>spec.values[]</code> c <code>path/value</code>;</li>
+          <li>объектный формат — вложенный объект, который BFF разворачивает в канонический массив.</li>
+        </ul>
+      </td>
     </tr>
     <tr>
       <td>
