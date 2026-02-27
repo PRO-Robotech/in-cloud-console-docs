@@ -2227,6 +2227,43 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
 
     <tr>
+      <td><code>MappedParsedText</code></td>
+      <td>Значение из JSONPath сопоставляемое с valueMap</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/parsedText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+                - type: MappedParsedText
+                  data:
+                    id: mapped-parsed-text
+                    value: "{reqsJsonPath[0]['.spec.accessLevel']['-']}"
+                    valueMap:
+                    20: "View"
+                    30: "Edit"
+                    40: "Admin"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+              export type TMappedParsedTextProps = {
+                  id: number | string
+                  value: string
+                  valueMap: Record<string, string>
+                  style?: CSSProperties
+                }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
+    <tr>
       <td><code>LabelsToSearchParams</code></td>
       <td>Создает ссылку на Search модуль с подставленными атрибутами поиска</td>
       <td>
@@ -6304,9 +6341,11 @@ CFOMapping читается как один именованный ресурс 
 
 :::info
 Оба формата поддерживаются. На стороне BFF объектный формат нормализуется в канонический
+
 <code>spec.values[]</code> (массив <code>{`{ path, value }`}</code>), который используется всеми потребителями.
 
 Пример нормализации:
+
 <ul>
   <li>
     <code>metadata.name</code> → <code>{`{ path: ["metadata","name"], value: "example-service" }`}</code>
@@ -6358,7 +6397,9 @@ CFOMapping читается как один именованный ресурс 
       <td>
         Подстановки для полей формы:
         <ul>
-          <li>канонический формат — массив <code>spec.values[]</code> c <code>path/value</code>;</li>
+          <li>
+            канонический формат — массив <code>spec.values[]</code> c <code>path/value</code>;
+          </li>
           <li>объектный формат — вложенный объект, который BFF разворачивает в канонический массив.</li>
         </ul>
       </td>
