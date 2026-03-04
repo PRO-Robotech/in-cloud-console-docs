@@ -5767,6 +5767,41 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       </td>
     </tr>
 
+    <tr>
+      <td><code>Volumes</code></td>
+      <td>Компонент отображения Volumes в табличном представлении с указанием mount</td>
+      <td>
+        {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure> */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <YamlModal
+            yamlContent={dedent`
+                - type: Volumes
+                  data:
+                    reqIndex: 0
+                    jsonPathToSpec: .items.0.spec
+                    errorText: "No efficient data in spec"
+            `}
+          />
+          <YamlModal
+            buttonLabel="Пример структуры"
+            yamlContent={dedent`
+                export type TVolumesProps = {
+                  id: number | string
+                  reqIndex: string
+                  jsonPathToSpec: string
+                  errorText?: string
+                  containerStyle?: CSSProperties
+                }
+            `}
+          />
+        </div>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
