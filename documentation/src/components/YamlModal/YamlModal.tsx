@@ -11,7 +11,7 @@ interface YamlModalProps {
 export const YamlModal: React.FC<YamlModalProps> = ({
   yamlContent,
   onCloseOtherModals,
-  buttonLabel = 'Открыть пример',
+  buttonLabel = 'Open example',
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
@@ -100,7 +100,7 @@ export const YamlModal: React.FC<YamlModalProps> = ({
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ padding: '1rem', fontWeight: 'bold', color: '#ccc' }}>Пример политики</div>
+              <div style={{ padding: '1rem', fontWeight: 'bold', color: '#ccc' }}>Policy example</div>
               <div style={{ padding: '0 1rem 1rem', overflow: 'auto', maxHeight: '70vh' }}>
                 <Editor
                   height={editorHeight}
@@ -130,7 +130,7 @@ export const YamlModal: React.FC<YamlModalProps> = ({
                     cursor: 'pointer',
                   }}
                 >
-                  Скопировать
+                  Copy
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
@@ -144,7 +144,7 @@ export const YamlModal: React.FC<YamlModalProps> = ({
                     cursor: 'pointer',
                   }}
                 >
-                  Закрыть
+                  Close
                 </button>
               </div>
             </div>
@@ -167,7 +167,7 @@ export const YamlModal: React.FC<YamlModalProps> = ({
             zIndex: 1100,
           }}
         >
-          Сохранено в буфер обмена
+          Copied to clipboard
         </div>
       )}
     </>

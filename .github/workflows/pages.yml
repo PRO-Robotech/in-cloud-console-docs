@@ -42,6 +42,14 @@ jobs:
       - name: Install deps (Docusaurus)
         working-directory: ./documentation
         run: npm i
+      - name: Resolve GitHub repo facts
+        run: |
+          repo_json="$(curl -fsSL https://api.github.com/repos/PRO-Robotech/openapi-ui)"
+          tags_json="$(curl -fsSL https://api.github.com/repos/PRO-Robotech/openapi-ui/tags?per_page=1)"
+
+          echo "Docusaurus_GIT_STARS=$(printf '%s' "$repo_json" | jq -r '.stargazers_count')" >> "$GITHUB_ENV"
+          echo "Docusaurus_GIT_FORKS=$(printf '%s' "$repo_json" | jq -r '.forks')" >> "$GITHUB_ENV"
+          echo "Docusaurus_GIT_TAG=$(printf '%s' "$tags_json" | jq -r '.[0].name // empty')" >> "$GITHUB_ENV"
       - name: Build (Docusaurus)
         working-directory: ./documentation
         env:
