@@ -2214,9 +2214,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              {
+              export type TParsedTextProps = {
                 id: number | string
                 text: string
+                tooltip?: string
                 formatter?: 'timestamp'
                 style?: CSSProperties
               }
@@ -5783,6 +5784,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   data:
                     reqIndex: 0
                     jsonPathToSpec: .items.0.spec
+                    jsonPathToPodName: .items.0.metadata.name
                     errorText: "No efficient data in spec"
             `}
           />
@@ -5793,6 +5795,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   id: number | string
                   reqIndex: string
                   jsonPathToSpec: string
+                  jsonPathToPodName?: string
                   errorText?: string
                   containerStyle?: CSSProperties
                 }
