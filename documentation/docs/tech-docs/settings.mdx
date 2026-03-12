@@ -599,16 +599,16 @@ The sidebar also needs to be described for each factory page. At first glance th
 ## Breadcrumb
 
 <p>
-  Breadcrumb in in‑Cloud is an additional navigation element. It shows the path from the root level to the current
-  page and helps users understand the context they are working in. Its main goal is to provide quick access to
-  previous levels without returning to the sidebar or repeating a search.
+  Breadcrumb in in‑Cloud is an additional navigation element. It shows the path from the root level to the current page
+  and helps users understand the context they are working in. Its main goal is to provide quick access to previous
+  levels without returning to the sidebar or repeating a search.
 </p>
 
 <p>
-  The trail is built declaratively from a YAML description. Each item has a key, display name, and link, and those
-  links can use placeholders such as <code>\{cluster}</code>, <code>\{namespace}</code>, <code>\{apiGroup}</code>,
-  <code>\{apiVersion}</code>, and <code>\{plural}</code>. This makes it possible to configure navigation flexibly for
-  a specific workflow.
+  The trail is built declaratively from a YAML description. Each item has a key, display name, and link, and those links
+  can use placeholders such as <code>\{cluster}</code>, <code>\{namespace}</code>, <code>\{apiGroup}</code>,
+  <code>\{apiVersion}</code>, and <code>\{plural}</code>. This makes it possible to configure navigation flexibly for a
+  specific workflow.
 </p>
 
 <p>
@@ -830,7 +830,8 @@ Breadcrumb also needs to be described for each factory page. At first glance thi
   trimming.
 </p>
 <p>
-  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code changes.
+  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code
+  changes.
 </p>
 
 <h3>CustomColumnsOverride Field Structure</h3>
@@ -1395,11 +1396,12 @@ Keep in mind that `CustomColumnsOverride` must be configured for each resource t
 ## TableUriMapping
 
 <p>
-  `TableUriMapping` is a route configuration mechanism for Kubernetes resource table views in in‑Cloud. When a route
-  is defined, rows and cells become clickable and lead to the corresponding resource pages.
+  `TableUriMapping` is a route configuration mechanism for Kubernetes resource table views in in‑Cloud. When a route is
+  defined, rows and cells become clickable and lead to the corresponding resource pages.
 </p>
 <p>
-  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code changes.
+  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code
+  changes.
 </p>
 
 <h3>TableUriMapping Field Structure</h3>
@@ -1891,8 +1893,8 @@ Make sure the routes are valid and point to existing views, otherwise the user m
 ## Factory
 
 <p>
-  The <code>Factory</code> resource is used in the in‑Cloud UI to build interfaces declaratively from YAML
-  descriptions. It acts as a description of a page or part of a page and includes:
+  The <code>Factory</code> resource is used in the in‑Cloud UI to build interfaces declaratively from YAML descriptions.
+  It acts as a description of a page or part of a page and includes:
 </p>
 
 <ul>
@@ -1924,8 +1926,8 @@ Make sure the routes are valid and point to existing views, otherwise the user m
 <h3>Data Processing</h3>
 
 <p>
-  Data fetched through <code>urlsToFetch</code> is available in all components through JSONPath syntax, including
-  nested access:
+  Data fetched through <code>urlsToFetch</code> is available in all components through JSONPath syntax, including nested
+  access:
 </p>
 
 <CodeBlock language="yaml">
@@ -2207,9 +2209,10 @@ It describes the interface structure as a hierarchy of components.
           <YamlModal
             buttonLabel="Structure example"
             yamlContent={dedent`
-              {
+              export type TParsedTextProps = {
                 id: number | string
                 text: string
+                tooltip?: string
                 formatter?: 'timestamp'
                 style?: CSSProperties
               }
@@ -5776,6 +5779,7 @@ It describes the interface structure as a hierarchy of components.
                   data:
                     reqIndex: 0
                     jsonPathToSpec: .items.0.spec
+                    jsonPathToPodName: .items.0.metadata.name
                     errorText: "No efficient data in spec"
             `}
           />
@@ -5786,6 +5790,7 @@ It describes the interface structure as a hierarchy of components.
                   id: number | string
                   reqIndex: string
                   jsonPathToSpec: string
+                  jsonPathToPodName?: string
                   errorText?: string
                   containerStyle?: CSSProperties
                 }
@@ -5863,9 +5868,7 @@ Inside `spec`, the `CustomFormsOverride` resource is logically divided into seve
       <td>
         <code>customizationId</code>
       </td>
-      <td>
-        Unique identifier used by the UI to find and apply the overridden form to the target resource.
-      </td>
+      <td>Unique identifier used by the UI to find and apply the overridden form to the target resource.</td>
       <td></td>
     </tr>
     <tr>
@@ -5900,8 +5903,8 @@ Inside `spec`, the `CustomFormsOverride` resource is logically divided into seve
         <code>sort</code>
       </td>
       <td>
-        Array of field paths used to sort the form. For example, <code>["spec", "serviceRef", "apiVersion"]</code>.
-        This defines the display order of fields in the form.
+        Array of field paths used to sort the form. For example, <code>["spec", "serviceRef", "apiVersion"]</code>. This
+        defines the display order of fields in the form.
       </td>
       <td>
         <YamlModal
@@ -5973,7 +5976,8 @@ business-oriented form with descriptions, dictionaries, required fields, and typ
         <code>type</code>
       </td>
       <td>
-        Basic field type: <code>string</code>, <code>integer</code>, <code>boolean</code>, <code>object</code>, or <code>array</code>.
+        Basic field type: <code>string</code>, <code>integer</code>, <code>boolean</code>, <code>object</code>, or{' '}
+        <code>array</code>.
       </td>
     </tr>
     <tr>
@@ -6014,9 +6018,7 @@ business-oriented form with descriptions, dictionaries, required fields, and typ
       <td>
         <code>customProps</code>
       </td>
-      <td>
-        Custom in‑Cloud UI extensions for rendering dictionaries, ranges, and dependencies between fields.
-      </td>
+      <td>Custom in‑Cloud UI extensions for rendering dictionaries, ranges, and dependencies between fields.</td>
     </tr>
   </tbody>
 </table>
@@ -6226,6 +6228,7 @@ Custom types are extensions of the standard <code>string</code>, <code>number</c
 ## CFOMapping
 
 The <code>CFOMapping</code> resource is used together with <code>CustomFormsOverride</code> to force an override of
+
 <code>customizationId</code> during form preparation.
 
 The form provider applies the following resolution logic:
