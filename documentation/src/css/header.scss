@@ -52,7 +52,13 @@ body.header-not-at-top {
 
 .header-github-link {
   position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  align-items: flex-start;
+  justify-content: center;
   margin-left: 35px;
+  white-space: normal;
 
   @media (min-width: 997px) {
     margin-left: auto;
@@ -61,6 +67,13 @@ body.header-not-at-top {
   &:hover {
     opacity: 0.6;
   }
+}
+
+.header-github-link__title {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  line-height: 1.1;
 }
 
 .header-github-link:before {
@@ -74,8 +87,9 @@ body.header-not-at-top {
   content: '';
 
   @media (min-width: 997px) {
-    top: 10px;
+    top: 50%;
     left: -25px;
+    transform: translateY(-50%);
   }
 }
 
@@ -85,17 +99,20 @@ html[data-theme='dark'] .header-github-link:before {
 }
 
 .header-github-link-mob {
+  display: block;
   margin-top: 15px;
 }
 
 .github-facts {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
-  width: 100%;
-  margin: 0.1rem 0 0;
+  width: auto;
+  margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
   font-size: 12px;
+  line-height: 1;
   list-style-type: none;
 }
 
@@ -113,7 +130,10 @@ html[data-theme='dark'] .header-github-link:before {
 }
 
 .github-facts-mob {
+  display: flex;
+  flex-wrap: wrap;
   margin-left: 40px;
+  margin-top: 0.35rem;
 }
 
 .github-fact--version:before {

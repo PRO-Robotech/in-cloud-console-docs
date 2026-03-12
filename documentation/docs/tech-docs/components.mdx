@@ -4,11 +4,11 @@ id: components
 
 import { FancyboxDiagram } from '@site/src/components/commonBlocks/FancyboxDiagram'
 
-# Компоненты
+# Components
 
 ---
-## Архитектура
-> Ниже приведена архитектура решения, с точки зрения набора компонентов и их логической коммутации.
+## Architecture
+> Below is the solution architecture from the perspective of its component set and logical connectivity.
 
 <div className="center">
   <FancyboxDiagram>
@@ -16,9 +16,9 @@ import { FancyboxDiagram } from '@site/src/components/commonBlocks/FancyboxDiagr
 ```mermaid
 flowchart LR
 
-  browser["Клиент (браузер)"]
+  browser["Client (browser)"]
 
-  subgraph "Кластер infra"
+  subgraph "Infra cluster"
     direction LR
     subgraph "POD-infra"
       direction LR
@@ -35,7 +35,7 @@ flowchart LR
     nginx1-->k8s1
   end
 
-  subgraph "Кластер prod"
+  subgraph "Prod cluster"
     direction LR
     subgraph "POD-prod"
       direction LR
@@ -60,10 +60,10 @@ flowchart LR
 </div>
 
 ---
-## Описание компонентов
+## Component Description
 
-- **Клиент (браузер)**: пользовательский интерфейс для взаимодействия с системой.
-- **Nginx**: L7‑прокси, управляющий маршрутизацией входящих запросов.
-- **WEB**: визуальный модуль для отображения данных и построения интерфейса.
-- **BFF**: промежуточный слой агрегации и оптимизации запросов от клиента.
-- **Kubernetes API**: интерфейс доступа к управляемому окружению.
+- **Client (browser)**: the user interface for interacting with the system.
+- **Nginx**: an L7 proxy that manages incoming request routing.
+- **WEB**: the visual module responsible for rendering data and building the interface.
+- **BFF**: an intermediate layer for aggregating and optimizing requests from the client.
+- **Kubernetes API**: the access interface to the managed environment.

@@ -2,6 +2,22 @@ import { themes as prismThemes } from 'prism-react-renderer'
 import type { Config } from '@docusaurus/types'
 import type * as Preset from '@docusaurus/preset-classic'
 
+const DEFAULT_GITHUB_REPO = 'PRO-Robotech/openapi-ui'
+const DEFAULT_GITHUB_REPO_URL = `https://github.com/${DEFAULT_GITHUB_REPO}`
+const DEFAULT_GITHUB_API_URL = `https://api.github.com/repos/${DEFAULT_GITHUB_REPO}`
+const DEFAULT_GITHUB_API_URL_TAG = `${DEFAULT_GITHUB_API_URL}/tags?per_page=1`
+const DEFAULT_GITHUB_API_URL_STAR = DEFAULT_GITHUB_API_URL
+const DEFAULT_GITHUB_REPO_LABEL = 'openapi-ui'
+
+const parseEnvNumber = (value: string | undefined): number | null => {
+  if (!value) {
+    return null
+  }
+
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
 const config: Config = {
   title: process.env.TITLE || 'in-cloud',
   favicon: 'img/favicon.ico',
@@ -14,8 +30,8 @@ const config: Config = {
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
-    defaultLocale: 'ru',
-    locales: ['ru'],
+    defaultLocale: 'en',
+    locales: ['en'],
   },
 
   markdown: {
@@ -97,19 +113,31 @@ const config: Config = {
     },
   ],
 
+  customFields: {
+    githubRepo: {
+      apiUrlStar: process.env.Docusaurus_GIT_API_URL_STAR || DEFAULT_GITHUB_API_URL_STAR,
+      apiUrlTag: process.env.Docusaurus_GIT_API_URL_TAG || DEFAULT_GITHUB_API_URL_TAG,
+      forks: parseEnvNumber(process.env.Docusaurus_GIT_FORKS),
+      label: process.env.Docusaurus_GIT_LABEL || DEFAULT_GITHUB_REPO_LABEL,
+      stars: parseEnvNumber(process.env.Docusaurus_GIT_STARS),
+      tag: process.env.Docusaurus_GIT_TAG || null,
+      url: process.env.Docusaurus_GIT_URL || DEFAULT_GITHUB_REPO_URL,
+    },
+  },
+
   themeConfig: {
     navbar: {
       logo: {
         src: 'img/paws.svg',
         href: 'https://in-cloud.io/',
       },
-      title: 'in-Сloud Console',
+      title: 'in-Cloud Console',
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'techDocs',
           position: 'left',
-          label: 'Документация',
+          label: 'Documentation',
         },
         // { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
       ],

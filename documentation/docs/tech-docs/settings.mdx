@@ -2,43 +2,41 @@
 id: settings
 ---
 
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
 import CodeBlock from '@theme/CodeBlock'
 import dedent from 'ts-dedent'
 import { YamlModal } from '@site/src/components/YamlModal/YamlModal'
 import { getBasePrefix } from '@site/src/utils/getBasePrefix'
 import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
-# Настройка
+# Configuration
 
 ---
 
-## Работа с ресурсами
+## Working with Resources
 
-Основу любого **Kube-native интерфейса** составляют ресурсы Kubernetes.
-Чтобы UI мог динамически отображать данные, необходимо стандартизировать подход к их описанию, контексту и области действия.
+Kubernetes resources form the foundation of any **Kube-native interface**.
+For the UI to render data dynamically, the approach to describing resources, context, and scope must be standardized.
 
-<h3>Области видимости</h3>
-Область видимости определяет контекст интерфейса, в рамках которого выполняются действия пользователя.
+<h3>Scopes</h3>
+Scope defines the interface context in which user actions are performed.
 
-:::info Пояснение
+:::info Explanation
 
-- **STOCK** — базовая область интерфейса, где происходит основная работа.
-  Она делится на два подтипа:
+- **STOCK** is the primary interface area where the main work happens.
+  It is divided into two subtypes:
 
-  - **cluster** — когда не указан Namespace или в переключателе выбран режим _All Namespaces_. В этом случае при просмотре ресурсов нужно, например, показывать дополнительный столбец `Namespace`.
-  - **namespace** — когда выбран конкретный Namespace. Тогда колонка `Namespace` уже избыточна и скрывается.
+  - **cluster**: when no `Namespace` is selected or when the switcher is set to _All Namespaces_. In this case, for example, the resource view should include an extra `Namespace` column.
+  - **namespace**: when a specific `Namespace` is selected. In that case, the `Namespace` column becomes redundant and is hidden.
 
-- **INSIDE** — дополнительная область интерфейса, обычно предназначенная для административных задач.
-  Администраторы могут описывать её по тем же принципам, что и STOCK, но адаптировать под свои нужды.
+- **INSIDE** is an additional interface area usually intended for administrative tasks.
+  Administrators can describe it using the same principles as STOCK while adapting it to their own needs.
   :::
 
 <table>
   <thead>
     <tr>
-      <th>Префикс</th>
-      <th>Значение</th>
+      <th>Prefix</th>
+      <th>Meaning</th>
     </tr>
   </thead>
   <tbody>
@@ -46,46 +44,46 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>stock</code>
       </td>
-      <td>Пользовательский UI</td>
+      <td>User UI</td>
     </tr>
     <tr>
       <td>
         <code>inside</code>
       </td>
-      <td>Административный UI</td>
+      <td>Administrative UI</td>
     </tr>
     <tr>
       <td>
         <code>namespace</code>
       </td>
-      <td>Объекты в пространстве имен</td>
+      <td>Objects inside a namespace</td>
     </tr>
     <tr>
       <td>
         <code>cluster</code>
       </td>
-      <td>Объекты типа ClusterScope или Namespaced во всех Namespaces</td>
+      <td>`ClusterScope` objects or namespaced objects across all namespaces</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Типы страниц</h3>
+<h3>Page Types</h3>
 
-В Kubernetes существуют две разные механики доступа к ресурсам: **builtin** и **api**.
+Kubernetes provides two different mechanisms for accessing resources: **builtin** and **api**.
 
-- **builtin** — это базовые ресурсы, доступные по URI `/api/v1`.
-  К ним относятся стандартные сущности Kubernetes: `Pods`, `Secrets`, `Services` и т. п.
+- **builtin** are the basic resources available under `/api/v1`.
+  These include standard Kubernetes entities such as `Pods`, `Secrets`, and `Services`.
 
-- **api** — это все ресурсы, доступные по URI вида:
+- **api** includes all resources available through URIs of the following form:
   - `/apis/{apiGroup}/{apiVersion}/{kind}`
   - `/apis/{apiGroup}/{apiVersion}/namespaces/{namespace}/{kind}`
 
 <table>
   <thead>
     <tr>
-      <th>Тип</th>
-      <th>Назначение</th>
-      <th>Пример запроса</th>
+      <th>Type</th>
+      <th>Purpose</th>
+      <th>Request example</th>
     </tr>
   </thead>
   <tbody>
@@ -94,7 +92,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>api-form</code>
       </td>
       <td>
-        Форма создания ресурса (<code>/apis/...</code>)
+        Resource creation form (<code>/apis/...</code>)
       </td>
       <td>
         <code>apps/v1/Deployment</code>
@@ -105,7 +103,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>api-table</code>
       </td>
       <td>
-        Таблица ресурсов (<code>/apis/...</code>)
+        Resource table (<code>/apis/...</code>)
       </td>
       <td>
         <code>batch/v1/Job</code>
@@ -116,7 +114,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>builtin-form</code>
       </td>
       <td>
-        Форма для <code>core/v1</code>
+        Form for <code>core/v1</code>
       </td>
       <td>
         <code>v1/Pod</code>
@@ -127,7 +125,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>builtin-table</code>
       </td>
       <td>
-        Таблица для <code>core/v1</code>
+        Table for <code>core/v1</code>
       </td>
       <td>
         <code>v1/Service</code>
@@ -137,7 +135,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>factory</code>
       </td>
-      <td>Выделенные страницы фабрики</td>
+      <td>Dedicated factory pages</td>
       <td>empty</td>
     </tr>
   </tbody>
@@ -145,9 +143,9 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 ---
 
-## Визуализация абстракций
+## Visualizing the Abstractions
 
-Прежде чем углубляться в используемые нами абстракции, попробуем набросать их визуальное представление на основе следующих скриншотов.
+Before going deeper into the abstractions we use, let us sketch a visual view of them based on the following screenshots.
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
   <FancyboxImage
@@ -155,7 +153,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример страниц с кратким расположением элементов CustomColumnsOverride
+    Example pages with a simplified layout of `CustomColumnsOverride` elements
   </figcaption>
 </figure>
 
@@ -165,7 +163,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример страниц с кратким расположением элементов Factory
+    Example pages with a simplified layout of `Factory` elements
   </figcaption>
 </figure>
 
@@ -175,7 +173,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример страниц с кратким расположением элементов CusoromFormOverride/CusoromFormPrefill
+    Example pages with a simplified layout of `CusoromFormOverride/CusoromFormPrefill` elements
   </figcaption>
 </figure>
 
@@ -185,7 +183,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример страниц с областью видимости INSIDE-*
+    Example pages with the `INSIDE-*` scope
   </figcaption>
 </figure>
 
@@ -195,7 +193,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример страниц с областью видимости STOCK-CLUSTER
+    Example pages with the `STOCK-CLUSTER` scope
   </figcaption>
 </figure>
 
@@ -205,7 +203,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример страниц с областью видимости STOCK-NAMESPACE
+    Example pages with the `STOCK-NAMESPACE` scope
   </figcaption>
 </figure>
 
@@ -214,37 +212,37 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ## Sidebar
 
 <p>
-  Sidebar в in‑Cloud — это базовый элемент навигации. Он&nbsp; отвечает за доступ к&nbsp; ресурсам и&nbsp; страницам
-  интерфейса и&nbsp; настраивается через YAML-конфигурацию. Такой подход позволяет управлять структурой и&nbsp;
-  содержимым сайдбара декларативно, без&nbsp; жесткой привязки к&nbsp; коду.
+  The Sidebar in in‑Cloud is a core navigation element. It provides access to interface resources and pages and is
+  configured through YAML. This approach makes it possible to manage sidebar structure and content declaratively,
+  without hard-coding it.
 </p>
 
 <p>
-  В отличие от&nbsp; статичных решений, сайдбар в in‑Cloud можно адаптировать под&nbsp; конкретные команды и&nbsp; их
-  рабочие процессы. Это дает возможность настраивать разные области видимости — пользовательскую, административную,
-  cluster или namespace — и&nbsp; поддерживать разные сценарии работы без&nbsp; дублирования интерфейса.
+  Unlike static solutions, the in‑Cloud sidebar can be adapted to specific teams and their workflows. This makes it
+  possible to configure different scopes such as user, administrative, cluster, or namespace and support different
+  working scenarios without duplicating the interface.
 </p>
 
-<h3>Структура полей Sidebar</h3>
+<h3>Sidebar Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>spec.id</code></td>
       <td>string</td>
-      <td>Уникальный идентификатор sidebar, отображается в UI.</td>
+      <td>Unique sidebar identifier displayed in the UI.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            ### Административный интерфейс
+            ### Administrative interface
             id: inside-cluster-api-form
             id: inside-cluster-api-table
             id: inside-cluster-builtin-form
@@ -254,7 +252,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             id: inside-namespace-builtin-form
             id: inside-namespace-builtin-table
 
-            ### Пользовательский интерфейс
+            ### User interface
             id: stock-cluster-api-form
             id: stock-cluster-api-table
             id: stock-cluster-builtin-form
@@ -271,14 +269,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.keysAndTags</code></td>
       <td>object</td>
-      <td>Сопоставление ключей и&nbsp; тегов для sidebar</td>
+      <td>Mapping of keys and tags for the sidebar</td>
       <td>
         <YamlModal
           yamlContent={dedent`
             keysAndTags:
-              # key — указатель на&nbsp; spec.menuItems[].children[].key
+              # key: pointer to spec.menuItems[].children[].key
               pods:
-                # tags — указатели со стороны фабрики на&nbsp; ключи, которые будут использоваться в сайдбаре
+                # tags: pointers from the factory side to keys used in the sidebar
                 - pod-sidebar
           `}
         />
@@ -287,7 +285,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.keysAndTags.\{childrenKey\}</code></td>
       <td>array</td>
-      <td>Массив тегов для привязки конкретного ключа</td>
+      <td>Array of tags bound to a specific key</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -299,7 +297,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[]</code></td>
       <td>array</td>
-      <td>Список элементов меню в сайдбаре</td>
+      <td>List of menu items in the sidebar</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -316,7 +314,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].key</code></td>
       <td>string</td>
-      <td>Уникальный ключ группы меню</td>
+      <td>Unique menu group key</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -328,7 +326,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].resourcesList</code></td>
       <td>Object</td>
-      <td>Объект настроект для листинга массива объектов в Sidebar</td>
+      <td>Configuration object for listing an array of objects in the Sidebar</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -355,7 +353,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].label</code></td>
       <td>string</td>
-      <td>Отображаемое имя группы меню</td>
+      <td>Displayed menu group name</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -367,7 +365,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].children[]</code></td>
       <td>array</td>
-      <td>Вложенные пункты меню</td>
+      <td>Nested menu items</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -381,7 +379,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].children[].key</code></td>
       <td>string</td>
-      <td>Уникальный ключ пункта меню</td>
+      <td>Unique menu item key</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -393,7 +391,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].children[].label</code></td>
       <td>string</td>
-      <td>Отображаемое имя в интерфейсе</td>
+      <td>Displayed name in the interface</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -405,15 +403,15 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.menuItems[].children[].link</code></td>
       <td>string</td>
-      <td>Путь в интерфейсе UI</td>
+      <td>Path inside the UI</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {cluster}   — имя кластера
-            # {namespace}     — пространство имен (или all-namespaces)
-            # {plural}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
-            # {apiGroup}      — группа API (apps, batch, networking.k8s.io)
-            # {apiVersion}    — версия API (v1, v1beta1, v1alpha1)
+            # {cluster}      - cluster name
+            # {namespace}    - namespace (or all-namespaces)
+            # {plural}       - resource (pods, deployments, etc.)
+            # {apiGroup}     - API group (apps, batch, networking.k8s.io)
+            # {apiVersion}   - API version (v1, v1beta1, v1alpha1)
 
             # default — cluster list
             link: /openapi-ui/clusters
@@ -452,7 +450,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Настройка sidebar</h3>
+<h3>Configuring the Sidebar</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -577,13 +575,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </details>
 
 :::warning
-Просьба обратить внимание что id связаны между компонентами интерфейса и&nbsp; подчиняются правилам именования.
+Please note that IDs are shared across interface components and must follow the established naming rules.
 :::
 
 :::info
-Просьба учитывать, что сайдбары требуется настраивать под&nbsp; каждую область видимости.
-Для административного и&nbsp; пользовательского интерфейсов конфигурация может различаться.
-Также сайдбар необходимо описывать под&nbsp; каждую страницу фабрики. На первый взгляд это может показаться избыточным, но именно такой подход обеспечивает гибкость и&nbsp; позволяет адаптировать интерфейс под&nbsp; конкретные команды и&nbsp; их процессы.
+Keep in mind that sidebars must be configured for each scope separately.
+The configuration may differ between the administrative and user interfaces.
+The sidebar also needs to be described for each factory page. At first glance this may seem redundant, but this approach is exactly what provides flexibility and allows the interface to be adapted to specific teams and their workflows.
 :::
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
@@ -592,7 +590,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример сайдбара для страницы Pods в пространстве имен All
+    Example sidebar for the `Pods` page in the `All Namespaces` scope
   </figcaption>
 </figure>
 
@@ -601,44 +599,43 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ## Breadcrumb
 
 <p>
-  Breadcrumb в in‑Cloud — это дополнительный элемент навигации. Он&nbsp; показывает путь от&nbsp; корневого уровня до
-  текущей страницы и&nbsp; помогает пользователю понимать контекст, в котором он работает. Основная цель — дать быстрый
-  доступ к&nbsp; предыдущим уровням без&nbsp; необходимости возвращаться к&nbsp; сайдбару или выполнять повторный поиск.
+  Breadcrumb in in‑Cloud is an additional navigation element. It shows the path from the root level to the current page
+  and helps users understand the context they are working in. Its main goal is to provide quick access to previous
+  levels without returning to the sidebar or repeating a search.
 </p>
 
 <p>
-  Цепочка формируется декларативно на&nbsp; основе YAML-описания. Каждый элемент имеет ключ, отображаемое имя и&nbsp;
-  ссылку, в которых могут использоваться плейсхолдеры (<code>\{cluster}</code>, <code>\{namespace}</code>,{' '}
-  <code>\{apiGroup}</code>, <code>\{apiVersion}</code>, <code>\{plural}</code>). Это позволяет гибко настраивать
-  структуру навигации под&nbsp; конкретный сценарий работы.
+  The trail is built declaratively from a YAML description. Each item has a key, display name, and link, and those links
+  can use placeholders such as <code>\{cluster}</code>, <code>\{namespace}</code>, <code>\{apiGroup}</code>,
+  <code>\{apiVersion}</code>, and <code>\{plural}</code>. This makes it possible to configure navigation flexibly for a
+  specific workflow.
 </p>
 
 <p>
-  В отличие от&nbsp; Sidebar, Breadcrumb не&nbsp; определяет логику интерфейса, а дополняет ее. Он&nbsp; служит для
-  удобства и&nbsp; экономии времени, когда необходимо перемещаться по вложенным уровням интерфейса или быстро
-  переключаться между кластерами и&nbsp; пространствами имен.
+  Unlike the Sidebar, Breadcrumb does not define interface logic; it complements it. It is meant for convenience and
+  time savings when moving across nested interface levels or quickly switching between clusters and namespaces.
 </p>
 
-<h3>Структура полей Breadcrumb</h3>
+<h3>Breadcrumb Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>spec.id</code></td>
       <td>string</td>
-      <td>Уникальный идентификатор цепочки навигации (breadcrumb), отображается в UI.</td>
+      <td>Unique breadcrumb trail identifier displayed in the UI.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            ### Административный интерфейс
+            ### Administrative interface
             id: inside-cluster-api-form
             id: inside-cluster-api-table
             id: inside-cluster-builtin-form
@@ -648,7 +645,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             id: inside-namespace-builtin-form
             id: inside-namespace-builtin-table
 
-            ### Пользовательский интерфейс
+            ### User interface
             id: stock-cluster-api-form
             id: stock-cluster-api-table
             id: stock-cluster-builtin-form
@@ -665,11 +662,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.breadcrumbItems[]</code></td>
       <td>array</td>
-      <td>Список элементов навигационной цепочки (breadcrumb trail).</td>
+      <td>List of breadcrumb trail items.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # Пример цепочки навигации для страницы создания ресурса в пространстве имен
+            # Example breadcrumb trail for a resource creation page inside a namespace
             breadcrumbItems:
               - key: in‑Cloud
                 label: in‑Cloud
@@ -693,7 +690,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.breadcrumbItems[].key</code></td>
       <td>string</td>
-      <td>Уникальный ключ пункта в цепочке навигации.</td>
+      <td>Unique key of the breadcrumb item.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -705,7 +702,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.breadcrumbItems[].label</code></td>
       <td>string</td>
-      <td>Отображаемое имя пункта навигации в UI.</td>
+      <td>Displayed name of the breadcrumb item in the UI.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -718,16 +715,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td><code>spec.breadcrumbItems[].link</code></td>
       <td>string</td>
       <td>
-        Ссылка на&nbsp; страницу, соответствующую элементу навигации.
+        Link to the page represented by the navigation item.
       </td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {cluster}   — имя кластера
-            # {namespace}     — пространство имен (или all-namespaces)
-            # {plural}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
-            # {apiGroup}      — группа API (apps, batch, networking.k8s.io)
-            # {apiVersion}    — версия API (v1, v1beta1, v1alpha1)
+            # {cluster}      - cluster name
+            # {namespace}    - namespace (or all-namespaces)
+            # {plural}       - resource (pods, deployments, etc.)
+            # {apiGroup}     - API group (apps, batch, networking.k8s.io)
+            # {apiVersion}   - API version (v1, v1beta1, v1alpha1)
 
             # default — cluster list
             link: /openapi-ui/clusters
@@ -766,7 +763,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Настройка breadcrumb</h3>
+<h3>Configuring Breadcrumb</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -804,13 +801,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </details>
 
 :::warning
-Просьба обратить внимание что id связаны между компонентами интерфейса и&nbsp; подчиняются правилам именования.
+Please note that IDs are shared across interface components and must follow the established naming rules.
 :::
 
 :::info
-Просьба учитывать, что Breadcrumb требуется настраивать под&nbsp; каждую область видимости.
-Для административного и&nbsp; пользовательского интерфейсов конфигурация может различаться.
-Также Breadcrumb необходимо описывать под&nbsp; каждую страницу фабрики. На первый взгляд это может показаться избыточным, но именно такой подход обеспечивает гибкость и&nbsp; позволяет адаптировать интерфейс под&nbsp; конкретные команды и&nbsp; их процессы.
+Keep in mind that Breadcrumb must be configured separately for each scope.
+The configuration may differ between the administrative and user interfaces.
+Breadcrumb also needs to be described for each factory page. At first glance this may seem redundant, but this approach is exactly what provides flexibility and allows the interface to be adapted to specific teams and their workflows.
 :::
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
@@ -819,7 +816,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример хлебных крошек для страницы Pods в пространстве имен All
+    Example breadcrumbs for the `Pods` page in the `All Namespaces` scope
   </figcaption>
 </figure>
 
@@ -828,23 +825,23 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ## CustomColumnsOverride
 
 <p>
-  CustomColumnsOverride — механизм описания колонок табличных представлений Kubernetes-ресурсов в in‑Cloud. Позволяет
-  переопределять стандартные колонки, добавлять новые и&nbsp; задавать поведение (тип, значения по умолчанию, обрезку
-  длины).
+  `CustomColumnsOverride` is a mechanism for describing columns in Kubernetes resource table views in in‑Cloud. It
+  allows you to override default columns, add new ones, and define behavior such as type, default values, and text
+  trimming.
 </p>
 <p>
-  Работает для пользовательской и&nbsp; административной областей видимости. Конфигурация декларативная (YAML) и&nbsp;
-  не&nbsp; требует правок кода.
+  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code
+  changes.
 </p>
 
-<h3>Структура полей CustomColumnsOverride</h3>
+<h3>CustomColumnsOverride Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -855,13 +852,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <YamlModal
           yamlContent={dedent`
             ###
-            ### Административный интерфейс
+            ### Administrative interface
             inside-namespace-/v1/pods
             inside-cluster-/v1/pods
             inside-namespace-/apps/v1/deployments
             inside-cluster-/apps/v1/deployments
 
-            ### Пользовательский интерфейс
+            ### User interface
             stock-namespace-/v1/pods
             stock-cluster-/v1/pods
             stock-namespace-/apps/v1/deployments
@@ -960,41 +957,41 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Описание полей</h3>
+<h3>Field Description</h3>
 <dl>
   <dt><code>spec.id</code></dt>
-  <dd>Идентификатор области видимости и&nbsp; ресурса, для которого переопределяются колонки.</dd>
+  <dd>Identifier of the scope and resource whose columns are overridden.</dd>
 
 <dt>
   <code>spec.additionalPrinterColumns[]</code>
 </dt>
-<dd>Список пользовательских колонок для табличного представления ресурса.</dd>
+<dd>List of custom columns for the resource table view.</dd>
 
 <dt>
   <code>spec.additionalPrinterColumnsUndefinedValues[]</code>
 </dt>
-<dd>Подстановка значений по умолчанию, если вычисленное значение пустое или не&nbsp; определено.</dd>
+<dd>Default values used when the computed value is empty or undefined.</dd>
 
 <dt>
   <code>spec.additionalPrinterColumnsTrimLengths[]</code>
 </dt>
-<dd>Правила обрезки строковых значений по длине для указанных колонок.</dd>
+<dd>Rules for trimming string values by length for selected columns.</dd>
 
 <dt><code>spec.additionalPrinterColumnsCustomSortersAndFilters[]</code></dt>
-<dd>Правила сортировок, либо отключение сортировок и фильтров на колонке таблицы.</dd>
+<dd>Sorting rules or an option to disable sorting and filtering on a table column.</dd>
 </dl>
 
 <h3>
-  Структура элемента <code>additionalPrinterColumns[]</code>
+  Structure of the <code>additionalPrinterColumns[]</code> item
 </h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1003,7 +1000,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>jsonPath</code>
       </td>
       <td>string</td>
-      <td>JSONPath-выражение для извлечения значения колонки из объекта ресурса.</td>
+      <td>JSONPath expression used to extract the column value from the resource object.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1017,7 +1014,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>name</code>
       </td>
       <td>string</td>
-      <td>Заголовок колонки.</td>
+      <td>Column title.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1030,16 +1027,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </table>
 
 <h3>
-  Структура элемента <code>additionalPrinterColumnsUndefinedValues[]</code>
+  Structure of the <code>additionalPrinterColumnsUndefinedValues[]</code> item
 </h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1048,7 +1045,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>key</code>
       </td>
       <td>string</td>
-      <td>Имя колонки, к&nbsp; которой применяется подстановка.</td>
+      <td>Name of the column to which the fallback value is applied.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1062,7 +1059,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>value</code>
       </td>
       <td>string</td>
-      <td>Значение по умолчанию при отсутствии данных.</td>
+      <td>Default value used when data is missing.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1075,16 +1072,16 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </table>
 
 <h3>
-  Структура элемента <code>additionalPrinterColumnsTrimLengths[]</code>
+  Structure of the <code>additionalPrinterColumnsTrimLengths[]</code> item
 </h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1093,7 +1090,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>key</code>
       </td>
       <td>string</td>
-      <td>Имя колонки, для которой задается ограничение длины.</td>
+      <td>Name of the column for which the length limit is defined.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1107,7 +1104,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>value</code>
       </td>
       <td>integer</td>
-      <td>Максимальная длина строки, символы сверх — обрезаются.</td>
+      <td>Maximum string length; extra characters are trimmed.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1119,7 +1116,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Настройка CustomColumnsOverride</h3>
+<h3>Configuring CustomColumnsOverride</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -1186,10 +1183,10 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </div>
   </summary>
 
-:::warning Внимание!
-Обратите внимание: данный пример отличается от предыдущего использованием кастомного типа `factory`.
-Чуть ниже вы сможете подробнее ознакомиться с этой абстракцией. На данном этапе важно запомнить, что элементы таблицы также
-могут использовать этот механизм для наполнения ячеек.
+:::warning Attention
+Please note that this example differs from the previous one because it uses the custom `factory` type.
+Further below you will find a more detailed explanation of this abstraction. At this stage, it is enough to remember
+that table elements can also use this mechanism to populate cells.
 :::
 
   <CodeBlock language="yaml">
@@ -1374,13 +1371,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </details>
 
 :::warning
-Просьба обратить внимание что id в этом ресурсе отличается от&nbsp; BreadCrumb и&nbsp; Sidebar.
+Please note that the `id` in this resource differs from the `BreadCrumb` and `Sidebar` IDs.
 :::
 
 :::info
-Просьба учитывать, что CustomColumnsOverride требуется настраивать под&nbsp; каждый тип ресурса тк они отличаются по структуре.
+Keep in mind that `CustomColumnsOverride` must be configured for each resource type because their structures differ.
 
-> JsonPath использует весь функционал библиотеки TypeScript JSONPath, а значит позволяет использовать фильтры, условия и&nbsp; другие возможности для извлечения данных из сложных структур.
+> JsonPath uses the full functionality of the TypeScript JSONPath library, which means you can use filters, conditions, and other features to extract data from complex structures.
 
 :::
 
@@ -1390,7 +1387,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример форматирования таблиц для Pods в пространстве имен All
+    Example table formatting for `Pods` in the `All Namespaces` scope
   </figcaption>
 </figure>
 
@@ -1399,59 +1396,58 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ## TableUriMapping
 
 <p>
-  TableUriMapping — механизм настройки маршрутов для табличных представлений Kubernetes-ресурсов в in‑Cloud. При&nbsp;
-  определении маршрута строки и&nbsp; ячейки становятся кликабельными и&nbsp; ведут на&nbsp; соответствующие страницы
-  ресурса.
+  `TableUriMapping` is a route configuration mechanism for Kubernetes resource table views in in‑Cloud. When a route is
+  defined, rows and cells become clickable and lead to the corresponding resource pages.
 </p>
 <p>
-  Работает для пользовательской и&nbsp; административной областей видимости. Конфигурация декларативная (YAML) и&nbsp;
-  не&nbsp; требует правок кода.
+  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code
+  changes.
 </p>
 
-<h3>Структура полей TableUriMapping</h3>
+<h3>TableUriMapping Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>spec.id</code></td>
       <td>string</td>
-      <td>Идентификатор области видимости и&nbsp; ресурса, для которых настраивается табличный роутинг.</td>
+      <td>Identifier of the scope and resource for which table routing is configured.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {cluster}   — имя кластера
-            # {namespace}     — пространство имен (или all-namespaces)
-            # {plural}      — ресурс (pods, deployments и&nbsp;т.&nbsp;д.)
-            # {apiGroup}      — группа API (apps, batch, networking.k8s.io)
-            # {apiVersion}    — версия API (v1, v1beta1, v1alpha1)
+            # {cluster}      - cluster name
+            # {namespace}    - namespace (or all-namespaces)
+            # {plural}       - resource (pods, deployments, etc.)
+            # {apiGroup}     - API group (apps, batch, networking.k8s.io)
+            # {apiVersion}   - API version (v1, v1beta1, v1alpha1)
 
-            # builtin — ресурсы
-            # Примеры шаблонов:
+            # builtin resources
+            # Template examples:
             # inside-cluster-/v1/{plural}
             # inside-namespace-/v1/{plural}
             # stock-cluster-/v1/{plural}
             # stock-namespace-/v1/{plural}
 
-            # Примеры:
+            # Examples:
             id: stock-namespace-/v1/pods
             id: stock-cluster-/v1/pods
 
-            # api — ресурсы
-            # Примеры шаблонов:
+            # api resources
+            # Template examples:
             # inside-cluster-/{apiGroup}/{apiVersion}/{plural}
             # inside-namespace-/{apiGroup}/{apiVersion}/{plural}
             # stock-cluster-/{apiGroup}/{apiVersion}/{plural}
             # stock-namespace-/{apiGroup}/{apiVersion}/{plural}
 
-            # Примеры:
+            # Examples:
             id: stock-namespace-/apps/v1/deployments
             id: stock-cluster-/apps/v1/deployments
 
@@ -1462,7 +1458,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.keysToParse</code></td>
       <td>string</td>
-      <td>JSONPath до значения, подставляемого как ```~recordValue``` (опционально).</td>
+      <td>JSONPath to the value inserted as <code>~recordValue~</code> (optional).</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1474,7 +1470,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.keysToParseSecond</code></td>
       <td>string</td>
-      <td>JSONPath до значения, подставляемого как ```~recordValueSecond``` (опционально).</td>
+      <td>JSONPath to the value inserted as <code>~recordValueSecond~</code> (optional).</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1486,7 +1482,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.keysToParseThird</code></td>
       <td>string</td>
-      <td>JSONPath до значения, подставляемого как ```~recordValueThird``` (опционально).</td>
+      <td>JSONPath to the value inserted as <code>~recordValueThird~</code> (optional).</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1498,7 +1494,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     <tr>
       <td><code>spec.pathToNavigate</code></td>
       <td>string</td>
-      <td>Шаблон маршрута для перехода из таблицы. Поддерживает плейсхолдеры из контекста и&nbsp; значений по JSONPath.</td>
+      <td>Route template used when navigating from a table. Supports placeholders from context and JSONPath values.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1511,13 +1507,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Плейсхолдеры маршрута</h3>
+<h3>Route Placeholders</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Плейсхолдер</th>
-      <th>Источник</th>
+      <th>Placeholder</th>
+      <th>Source</th>
     </tr>
   </thead>
   <tbody>
@@ -1525,20 +1521,20 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>\{cluster}</code>
       </td>
-      <td>Выбранный кластер</td>
+      <td>Selected cluster</td>
     </tr>
     <tr>
       <td>
         <code>\{namespace}</code>
       </td>
-      <td>Выбранное пространство имен (если применяется)</td>
+      <td>Selected namespace (if applicable)</td>
     </tr>
     <tr>
       <td>
         <code>```~recordValue~```</code>
       </td>
       <td>
-        Значение из <code>spec.keysToParse</code>
+        Value from <code>spec.keysToParse</code>
       </td>
     </tr>
     <tr>
@@ -1546,7 +1542,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>```~recordValueSecond~```</code>
       </td>
       <td>
-        Значение из <code>spec.keysToParseSecond</code>
+        Value from <code>spec.keysToParseSecond</code>
       </td>
     </tr>
     <tr>
@@ -1554,19 +1550,19 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>```~recordValueThird~```</code>
       </td>
       <td>
-        Значение из <code>spec.keysToParseThird</code>
+        Value from <code>spec.keysToParseThird</code>
       </td>
     </tr>
     <tr>
       <td>
         <code>\{index}</code>
       </td>
-      <td>Номер индекса URI (считается в разрезе разделительных "/")</td>
+      <td>URI segment index (counted by the "/" separators)</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Настройка TableUriMapping</h3>
+<h3>Configuring TableUriMapping</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -1591,11 +1587,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </details>
 
 :::warning
-Просьба обратить внимание что id в этом ресурсе отличается от&nbsp; BreadCrumb и&nbsp; Sidebar.
+Please note that the `id` in this resource differs from the `BreadCrumb` and `Sidebar` IDs.
 :::
 
 :::info
-Просьба учитывать, что CustomColumnsOverride требуется настраивать под&nbsp; каждый тип ресурса.
+Keep in mind that `CustomColumnsOverride` must be configured for each resource type.
 :::
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
@@ -1604,7 +1600,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Страница табличного представления Pods в пространстве имен All где&nbsp; нажали на&nbsp; строку таблицы
+    `Pods` table page in the `All Namespaces` scope after clicking a table row
   </figcaption>
 </figure>
 
@@ -1614,42 +1610,42 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Страница фабрики с деталями Pods, открытая по клику на&nbsp; строку таблицы
+    Factory page with `Pods` details opened by clicking a table row
   </figcaption>
 </figure>
 
-> Как видно на&nbsp; втором изображении, контекст сохраняется на&nbsp; уровнях Sidebar и&nbsp; Breadcrumb — это позволяет быстро вернуться к&nbsp; предыдущему состоянию интерфейса. Указатели keysToParse и&nbsp; keysToParseSecond передают нужные значения в фабрику, задавая Namespace-контекст для дальнейшей работы с Pods.
+> As shown in the second image, context is preserved at the `Sidebar` and `Breadcrumb` levels, which makes it easy to return to the previous interface state. The `keysToParse` and `keysToParseSecond` pointers pass the required values into the factory and set the namespace context for further work with `Pods`.
 
 ---
 
 ## Navigation
 
 <p>
-  <strong>Navigation</strong> — это механизм настройки переходов между контекстами в интерфейсе in‑Cloud UI. Он&nbsp;
-  определяет, куда должен направляться пользователь при выборе проекта, инстанса или пространства имен.
+  <strong>Navigation</strong> is the mechanism for configuring transitions between contexts in the in‑Cloud UI. It
+  defines where the user should be redirected when selecting a project, instance, or namespace.
 </p>
 
 <p>
-  Navigation работает декларативно: при изменении значения в выпадающем списке пользователь перенаправляется на&nbsp;
-  заранее заданный маршрут. Для этого задаются два шаблона на&nbsp; каждый тип контекста:
+  Navigation works declaratively: when the value in a dropdown changes, the user is redirected to a predefined route.
+  Two templates are defined for each context type:
 </p>
 
 <ul>
   <li>
-    <code>clear</code> — маршрут при сбросе значения (например, "все проекты")
+    <code>clear</code>: the route used when the value is reset, for example "all projects"
   </li>
   <li>
-    <code>change</code> — маршрут при выборе нового значения
+    <code>change</code>: the route used when a new value is selected
   </li>
 </ul>
 
-<p>В маршрутах поддерживаются следующие плейсхолдеры:</p>
+<p>The following placeholders are supported in routes:</p>
 
 <table>
   <thead>
     <tr>
-      <th>Плейсхолдер</th>
-      <th>Описание</th>
+      <th>Placeholder</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -1657,26 +1653,26 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>\{selectedCluster}</code>
       </td>
-      <td>Текущий выбранный кластер</td>
+      <td>Currently selected cluster</td>
     </tr>
     <tr>
       <td>
         <code>\{value}</code>
       </td>
-      <td>Новое выбранное значение (проект, инстанс или namespace)</td>
+      <td>Newly selected value (project, instance, or namespace)</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Структура полей Navigation</h3>
+<h3>Navigation Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1685,7 +1681,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.projects.clear</code>
       </td>
       <td>string</td>
-      <td>Маршрут при сбросе выбранного проекта.</td>
+      <td>Route used when the selected project is cleared.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1699,7 +1695,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.projects.change</code>
       </td>
       <td>string</td>
-      <td>Маршрут при выборе конкретного проекта.</td>
+      <td>Route used when a specific project is selected.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1713,7 +1709,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.projects.aliasPath</code>
       </td>
       <td>string</td>
-      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to labels.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1727,7 +1723,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.instances.clear</code>
       </td>
       <td>string</td>
-      <td>Маршрут при сбросе выбранного инстанса.</td>
+      <td>Route used when the selected instance is cleared.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1741,7 +1737,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.instances.change</code>
       </td>
       <td>string</td>
-      <td>Маршрут при выборе конкретного инстанса.</td>
+      <td>Route used when a specific instance is selected.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1755,7 +1751,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.instances.mapOptionsPattern</code>
       </td>
       <td>string</td>
-      <td>\{reqsJsonPath[...]\} для применения к value.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to the value.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1769,7 +1765,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.instances.aliasPath</code>
       </td>
       <td>string</td>
-      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to labels.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1783,7 +1779,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.namespaces.clear</code>
       </td>
       <td>string</td>
-      <td>Маршрут при сбросе выбранного namespace.</td>
+      <td>Route used when the selected namespace is cleared.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1797,7 +1793,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.namespaces.change</code>
       </td>
       <td>string</td>
-      <td>Маршрут при выборе конкретного namespace.</td>
+      <td>Route used when a specific namespace is selected.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1811,7 +1807,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.namespaces.aliasPath</code>
       </td>
       <td>string</td>
-      <td>\{reqsJsonPath[...]\} для применения к labels.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to labels.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1825,7 +1821,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.baseFactoriesMapping</code>
       </td>
       <td>Record\<string, string\></td>
-      <td>Замена id фабрики по-умолчанию на целевой id</td>
+      <td>Overrides the default factory ID with a target ID.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1839,7 +1835,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         <code>spec.pathToNavigateFromClusterList</code>
       </td>
       <td>string</td>
-      <td>`~recordValue~` для подмены из колонки name при клике.</td>
+      <td><code>~recordValue~</code> placeholder substituted from the `name` column on click.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1851,7 +1847,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Пример ресурса Navigation</h3>
+<h3>Navigation Resource Example</h3>
 
 <details close className="custom-gray-block">
   <summary>
@@ -1884,13 +1880,12 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </details>
 
 :::info
-Ресурс <code>Navigation</code> обычно описывается один раз и&nbsp; применяется глобально ко всем элементам интерфейса.
-При необходимости можно задать разные правила навигации для разных страниц фабрики.
+The <code>Navigation</code> resource is usually described once and applied globally to all interface elements.
+If needed, you can define different navigation rules for different factory pages.
 :::
 
 :::warning
-Обратите внимание, что маршруты должны быть валидными и&nbsp; вести на&nbsp; существующие представления,
-иначе пользователь может попасть на&nbsp; несуществующую страницу.
+Make sure the routes are valid and point to existing views, otherwise the user may end up on a non-existent page.
 :::
 
 ---
@@ -1898,25 +1893,25 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 ## Factory
 
 <p>
-  Ресурс <code>Factory</code> используется в in‑Cloud UI для декларативного построения интерфейсов на&nbsp; основе
-  описания в YAML. Он&nbsp; выступает как описатель страницы или ее части, включающей:
+  The <code>Factory</code> resource is used in the in‑Cloud UI to build interfaces declaratively from YAML descriptions.
+  It acts as a description of a page or part of a page and includes:
 </p>
 
 <ul>
-  <li>получение данных через API</li>
-  <li>визуальное разложение на&nbsp; компоненты</li>
-  <li>объединение вложенных компонентов в структуру</li>
-  <li>работу с JSONPath-выражениями и&nbsp; переменными из URL</li>
+  <li>data retrieval through the API</li>
+  <li>visual composition from components</li>
+  <li>nesting and grouping components into a structure</li>
+  <li>work with JSONPath expressions and URL variables</li>
 </ul>
 
-<h3>Переменные URL</h3>
+<h3>URL Variables</h3>
 
 <p>
-  Все&nbsp; пути в <code>urlsToFetch</code> и&nbsp; других полях могут содержать переменные в фигурных скобках, которые
-  подставляются при рендеринге:
+  All paths in <code>urlsToFetch</code> and other fields can contain variables in curly braces that are substituted
+  during rendering:
 </p>
 
-<CodeBlock language="yaml" title="Пример с плейсхолдерами">
+<CodeBlock language="yaml" title="Placeholder example">
   {dedent`
     urlsToFetch:
       - cluster: "{2}"
@@ -1928,11 +1923,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   `}
 </CodeBlock>
 
-<h3>Обработка данных</h3>
+<h3>Data Processing</h3>
 
 <p>
-  Данные, полученные из <code>urlsToFetch</code>, доступны во всех компонентах через JSONPath с синтаксисом
-  (поддерживает вложенность):
+  Data fetched through <code>urlsToFetch</code> is available in all components through JSONPath syntax, including nested
+  access:
 </p>
 
 <CodeBlock language="yaml">
@@ -1950,36 +1945,36 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
 <ul>
   <li>
-    <code>reqsJsonPath[0]</code> — первый элемент из <code>urlsToFetch</code>
+    <code>reqsJsonPath[0]</code>: the first element from <code>urlsToFetch</code>
   </li>
   <li>
-    <code>[".items.0.metadata.name"]</code> — путь к&nbsp; нужному полю
+    <code>[".items.0.metadata.name"]</code>: the path to the required field
   </li>
   <li>
-    <code>["-"]</code> — Базовое значение если значение не&nbsp; определено
+    <code>["-"]</code>: the fallback value if the target value is undefined
   </li>
 </ul>
 
 :::info
-Просьба обратить внимание на несколько моментов:
+Please note a few important details:
 
-1. urlsToFetch — это массив, в котором каждый элемент содержит результаты выборки, прошедшие через заданные фильтры (labelSelector, fieldSelector).
-2. Если целевой API поддерживает watch и доступен по сокетному соединению, данные приходят потоково в реальном времени. Если такой возможности нет, выполняется обычный REST-запрос.
+1. `urlsToFetch` is an array in which each element contains query results filtered with the specified `labelSelector` and `fieldSelector`.
+2. If the target API supports `watch` and is available through a socket connection, data is streamed in real time. Otherwise, a regular REST request is used.
    :::
-   <h3>Типовые применения</h3>
+   <h3>Typical Use Cases</h3>
 
 <ul>
-  <li>Страницы деталей ресурсов (Pods, Deployments, Nodes)</li>
-  <li>Таблицы с YAML/JSON редактированием</li>
+  <li>Resource detail pages such as `Pods`, `Deployments`, and `Nodes`</li>
+  <li>Tables with YAML/JSON editing</li>
   <li>
-    Динамические вкладки с таблицами (<code>EnrichedTable</code>)
+    Dynamic tabs with tables (<code>EnrichedTable</code>)
   </li>
-  <li>Визуализация логов и&nbsp; терминала</li>
+  <li>Log and terminal visualization</li>
 </ul>
 
-<h3>Общее описание</h3>
+<h3>General Description</h3>
 
-Ресурс принадлежит группе <code>front.in‑Cloud.io/v1alpha1</code> и&nbsp; имеет следующий базовый вид:
+The resource belongs to the <code>front.in‑Cloud.io/v1alpha1</code> API group and has the following basic shape:
 
 <CodeBlock language="yaml" title="Factory.yaml">
   {dedent`
@@ -2004,14 +1999,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   `}
 </CodeBlock>
 
-<h3>Ключевые поля</h3>
+<h3>Key Fields</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Назначение</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
@@ -2022,7 +2017,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>string</code>
       </td>
-      <td>Уникальный ключ страницы, используется как ID и&nbsp; часть URL.</td>
+      <td>Unique page key used as an ID and as part of the URL.</td>
     </tr>
     <tr>
       <td>
@@ -2031,7 +2026,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>string | undefined</code>
       </td>
-      <td>Связь с id сайдбара, влияет на используемый id для сравнения.</td>
+      <td>Link to a sidebar ID; affects which ID is used for matching.</td>
     </tr>
     <tr>
       <td>
@@ -2040,7 +2035,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>string[]</code>
       </td>
-      <td>Связь с тегами сайдбара, влияет на&nbsp; навигацию и&nbsp; видимость.</td>
+      <td>Link to sidebar tags; affects navigation and visibility.</td>
     </tr>
     <tr>
       <td>
@@ -2063,8 +2058,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
         </CodeBlock>
       </td>
       <td>
-        Список API-запросов, чьи данные будут подставлены в шаблоны компонентов. Указание ресурса через структуру
-        приведет к проверка verb `watch` и получению данных через сокет при его наличии
+        List of API requests whose data will be injected into component templates. Describing a resource through the
+        structured form triggers a `watch` verb check and uses a socket stream when available.
       </td>
     </tr>
     <tr>
@@ -2074,7 +2069,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>bool</code>
       </td>
-      <td>Управляет наличием скролла в карточке основного контента.</td>
+      <td>Controls whether the main content card is scrollable.</td>
     </tr>
     <tr>
       <td>
@@ -2083,33 +2078,33 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>Component[]</code>
       </td>
-      <td>Основная структура компонентов интерфейса.</td>
+      <td>Main interface component structure.</td>
     </tr>
   </tbody>
 </table>
 
 <h3>
-  Поле <code>data[]</code>
+  The <code>data[]</code> Field
 </h3>
 
-Поле <code>data</code> — это **основное содержимое Factory-ресурса**.
-Оно описывает структуру интерфейса в виде иерархии компонентов.
+The <code>data</code> field is the **main content of a Factory resource**.
+It describes the interface structure as a hierarchy of components.
 
-<h3>Доступные компоненты Factory</h3>
+<h3>Available Factory Components</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Название</th>
-      <th>Назначение</th>
-      <th>Пример</th>
+      <th>Name</th>
+      <th>Purpose</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
 
     <tr>
       <td><code>antdText</code></td>
-      <td>Выводит простой текст или заголовок</td>
+      <td>Displays plain text or a heading</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2132,7 +2127,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
             {
               id: number | string
@@ -2142,7 +2137,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/typography#typographytext" target="_blank">TextProps</a>
-            <a href="https://ant.design/components/typography#typography-demo-text" target="_blank">Пример</a>
+            <a href="https://ant.design/components/typography#typography-demo-text" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2150,7 +2145,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>ResourceBadge</code></td>
-      <td>Выводит простой текст или заголовок</td>
+      <td>Displays a simple badge-like label</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ResourceBadge.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2179,7 +2174,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2195,7 +2190,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>parsedText</code></td>
-      <td>Значение из JSONPath</td>
+      <td>Value resolved from JSONPath</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/parsedText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2212,7 +2207,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TParsedTextProps = {
                 id: number | string
@@ -2229,7 +2224,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>MappedParsedText</code></td>
-      <td>Значение из JSONPath сопоставляемое с valueMap</td>
+      <td>Value from JSONPath mapped through `valueMap`</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/parsedText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2250,7 +2245,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TMappedParsedTextProps = {
                   id: number | string
@@ -2266,7 +2261,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>LabelsToSearchParams</code></td>
-      <td>Создает ссылку на Search модуль с подставленными атрибутами поиска</td>
+      <td>Creates a link to the Search module with prefilled search attributes</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/LabelsToSearchParams.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2288,7 +2283,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TLabelsToSearchParamsProps = {
                 id: number | string
@@ -2311,7 +2306,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>StatusText</code></td>
-      <td>Определяет статус по значениям (успех, ошибка, ожидание)</td>
+      <td>Determines status from values such as success, error, or pending</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/StatusText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2397,7 +2392,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2416,7 +2411,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/typography#typographytext" target="_blank">TextProps</a>
-            <a href="https://ant.design/components/typography#typography-demo-text" target="_blank">Пример</a>
+            <a href="https://ant.design/components/typography#typography-demo-text" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2424,7 +2419,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdLink</code></td>
-      <td>Гиперссылка на&nbsp; другой ресурс или маршрут</td>
+      <td>Hyperlink to another resource or route</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdLink.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2444,7 +2439,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2454,7 +2449,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-            <a href="https://ant.design/components/typography#typography-demo-text" target="_blank">Пример</a>
+            <a href="https://ant.design/components/typography#typography-demo-text" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2462,7 +2457,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdButton</code></td>
-      <td>Кнопка действия с ID, стилями и&nbsp; событиями</td>
+      <td>Action button with ID, styles, and events</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdButton.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2500,7 +2495,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2510,7 +2505,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/button#api" target="_blank">ButtonProps</a>
-            <a href="https://ant.design/components/button" target="_blank">Пример</a>
+            <a href="https://ant.design/components/button" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2518,7 +2513,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>KeyCounter</code></td>
-      <td>Подсчитывает количество ключей в объекте</td>
+      <td>Counts the number of keys in an object</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/KeyCounter.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2539,7 +2534,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2557,7 +2552,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>ItemCounter</code></td>
-      <td>Подсчитывает количество элементов в массиве</td>
+      <td>Counts the number of items in an array</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ItemCounter.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2578,7 +2573,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2596,7 +2591,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>ConverterBytes</code></td>
-      <td>Конвертирует байты в читаемый размер (КБ, МБ и&nbsp;т.&nbsp;д.)</td>
+      <td>Converts bytes into a human-readable size such as KB or MB</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ConverterBytes.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2616,7 +2611,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2642,7 +2637,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>ConverterCores</code></td>
-      <td>Конвертирует core в читаемый размер</td>
+      <td>Converts CPU cores into a readable value</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ConverterBytes.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2660,7 +2655,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2692,7 +2687,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>MarketPlace</code></td>
-      <td>Отображает доступный набор ресурсов Marketplace для заказа</td>
+      <td>Displays the available set of Marketplace resources for ordering</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/marketplace.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2716,7 +2711,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2739,7 +2734,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>SecretBase64Plain</code></td>
-      <td>Показывает секрет в base64 или plaintext с глазком</td>
+      <td>Displays a secret in base64 or plaintext with a visibility toggle</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/SecretBase64Plain.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2758,7 +2753,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           `}
         />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TSecretBase64PlainProps = {
                 id: number | string
@@ -2789,7 +2784,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdFlex</code></td>
-      <td>Контейнер с флекс-раскладкой (по умолчанию вертикальный)</td>
+      <td>Container with flex layout, vertical by default</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdFlex.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2819,7 +2814,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2828,7 +2823,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/flex#api" target="_blank">FlexProps</a>
-            <a href="https://ant.design/components/flex" target="_blank">Пример</a>
+            <a href="https://ant.design/components/flex" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2836,7 +2831,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdRow</code></td>
-      <td>Горизонтальная сетка из колонок</td>
+      <td>Horizontal grid composed of columns</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdRow.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2855,7 +2850,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2864,7 +2859,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/grid#row" target="_blank">RowProps</a>
-            <a href="https://ant.design/components/grid" target="_blank">Пример</a>
+            <a href="https://ant.design/components/grid" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2872,7 +2867,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdCol</code></td>
-      <td>Колонка в рамках строки <code>antdRow</code></td>
+      <td>Column inside an <code>antdRow</code></td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdCol.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2891,7 +2886,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
             {
               id: number | string
@@ -2900,7 +2895,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/grid#col" target="_blank">ColProps</a>
-            <a href="https://ant.design/components/grid" target="_blank">Пример</a>
+            <a href="https://ant.design/components/grid" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2908,7 +2903,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdTabs</code></td>
-      <td>Вкладки с разными дочерними компонентами</td>
+      <td>Tabs with different child components</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdTabs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2944,7 +2939,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TAntdTabsProps = {
                 id: number | string
@@ -2960,7 +2955,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/tabs#tabs" target="_blank">TabsProps</a>
-            <a href="https://ant.design/components/tabs" target="_blank">Пример</a>
+            <a href="https://ant.design/components/tabs" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -2968,7 +2963,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdCard</code></td>
-      <td>Обертка в виде карточки с отступами и&nbsp; стилем</td>
+      <td>Card wrapper with spacing and styling</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdCard.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2996,7 +2991,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
             {
               id: number | string
@@ -3005,7 +3000,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
             <a href="https://ant.design/components/card#api" target="_blank">CardProps</a>
-            <a href="https://ant.design/components/card" target="_blank">Пример</a>
+            <a href="https://ant.design/components/card" target="_blank">Example</a>
           </div>
         </div>
       </td>
@@ -3013,11 +3008,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>ContentCard</code></td>
-      <td>Визуальная карточка с секцией данных</td>
+      <td>Visual card with a data section</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ContentCard.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
-          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9рем', color: '#666', textAlign: 'center' }}>
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
           </figcaption>
         </figure>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
@@ -3032,7 +3027,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3049,7 +3044,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Spacer</code></td>
-      <td>Добавляет вертикальный отступ между элементами</td>
+      <td>Adds vertical spacing between elements</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Spacer.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3066,7 +3061,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3082,7 +3077,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>EnrichedTable</code></td>
-      <td>Продвинутая таблица с поддержкой загрузки данных и&nbsp; фильтрации</td>
+      <td>Advanced table with data loading and filtering support</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/EnrichedTable.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3112,7 +3107,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3166,7 +3161,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>VisibilityContainer</code></td>
-      <td>Показывает блок при наличии содержимого (обычно из <code>value</code>). Можно задавать критерии</td>
+      <td>Shows a block when content is present, usually from <code>value</code>; criteria can also be configured</td>
       <td>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <YamlModal
@@ -3193,7 +3188,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3209,7 +3204,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>YamlEditorSingleton</code></td>
-      <td>Редактор YAML для одного ресурса (prefill через API)</td>
+      <td>YAML editor for a single resource with prefill through the API</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/YamlEditorSingleton.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3240,7 +3235,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
              export type TYamlEditorSingletonPermissions = {
                 canUpdate?: boolean
@@ -3277,7 +3272,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>TogglerSegmented</code></td>
-      <td>Переключатель с сегментами для выбора одного из нескольких значений</td>
+      <td>Segmented switch for selecting one of several values</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/TogglerSegmented.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3315,7 +3310,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               TogglerSegmented: {
                 id: number | string
@@ -3344,7 +3339,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Toggler</code></td>
-      <td>Переключатель для выбора одного из двух значений</td>
+      <td>Switch for selecting one of two values</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Toggler.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3379,7 +3374,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               Toggler: {
                 id: number | string
@@ -3413,7 +3408,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>OwnerRefs</code></td>
-      <td>Ссылки на владельцев ресурсов</td>
+      <td>Links to resource owners</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/OwnerRefs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3450,7 +3445,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               OwnerRefs: {
                 id: number | string
@@ -3482,7 +3477,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Events</code></td>
-      <td>Редактор YAML для одного ресурса (prefill через API)</td>
+      <td>Event viewer with resource-linked navigation</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Events.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3512,7 +3507,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               Events: {
                 id: number | string
@@ -3544,7 +3539,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Labels</code></td>
-      <td>Редактируемый список label'ов объекта</td>
+      <td>Editable list of object labels</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Labels.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3580,7 +3575,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                   id: number | string
@@ -3625,7 +3620,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Tolerations</code></td>
-      <td>Просмотр и&nbsp; редактирование toleration'ов Pod'а</td>
+      <td>View and edit Pod tolerations</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Tolerations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3664,7 +3659,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TTolerationsPermissions = {
                 canPatch?: boolean
@@ -3715,7 +3710,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Taints</code></td>
-      <td>Просмотр и&nbsp; редактирование taint'ов</td>
+      <td>View and edit taints</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Tolerations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3756,7 +3751,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
              export type TTaintsPermissions = {
               canPatch?: boolean
@@ -3808,7 +3803,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Annotations</code></td>
-      <td>Редактируемая таблица аннотаций</td>
+      <td>Editable annotations table</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Annotations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3845,7 +3840,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TAnnotationsPermissions = {
                 canPatch?: boolean
@@ -3896,7 +3891,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>ArrayOfObjectsToKeyValues</code></td>
-      <td>Преобразует массив объектов в список ключ:значение по полям <code>keyFieldName</code> и&nbsp; <code>valueFieldName</code></td>
+      <td>Converts an array of objects into a key:value list using <code>keyFieldName</code> and <code>valueFieldName</code></td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ArrayOfObjectsToKeyValues.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3918,7 +3913,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3940,7 +3935,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>PodLogs</code></td>
-      <td>Просмотр логов выбранного Pod'а</td>
+      <td>View logs of the selected Pod</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/PodLogs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3960,7 +3955,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3981,7 +3976,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>PodTerminal</code></td>
-      <td>Терминал для exec внутри контейнера Pod'а</td>
+      <td>Terminal for exec inside a Pod container</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/PodTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4001,7 +3996,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4018,7 +4013,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>NodeTerminal</code></td>
-      <td>Exec в отдельный Pod на&nbsp; выбранной ноде. Предварительно необходимо описать PodTemplate в NS, который будет указан в параметрах</td>
+      <td>Exec into a separate Pod on the selected node. A `PodTemplate` must be defined in the namespace specified in the parameters beforehand.</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4036,7 +4031,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4072,7 +4067,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4112,7 +4107,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4204,7 +4199,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Как собираются типы"
+            buttonLabel="How the types are composed"
             yamlContent={dedent`
               type TBaseContainerSizeProps = {
                 width?: CSSProperties['width']
@@ -4286,7 +4281,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               { id: number | string } & React.DetailedHTMLProps<
                 React.IframeHTMLAttributes<HTMLIFrameElement>,
@@ -4324,7 +4319,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4369,7 +4364,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4542,7 +4537,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                 export type TKeyCounterProps = {
                     id: number | string
@@ -4811,7 +4806,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4846,7 +4841,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -5321,7 +5316,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                   export type TLabelsModalProps = {
                     notificationSuccessMessage?: string
@@ -5610,7 +5605,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                 export type TCanonicalUnit =
                   | 'B'
@@ -5770,7 +5765,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>Volumes</code></td>
-      <td>Компонент отображения Volumes в табличном представлении с указанием mount</td>
+      <td>Component for displaying `Volumes` in a table view together with mount information</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5789,7 +5784,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                 export type TVolumesProps = {
                   id: number | string
@@ -5808,7 +5803,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
   </tbody>
 </table>
 
-<h3>Примеры</h3>
+<h3>Examples</h3>
 
 <ul>
   <li>
@@ -5830,42 +5825,42 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 </ul>
 
 :::info
-Компонент <code>Factory</code> является ключевым в визуальной архитектуре in‑Cloud UI. Он&nbsp; дает возможность создавать интерфейс без&nbsp; написания кода.
+The <code>Factory</code> component is a key part of the visual architecture of the in‑Cloud UI. It makes it possible to build interfaces without writing code.
 :::
 
 :::tip
-Factory поддерживает версионность API. Вы можете создавать разные Factory-ресурсы с одинаковым ключом, но разными реализациями под&nbsp; нужные кластеры.
+Factory supports API versioning. You can create different Factory resources with the same key but different implementations for the clusters you need.
 :::
 
 ---
 
 ## CustomFormsOverride
 
-Компонент `CustomFormsOverride` используется для кастомизации динамических форм редактирования ресурсов в интерфейсе in‑Cloud. Он&nbsp; работает поверх OpenAPI-спецификаций и&nbsp; позволяет декларативно переопределять поведение и&nbsp; структуру UI-форм.
+The `CustomFormsOverride` component is used to customize dynamic resource editing forms in the in‑Cloud interface. It works on top of OpenAPI specifications and allows the behavior and structure of UI forms to be overridden declaratively.
 
-<h3>1. Зачем нужен CustomFormsOverride</h3>
+<h3>1. Why CustomFormsOverride Exists</h3>
 
 :::info
-`CustomFormsOverride` создан для того, чтобы стандартная форма, построенная на&nbsp; базе OpenAPI, стала более удобной, лаконичной и&nbsp; безопасной.
+`CustomFormsOverride` exists to make the standard OpenAPI-based form more convenient, compact, and safe.
 :::
 
-Он решает следующие задачи:
+It solves the following tasks:
 
-- скрывает ненужные или чувствительные поля (например, `metadata`, `status`);
-- позволяет переопределить типы и&nbsp; поведение полей;
-- добавляет поддержку справочников и&nbsp; зависимостей между полями;
-- меняет отображение без&nbsp; пересборки всего UI.
+- hides unnecessary or sensitive fields such as `metadata` and `status`;
+- allows field types and behavior to be overridden;
+- adds support for dictionaries and field dependencies;
+- changes the rendering without rebuilding the UI.
 
-<h3>3. Основные блоки ресурса</h3>
+<h3>3. Main Resource Blocks</h3>
 
-Ресурс `CustomFormsOverride` внутри `spec` логически делится на&nbsp; несколько ключевых блоков:
+Inside `spec`, the `CustomFormsOverride` resource is logically divided into several key blocks:
 
 <table>
   <thead>
     <tr>
-      <th>Блок</th>
-      <th>Назначение</th>
-      <th>Пример</th>
+      <th>Block</th>
+      <th>Purpose</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -5873,10 +5868,7 @@ Factory поддерживает версионность API. Вы можете
       <td>
         <code>customizationId</code>
       </td>
-      <td>
-        Уникальный идентификатор, по которому UI находит и&nbsp; применяет переопределенную форму к&nbsp; нужному
-        ресурсу.
-      </td>
+      <td>Unique identifier used by the UI to find and apply the overridden form to the target resource.</td>
       <td></td>
     </tr>
     <tr>
@@ -5884,8 +5876,8 @@ Factory поддерживает версионность API. Вы можете
         <code>hidden</code>
       </td>
       <td>
-        Массив путей до скрываемых полей. Например, <code>["spec", "serviceRef", "apiVersion"]</code>. Позволяет убрать
-        из формы технические и&nbsp; чувствительные поля.
+        Array of paths to fields that should be hidden. For example, <code>["spec", "serviceRef", "apiVersion"]</code>.
+        This makes it possible to remove technical or sensitive fields from the form.
       </td>
       <td>
         <YamlModal
@@ -5911,8 +5903,8 @@ Factory поддерживает версионность API. Вы можете
         <code>sort</code>
       </td>
       <td>
-        Массив путей до полей, по которым нужно отсортировать форму. Например,{' '}
-        <code>["spec", "serviceRef", "apiVersion"]</code>. Позволяет задать порядок отображения полей в форме.
+        Array of field paths used to sort the form. For example, <code>["spec", "serviceRef", "apiVersion"]</code>. This
+        defines the display order of fields in the form.
       </td>
       <td>
         <YamlModal
@@ -5938,8 +5930,8 @@ Factory поддерживает версионность API. Вы можете
         <code>schema</code>
       </td>
       <td>
-        Переопределение структуры и&nbsp; поведения формы на&nbsp; базе JSON Schema. Здесь задаются типы, описания,
-        required-поля и&nbsp; расширения вроде <code>customProps</code>.
+        Overrides the structure and behavior of the form using JSON Schema. Types, descriptions, required fields, and
+        extensions such as <code>customProps</code> are defined here.
       </td>
       <td></td>
     </tr>
@@ -5948,8 +5940,7 @@ Factory поддерживает версионность API. Вы можете
         <code>strategy</code>
       </td>
       <td>
-        Определяет способ объединения с оригинальной схемой ресурса: <code>merge</code> (объединить) или{' '}
-        <code>replace</code> (заменить полностью).
+        Defines how the form is combined with the original resource schema: <code>merge</code> or <code>replace</code>.
       </td>
       <td></td>
     </tr>
@@ -5958,7 +5949,7 @@ Factory поддерживает версионность API. Вы можете
         <code>forceViewMode</code>
       </td>
       <td>
-        Необязательный параметр. Определяет способ отображения: <code>OpenAPI</code> или <code>Manual</code>.
+        Optional parameter that defines the rendering mode: <code>OpenAPI</code> or <code>Manual</code>.
       </td>
       <td></td>
     </tr>
@@ -5966,16 +5957,17 @@ Factory поддерживает версионность API. Вы можете
 </table>
 
 <h3>
-  4. Что делает блок <code>schema</code>
+  4. What the <code>schema</code> Block Does
 </h3>
 
-Блок <code>schema</code> используется для переопределения OpenAPI-структуры формы. Он&nbsp; позволяет задать удобную, безопасную и&nbsp; бизнес-ориентированную форму с описаниями, справочниками, обязательными полями и&nbsp; типами.
+The <code>schema</code> block is used to override the OpenAPI form structure. It lets you define a convenient, safe,
+business-oriented form with descriptions, dictionaries, required fields, and types.
 
 <table>
   <thead>
     <tr>
-      <th>Возможность</th>
-      <th>Описание</th>
+      <th>Capability</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -5984,7 +5976,7 @@ Factory поддерживает версионность API. Вы можете
         <code>type</code>
       </td>
       <td>
-        Базовый тип поля: <code>string</code>, <code>integer</code>, <code>boolean</code>, <code>object</code>,{' '}
+        Basic field type: <code>string</code>, <code>integer</code>, <code>boolean</code>, <code>object</code>, or{' '}
         <code>array</code>.
       </td>
     </tr>
@@ -5992,26 +5984,26 @@ Factory поддерживает версионность API. Вы можете
       <td>
         <code>description</code>
       </td>
-      <td>Подпись и&nbsp; пояснение для поля — отображается как подсказка в UI.</td>
+      <td>Field label and explanation displayed as a UI hint.</td>
     </tr>
     <tr>
       <td>
         <code>required</code>
       </td>
-      <td>Массив обязательных полей. Используется для валидации формы.</td>
+      <td>Array of required fields used for form validation.</td>
     </tr>
     <tr>
       <td>
         <code>enum</code>
       </td>
-      <td>Ограничение на&nbsp; набор допустимых значений — автоматически отрисовывается как выпадающий список.</td>
+      <td>Restriction on the set of allowed values, rendered automatically as a dropdown.</td>
     </tr>
     <tr>
       <td>
         <code>properties</code>
       </td>
       <td>
-        Вложенные поля для объектов. Используется при описании <code>type: object</code>.
+        Nested fields for objects, used when describing <code>type: object</code>.
       </td>
     </tr>
     <tr>
@@ -6019,34 +6011,34 @@ Factory поддерживает версионность API. Вы можете
         <code>items</code>
       </td>
       <td>
-        Схема элемента массива. Используется при <code>type: array</code>.
+        Schema of an array item, used with <code>type: array</code>.
       </td>
     </tr>
     <tr>
       <td>
         <code>customProps</code>
       </td>
-      <td>
-        Кастомные расширения in‑Cloud UI для отображения справочников, диапазонов и&nbsp; зависимостей между полями.
-      </td>
+      <td>Custom in‑Cloud UI extensions for rendering dictionaries, ranges, and dependencies between fields.</td>
     </tr>
   </tbody>
 </table>
 
 :::tip
-Блок <code>schema</code> позволяет настроить поведение формы без&nbsp; пересборки UI.
+The <code>schema</code> block lets you configure form behavior without rebuilding the UI.
 :::
 
-<h3>6. Кастомные типы полей</h3>
+<h3>6. Custom Field Types</h3>
 
-При переопределении схемы в ресурсах <code>CustomFormsOverride</code> доступны нестандартные типы, которые расширяют базовые возможности <code>OpenAPI Schema</code>. Эти типы используются в поле <code>type</code> и&nbsp; активируют специальное поведение в UI.
+When overriding the schema in <code>CustomFormsOverride</code> resources, non-standard field types are available to
+extend the base capabilities of <code>OpenAPI Schema</code>. These types are used in the <code>type</code> field and
+activate special UI behavior.
 
 <table>
   <thead>
     <tr>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -6055,9 +6047,9 @@ Factory поддерживает версионность API. Вы можете
         <code>listInput</code>
       </td>
       <td>
-        Кастомный тип для выбора значения из внешнего справочника. В сочетании с <code>customProps</code> позволяет
-        подгружать данные по <code>valueUri</code>, отображать и&nbsp; фильтровать их по заданным{' '}
-        <code>keysToLabel</code> и&nbsp; <code>keysToValue</code>.
+        Custom type for selecting a value from an external dictionary. In combination with <code>customProps</code>, it
+        allows data to be loaded from <code>valueUri</code> and displayed or filtered using the specified
+        <code>keysToLabel</code> and <code>keysToValue</code>.
       </td>
       <td>
         <YamlModal
@@ -6107,8 +6099,8 @@ Factory поддерживает версионность API. Вы можете
         <code>rangeInputCpu</code>
       </td>
       <td>
-        Тип ввода значений CPU с возможностью задания минимального и&nbsp; максимального диапазона, шага и&nbsp;
-        бизнес-логики сравнения. Поддерживает редактирование и&nbsp; агрегацию значений из API-ответов.
+        CPU input type with configurable minimum and maximum range, step, and comparison logic. Supports editing and
+        aggregation of values from API responses.
       </td>
       <td>
         <YamlModal
@@ -6168,8 +6160,8 @@ Factory поддерживает версионность API. Вы можете
         <code>rangeInputMemory</code>
       </td>
       <td>
-        Аналогично <code>rangeInputCpu</code>, но используется для управления значениями объема памяти. Позволяет задать
-        диапазоны, фильтрацию и&nbsp; зависимости от&nbsp; квот или лимитов в других ресурсах.
+        Similar to <code>rangeInputCpu</code>, but used for memory values. It supports ranges, filtering, and
+        dependencies on quotas or limits from other resources.
       </td>
       <td>
         <YamlModal
@@ -6228,29 +6220,30 @@ Factory поддерживает версионность API. Вы можете
 </table>
 
 :::info
-Кастомные типы являются расширением стандартных типов <code>string</code>, <code>number</code>, <code>boolean</code> и&nbsp; работают только в рамках UI in‑Cloud.
+Custom types are extensions of the standard <code>string</code>, <code>number</code>, and <code>boolean</code> types and work only within the in‑Cloud UI.
 :::
 
 ---
 
 ## CFOMapping
 
-Ресурс <code>CFOMapping</code> используется вместе с <code>CustomFormsOverride</code> для принудительного
-переопределения <code>customizationId</code> при подготовке формы.
+The <code>CFOMapping</code> resource is used together with <code>CustomFormsOverride</code> to force an override of
 
-В провайдере формы применяется следующая логика резолва:
+<code>customizationId</code> during form preparation.
 
-1. Если существует <code>CustomFormsOverride</code> с исходным <code>customizationId</code>, используется он.
-2. Иначе UI пытается найти маппинг в <code>spec.mappings[customizationId]</code> и проверить, что целевой
-   <code>customizationId</code> реально существует в <code>CustomFormsOverride</code>.
-3. Если ни исходный, ни mapped ID не найдены, используется <code>fallbackId</code>.
+The form provider applies the following resolution logic:
+
+1. If a <code>CustomFormsOverride</code> exists with the original <code>customizationId</code>, it is used.
+2. Otherwise, the UI looks for a mapping in <code>spec.mappings[customizationId]</code> and checks that the target
+   <code>customizationId</code> actually exists in <code>CustomFormsOverride</code>.
+3. If neither the original nor the mapped ID is found, <code>fallbackId</code> is used.
 
 :::info
-CFOMapping читается как один именованный ресурс по селектору <code>metadata.name</code>, а сами соответствия
-хранятся в поле <code>spec.mappings</code> в формате <code>ключ -> целевой customizationId</code>.
+`CFOMapping` is read as a single named resource selected by <code>metadata.name</code>, while the mappings themselves
+are stored in <code>spec.mappings</code> as <code>source key -&gt; target customizationId</code>.
 :::
 
-<h3>Пример ресурса</h3>
+<h3>Resource Example</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -6266,14 +6259,14 @@ CFOMapping читается как один именованный ресурс 
   `}
 </CodeBlock>
 
-<h3>Поля ресурса</h3>
+<h3>Resource Fields</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Назначение</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
@@ -6284,7 +6277,7 @@ CFOMapping читается как один именованный ресурс 
       <td>
         <code>string</code>
       </td>
-      <td>Имя mapping-ресурса. Используется в UI для выбора через fieldSelector.</td>
+      <td>Name of the mapping resource. Used by the UI for selection via `fieldSelector`.</td>
     </tr>
     <tr>
       <td>
@@ -6294,7 +6287,7 @@ CFOMapping читается как один именованный ресурс 
         <code>Record&lt;string, string&gt;</code>
       </td>
       <td>
-        Словарь соответствий исходного <code>customizationId</code> к целевому <code>customizationId</code>.
+        Mapping dictionary from the source <code>customizationId</code> to the target <code>customizationId</code>.
       </td>
     </tr>
     <tr>
@@ -6305,7 +6298,7 @@ CFOMapping читается как один именованный ресурс 
         <code>string</code>
       </td>
       <td>
-        Целевой <code>customizationId</code>, на который будет переключена форма, если он существует в
+        Target <code>customizationId</code> that the form will switch to if it exists in
         <code>CustomFormsOverride</code>.
       </td>
     </tr>
@@ -6313,18 +6306,18 @@ CFOMapping читается как один именованный ресурс 
 </table>
 
 :::tip
-Если mapped <code>customizationId</code> отсутствует среди <code>CustomFormsOverride</code>, UI не применит mapping и
-перейдет к <code>fallbackId</code> (если задан).
+If the mapped <code>customizationId</code> is missing from <code>CustomFormsOverride</code>, the UI will not apply the
+mapping and will fall back to <code>fallbackId</code> if one is specified.
 :::
 
 ---
 
 ## CustomFormsPrefill
 
-Ресурс <code>CustomFormsPrefill</code> позволяет заранее подставлять значения в кастомные формы UI in‑Cloud.
-Это упрощает ввод данных и&nbsp; обеспечивает единообразие при создании ресурсов Kubernetes.
+The <code>CustomFormsPrefill</code> resource lets you prefill values in custom in‑Cloud UI forms.
+This simplifies data entry and ensures consistency when creating Kubernetes resources.
 
-<h3>Пример ресурса</h3>
+<h3>Resource Example</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -6355,7 +6348,7 @@ CFOMapping читается как один именованный ресурс 
   `}
 </CodeBlock>
 
-<h3>Пример ресурса (формат через объект)</h3>
+<h3>Resource Example (Object Format)</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -6378,11 +6371,11 @@ CFOMapping читается как один именованный ресурс 
 </CodeBlock>
 
 :::info
-Оба формата поддерживаются. На стороне BFF объектный формат нормализуется в канонический
+Both formats are supported. On the BFF side, the object format is normalized into the canonical
 
-<code>spec.values[]</code> (массив <code>{`{ path, value }`}</code>), который используется всеми потребителями.
+<code>spec.values[]</code> form, an array of <code>{`{ path, value }`}</code>, which is used by all consumers.
 
-Пример нормализации:
+Normalization example:
 
 <ul>
   <li>
@@ -6394,14 +6387,14 @@ CFOMapping читается как один именованный ресурс 
 </ul>
 :::
 
-<h3>Поля ресурса</h3>
+<h3>Resource Fields</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Назначение</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
@@ -6412,7 +6405,7 @@ CFOMapping читается как один именованный ресурс 
       <td>
         <code>string</code>
       </td>
-      <td>Уникальное имя ресурса префилла.</td>
+      <td>Unique name of the prefill resource.</td>
     </tr>
     <tr>
       <td>
@@ -6422,7 +6415,7 @@ CFOMapping читается как один именованный ресурс 
         <code>string</code>
       </td>
       <td>
-        ID формы, к&nbsp; которой применяется префилл (должен совпадать с <code>CustomForms</code>).
+        ID of the form to which the prefill is applied; it must match <code>CustomForms</code>.
       </td>
     </tr>
     <tr>
@@ -6433,12 +6426,12 @@ CFOMapping читается как один именованный ресурс 
         <code>array | object</code>
       </td>
       <td>
-        Подстановки для полей формы:
+        Prefill values for form fields:
         <ul>
           <li>
-            канонический формат — массив <code>spec.values[]</code> c <code>path/value</code>;
+            canonical format: an array in <code>spec.values[]</code> using <code>path/value</code>;
           </li>
-          <li>объектный формат — вложенный объект, который BFF разворачивает в канонический массив.</li>
+          <li>object format: a nested object that the BFF expands into the canonical array.</li>
         </ul>
       </td>
     </tr>
@@ -6450,7 +6443,7 @@ CFOMapping читается как один именованный ресурс 
         <code>string[]</code>
       </td>
       <td>
-        Путь до поля объекта в виде массива ключей (например, <code>["spec","ports"]</code>).
+        Path to the object field as an array of keys, for example <code>["spec","ports"]</code>.
       </td>
     </tr>
     <tr>
@@ -6460,28 +6453,28 @@ CFOMapping читается как один именованный ресурс 
       <td>
         <code>any</code>
       </td>
-      <td>Значение для подстановки (строка, число, объект или массив).</td>
+      <td>Value used for prefilling, such as a string, number, object, or array.</td>
     </tr>
   </tbody>
 </table>
 
 ## Search
 
-Страница <code>Search</code> предназначена для поиска ресурсов Kubernetes по имени, типу, лейблам и кастомным полям в рамках выбранного кластера.
+The <code>Search</code> page is designed for searching Kubernetes resources by name, type, labels, and custom fields within the selected cluster.
 
-Она доступна из бокового меню интерфейса и также поддерживает callback-ссылки из форм создания и редактирования ресурсов, что позволяет быстро перейти к списку найденных объектов после выполнения операций.
+It is available from the interface sidebar and also supports callback links from resource creation and editing forms, making it possible to jump directly to the list of matching objects after completing an operation.
 
-#### Пути доступа
+#### Access Paths
 
 <details>
-  <summary>Доступные маршруты</summary>
+  <summary>Available routes</summary>
 
 <ul>
   <li>
-    <code>{`/openapi-ui/{cluster}/{namespace}/search`}</code> — поиск с указанием пространства имён.
+    <code>{`/openapi-ui/{cluster}/{namespace}/search`}</code>: search within a specific namespace.
   </li>
   <li>
-    <code>{`/openapi-ui/{cluster}/search`}</code> — глобальный поиск по кластеру.
+    <code>{`/openapi-ui/{cluster}/search`}</code>: cluster-wide search.
   </li>
 </ul>
 
@@ -6493,39 +6486,39 @@ CFOMapping читается как один именованный ресурс 
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Схема взаимодействия интерфейса страницы <code>Search</code> с кластером Kubernetes
+    Interaction diagram between the <code>Search</code> page interface and the Kubernetes cluster
   </figcaption>
 </figure>
 
 :::note
-Страница <code>Search</code> является частью общей системы визуализации Factory и использует единый механизм отображения данных, включая поддержку фильтрации, подсветку совпадений и контекстные переходы.
+The <code>Search</code> page is part of the shared Factory visualization system and uses the same data rendering mechanism, including filtering, match highlighting, and contextual navigation.
 :::
 
 ## Plugins
 
-Есть два типа поддерживаемых плагинов:
+There are two supported plugin types:
 
-- Плагины с фиксированным названием: `plugin-header`, `plugin-navigation`, `plugin-sidebar`, отвечающие за соответствующие блоки в ui.
-- Плагины с динамическим именем, доступные по адресу: `:prefix/:cluster/:namespace?/:syntheticProject?/plugins/:pluginName/*`
+- Plugins with fixed names such as `plugin-header`, `plugin-navigation`, and `plugin-sidebar`, responsible for the corresponding UI blocks.
+- Plugins with dynamic names, available at `:prefix/:cluster/:namespace?/:syntheticProject?/plugins/:pluginName/*`
 
-Репозиторий с [примером плагина](https://github.com/PRO-Robotech/openapi-ui-plugin-example)
+Repository with a [plugin example](https://github.com/PRO-Robotech/openapi-ui-plugin-example)
 
-Плагины должны быть настроены в чарте таким образом, чтобы `remoteEntry.js` был доступен пользователю из браузера.
+Plugins must be configured in the chart so that `remoteEntry.js` is accessible to the user in the browser.
 
-Плагины настраиваются через манифест в виде JSON, указанный в качестве ENV-переменной:
+Plugins are configured through a JSON manifest passed as an environment variable:
 
 <table>
   <thead>
     <tr>
-      <th>Тип</th>
-      <th>Где указывать</th>
-      <th>Пример env</th>
+      <th>Type</th>
+      <th>Where to define it</th>
+      <th>Environment variable example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>
-        <p>С фиксированным</p>
+        <p>Fixed-name</p>
       </td>
       <td>
         <p>UI</p>
@@ -6536,17 +6529,17 @@ CFOMapping читается как один именованный ресурс 
           MF_PLUGINS_NO_CLUSTER='{
               "plugin-header": {
                 "name": "plugin-example",
-                "entry": "путь/до/remoteEntry.js",
+                "entry": "path/to/remoteEntry.js",
                 "exposedModule": "./App"
               },
               "plugin-navigation": {
                 "name": "plugin-example",
-                "entry": "путь/до/remoteEntry.js",
+                "entry": "path/to/remoteEntry.js",
                 "exposedModule": "./App"
               },
               "plugin-sidebar": {
                 "name": "plugin-example",
-                "entry": "путь/до/remoteEntry.js",
+                "entry": "path/to/remoteEntry.js",
                 "exposedModule": "./App"
               }
             }'
@@ -6556,7 +6549,7 @@ CFOMapping читается как один именованный ресурс 
     </tr>
     <tr>
       <td>
-        <p>С динамическом</p>
+        <p>Dynamic-name</p>
       </td>
       <td>
         <p>BFF</p>
@@ -6567,7 +6560,7 @@ CFOMapping читается как один именованный ресурс 
           MF_PLUGINS_JSON='{
             "plugin-example": {
               "name": "plugin-example",
-              "entry": "путь/до/remoteEntry.js",
+              "entry": "path/to/remoteEntry.js",
               "exposedModule": "./App"
             }
           }'
@@ -6580,9 +6573,9 @@ CFOMapping читается как один именованный ресурс 
 
 ---
 
-:::info Информация
+:::info Information
 
-> Что-то непонятно или нашли ошибку? Напишите нам — поможем разобраться.
+> If anything is unclear or you found an error, contact us and we will help.
 
 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
   <div style={{ display: 'flex', alignItems: 'center' }}>

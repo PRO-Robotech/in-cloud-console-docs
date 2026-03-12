@@ -2,27 +2,24 @@
 id: getting-started
 ---
 
-import { FancyboxDiagram } from '@site/src/components/commonBlocks/FancyboxDiagram'
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
 import CodeBlock from '@theme/CodeBlock'
 import dedent from 'ts-dedent'
 
-# С чего начать
+# Getting Started
 
 ---
 
-## Что такое in-Cloud?
+## What is in-Cloud?
 
-**in-Cloud** — это фреймворк для создания собственного пользовательского интерфейса к&nbsp;Kubernetes-API. Вы можете построить интерфейс, который соответствует вашему видению — от&nbsp;минималистичного дашборда до&nbsp;аналога OpenShift Console. Все элементы собираются из&nbsp;готовых компонентов, а&nbsp;логика описывается декларативно.
+**in-Cloud** is a framework for building your own user interface on top of the Kubernetes API. You can create an interface that matches your vision, from a minimalist dashboard to an OpenShift Console-style experience. All elements are assembled from ready-made components, and the logic is described declaratively.
 
 ---
 
-## Установка in-Cloud Console
+## Installing in-Cloud Console
 
-На&nbsp;этом этапе вы устанавливаете основное приложение. Возможна настройка как&nbsp;базового варианта, так&nbsp;и&nbsp;полноценной версии «под&nbsp;ключ» — с&nbsp;oAuth-Proxy и&nbsp;Dex.
+At this stage, you install the main application. You can deploy either a basic setup or a fully packaged version with `oAuth-Proxy` and `Dex`.
 
-Здесь также добавляется интерфейсная надстройка — готовый пресет, с&nbsp;которого удобно начать знакомство с&nbsp;системой.
+This step also adds a UI layer, a ready-to-use preset that provides a convenient starting point for exploring the system.
 
 <CodeBlock language="bash">
   {dedent`
@@ -38,13 +35,13 @@ import dedent from 'ts-dedent'
 
 ---
 
-## Как начать использовать?
+## How to Start Using It
 
-Мы осознаем, что инфраструктура у&nbsp;каждого своя, включая способы заведения трафика (Ingress, VirtualService и&nbsp;т. п.). Поэтому оставляем это на&nbsp;ваше усмотрение.
+We understand that every infrastructure is different, including the way traffic is exposed (`Ingress`, `VirtualService`, and so on). Because of that, we leave this part to your own setup.
 
-По&nbsp;умолчанию разворачивается один `Deployment` с&nbsp;тремя контейнерами: `Nginx`, `Web`, `BFF`. Входной трафик следует направлять на&nbsp;контейнер `Nginx`, порт `nginx-http`.
+By default, one `Deployment` is created with three containers: `Nginx`, `Web`, and `BFF`. Incoming traffic should be routed to the `Nginx` container on the `nginx-http` port.
 
-Для быстрого старта можно воспользоваться `port-forward`:
+For a quick start, you can use `port-forward`:
 
 <CodeBlock language="bash">
   {dedent`
@@ -52,15 +49,15 @@ import dedent from 'ts-dedent'
   `}
 </CodeBlock>
 
-После этого в браузере откройте [http://localhost:8081](http://localhost:8081).
-Вы увидите базовый интерфейс **in-Cloud Console** — стартовую версию UI с преднастроенным сайдбаром и несколькими типовыми страницами (например, список Namespaces, Workloads и сервисов).
+After that, open [http://localhost:8081](http://localhost:8081) in your browser.
+You will see the default **in-Cloud Console** interface: an initial UI version with a preconfigured sidebar and several standard pages such as lists of `Namespaces`, `Workloads`, and services.
 
-Эта конфигурация предназначена только для ознакомления и локальной отладки.
-В боевых сценариях трафик следует заводить через привычные механизмы (Ingress, Istio VirtualService и т. п.), а доступ — интегрировать с IDP.
+This configuration is intended only for evaluation and local debugging.
+In production scenarios, traffic should be exposed through your standard mechanisms such as `Ingress` or `Istio VirtualService`, and access should be integrated with your identity provider.
 
 :::info RBAC
-Если установка выполняется в ознакомительных целях, необходимо добавить рольбиндинг для анонимного пользователя.
-В Kubernetes все пользователи, которые не прошли аутентификацию, автоматически относятся к субъекту `system:anonymous`.
+If the installation is used for evaluation purposes, you need to add a role binding for the anonymous user.
+In Kubernetes, all users who have not been authenticated are automatically assigned to the `system:anonymous` subject.
 
 <CodeBlock language="yaml">
   {dedent`

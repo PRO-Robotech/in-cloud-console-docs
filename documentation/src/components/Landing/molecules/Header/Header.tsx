@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
 import Link from '@docusaurus/Link'
-import BrowserOnly from '@docusaurus/BrowserOnly' // Импортируем компонент BrowserOnly
+import BrowserOnly from '@docusaurus/BrowserOnly'
 import styles from './styles.module.css'
 import { getBasePrefix } from '@site/src/utils/getBasePrefix'
 
-// Компонент Header
 export const Header: FC = () => (
   <div className={styles.container}>
     <div className={styles.text}>
@@ -12,7 +11,7 @@ export const Header: FC = () => (
         <BrowserOnly>
           {() => {
             return (
-              <Link to={`${getBasePrefix()}tech-docs/about`}>
+              <Link to={`${getBasePrefix()}tech-docs/introduction`}>
                 <img src={`${getBasePrefix()}img/paws2.svg`} alt="Logo" className="logo2" />
               </Link>
             )
@@ -20,7 +19,7 @@ export const Header: FC = () => (
         </BrowserOnly>
         in-Cloud Console
       </h1>
-      {/* <p className="subheading">Строим вместе облако</p> */}
+      {/* <p className="subheading">Building the cloud together</p> */}
     </div>
   </div>
 )

@@ -5,18 +5,18 @@
 @use './table-of-contents';
 @use './global';
 
-/* TODO dobry_kot для увеличения ширины боковой навигационной панели по заголовкам */
+/* TODO dobry_kot: increase sidebar width for long headings */
 
 .tableOfContents_bqdL {
   position: sticky;
   top: calc(var(--ifm-navbar-height) + 1rem);
   max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
   margin-right: -30px;
-  overflow-y: auto; /* этот параметр исправляет в нужную сторону */
+  overflow-y: auto; /* keeps scrolling behavior correct */
 }
 
 .custom-gray-block {
-  background-color: #55555573; /* светло-голубой */
+  background-color: #55555573; /* light blue */
   border-radius: 6px;
   padding: 10px;
   margin-top: 10px;
@@ -29,7 +29,7 @@
 }
 
 .custom-blue-block {
-  background-color: #544c9292; /* светло-голубой */
+  background-color: #544c9292; /* light blue */
   border-radius: 6px;
   padding: 10px;
   margin-top: 10px;
@@ -41,18 +41,18 @@
   cursor: pointer;
 }
 
-/* В styles.module.css */
+/* In styles.module.css */
 .headerContainer {
   display: flex;
-  align-items: center; /* Выровнять по вертикали */
-  justify-content: space-between; /* Распределить элементы по краям */
+  align-items: center; /* Vertical alignment */
+  justify-content: space-between; /* Distribute elements to the edges */
   position: relative;
 }
 
 .textContainer {
   flex: 1;
   margin-right: 30px;
-  margin-left: auto; /* Добавляем отступ слева для сдвига */
+  margin-left: auto; /* Add left spacing for shifting */
 }
 
 .logoContainer {
@@ -62,12 +62,12 @@
   margin-right: +200px;
   margin-left: auto;
   box-sizing: border-box;
-  padding: 0px 0px 0px 0px; /* сверху, справа, снизу, слева */
+  padding: 0px 0px 0px 0px; /* top, right, bottom, left */
 }
 
 .logo {
-  padding: 20px; /* внутренние отступы вокруг логотипа */
-  max-width: 270%; /* ограничить размер внутри контейнера */
+  padding: 20px; /* inner spacing around the logo */
+  max-width: 270%; /* limit the size inside the container */
   height: auto;
   border-radius: 2px;
   box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
@@ -77,11 +77,11 @@
 }
 
 .logoContainer:hover .logo {
-  transform: translateY(-2px); /* Поднимаем логотип при наведении */
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3); /* Увеличиваем тень при наведении */
+  transform: translateY(-2px); /* Lift the logo on hover */
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3); /* Increase shadow on hover */
 }
 
-/* Контейнер для текста и логотипа */
+/* Container for text and logo */
 .text {
   display: flex;
   flex-direction: column;
@@ -90,46 +90,46 @@
   text-align: center;
 }
 
-/* Стили для заголовка in-Cloud */
+/* Styles for the in-Cloud heading */
 .header-title {
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  margin-bottom: -42px; /* Убираем отступ между логотипом и текстом */
+  margin-bottom: -42px; /* Remove spacing between the logo and text */
 }
 
-/* Стили для подзаголовка */
+/* Styles for the subheading */
 .subheading {
   font-size: 1.3rem;
   color: gray;
-  margin-top: 0; /* Убираем отступ сверху */
-  margin-bottom: 10; /* Убираем лишний отступ снизу */
+  margin-top: 0; /* Remove top spacing */
+  margin-bottom: 10; /* Remove extra bottom spacing */
   font-weight: normal;
   margin-right: 0px;
-  margin-left: +225px; /* Сдвигаем логотип влево */
+  margin-left: +225px; /* Shift the logo to the left */
 }
 
-/* Стили для логотипа */
+/* Styles for the logo */
 .logo2 {
   padding: 10px;
-  width: 120px; /* Устанавливаем фиксированный размер логотипа */
-  height: 120px; /* Устанавливаем фиксированную высоту для круглой формы */
-  object-fit: contain; /* Убедитесь, что изображение сохраняет пропорции */
-  margin-right: 10px; /* Уменьшаем отступ между логотипом и текстом */
+  width: 120px; /* Set a fixed logo size */
+  height: 120px; /* Set a fixed height for the circular shape */
+  object-fit: contain; /* Keep the image proportions intact */
+  margin-right: 10px; /* Reduce spacing between the logo and text */
   transition:
     transform 0.3s ease,
-    box-shadow 0.3s ease; /* Плавный переход для эффектов */
-  border-radius: 50%; /* Логотип круглый */
+    box-shadow 0.3s ease; /* Smooth transition for effects */
+  border-radius: 50%; /* Make the logo circular */
 
-  /* Начальная подсветка */
-  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.5); /* Легкое свечение по контуру */
+  /* Initial glow */
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.5); /* Soft edge glow */
 }
 
-/* Эффект при наведении на логотип */
+/* Hover effect for the logo */
 .logo2:hover {
-  transform: scale(1.1); /* Увеличиваем размер при наведении */
-  box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.8); /* Усиленное свечение при наведении */
+  transform: scale(1.1); /* Increase size on hover */
+  box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.8); /* Stronger glow on hover */
 }
 
 .obligatory-note-orange {
