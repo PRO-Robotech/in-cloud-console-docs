@@ -5823,7 +5823,7 @@ It describes the interface structure as a hierarchy of components.
 
     <tr>
       <td><code>antdResult</code></td>
-      <td>Status placeholder for displaying errors or empty states (403, 404, 500, success, warning, info). Two modes: manual (status, title and subtitle are set in YAML) and auto-detect (component reads the HTTP error from urlsToFetch by reqIndex)</td>
+      <td>Status placeholder for displaying errors or empty states (403, 404, 500, success, warning, info). Three modes: manual (status, title and subtitle are set in YAML), auto-detect (component reads the HTTP error from urlsToFetch by reqIndex), and emptyAsNotFound (treats an empty K8s list response as 404 — useful for detail pages that fetch a single resource via fieldSelector)</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdResult.png`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5860,6 +5860,20 @@ It describes the interface structure as a hierarchy of components.
                 data:
                   id: error-display
                   reqIndex: 0
+
+              # Auto-detect + emptyAsNotFound — for detail pages
+              # (K8s list with fieldSelector returns 200 + empty items
+              #  instead of 404 when a resource is missing)
+              - type: antdResult
+                data:
+                  id: pod-fetch-error
+                  reqIndex: 0
+                  emptyAsNotFound: true
+                  title: "Pod {8} is not found"
+                  subTitle: "Namespace: {3}"
+                children:
+                  - type: antdFlex
+                    # ... page content renders as children
             `}
           />
 
@@ -5869,6 +5883,7 @@ It describes the interface structure as a hierarchy of components.
               {
                 id: number | string
                 reqIndex?: number       // urlsToFetch request index for auto-detect
+                emptyAsNotFound?: boolean // treat empty K8s list (items: []) as 404
                 status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
                 title?: string          // supports templates (reqsJsonPath, partsOfUrl)
                 subTitle?: string       // supports templates
