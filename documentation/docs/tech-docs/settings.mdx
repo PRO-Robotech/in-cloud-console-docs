@@ -5828,7 +5828,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdResult</code></td>
-      <td>Заглушка для отображения статуса (403, 404, 500, success, warning, info). Два режима: ручной (статус, заголовок и подзаголовок задаются в YAML) и автоматический (компонент считывает HTTP-ошибку из urlsToFetch по reqIndex)</td>
+      <td>Заглушка для отображения статуса (403, 404, 500, success, warning, info). Три режима: ручной (статус, заголовок и подзаголовок задаются в YAML), автоматический (компонент считывает HTTP-ошибку из urlsToFetch по reqIndex) и «пустой список = 404» (флаг <code>emptyAsNotFound</code> — если K8s-запрос с <code>fieldSelector</code> вернул пустой <code>items[]</code>, компонент показывает 404).</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdResult.png`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5865,6 +5865,22 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 data:
                   id: error-display
                   reqIndex: 0
+
+              # Автоматический режим + emptyAsNotFound
+              # Оборачивает контент как children — при ошибке/не найдено
+              # показывается только Result, при успехе — дочерние компоненты
+              - type: antdResult
+                data:
+                  id: pod-fetch-error
+                  reqIndex: 0
+                  emptyAsNotFound: true
+                children:
+                  - type: antdFlex
+                    data:
+                      id: page-header
+                  - type: antdTabs
+                    data:
+                      id: page-tabs
             `}
           />
 
@@ -5874,6 +5890,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               {
                 id: number | string
                 reqIndex?: number       // индекс запроса из urlsToFetch для автоопределения ошибки
+                emptyAsNotFound?: boolean // если true и items[] пуст — показывает 404 (для K8s list с fieldSelector)
                 status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
                 title?: string          // поддерживает шаблоны (reqsJsonPath, partsOfUrl)
                 subTitle?: string       // поддерживает шаблоны
