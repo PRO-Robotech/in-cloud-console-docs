@@ -5777,10 +5777,21 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
                 - type: Volumes
                   data:
+                    baseprefix: "/openapi-ui"
+                    cluster: '{2}'
+                    forcedNamespace: '{3}'
                     reqIndex: 0
                     jsonPathToSpec: .items.0.spec
                     jsonPathToPodName: .items.0.metadata.name
+                    baseFactoryClusterSceopedAPIKey: base-factory-clusterscoped-api
+                    baseFactoryClusterSceopedBuiltinKey: base-factory-clusterscoped-builtin
+                    baseFactoryNamespacedAPIKey: base-factory-namespaced-api
+                    baseFactoryNamespacedBuiltinKey: base-factory-namespaced-builtin
+                    baseNamespaceFactoryKey: namespace-details
+                    baseNavigationPluralName: navigations
+                    baseNavigationSpecificName: navigation
                     errorText: "No efficient data in spec"
+                    # containerFactoryKey: container-details
             `}
           />
           <YamlModal
@@ -5788,11 +5799,21 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
                 export type TVolumesProps = {
                   id: number | string
+                  baseprefix?: string
+                  cluster: string
                   reqIndex: string
                   jsonPathToSpec: string
                   jsonPathToPodName?: string
+                  forcedNamespace?: string
                   errorText?: string
                   containerStyle?: CSSProperties
+                  baseFactoryNamespacedAPIKey: string
+                  baseFactoryClusterSceopedAPIKey: string
+                  baseFactoryNamespacedBuiltinKey: string
+                  baseFactoryClusterSceopedBuiltinKey: string
+                  baseNavigationPluralName: string
+                  baseNavigationSpecificName: string
+                  containerFactoryKey?: string
                 }
             `}
           />
