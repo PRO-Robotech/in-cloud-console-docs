@@ -5821,6 +5821,69 @@ It describes the interface structure as a hierarchy of components.
       </td>
     </tr>
 
+    <tr>
+      <td><code>antdResult</code></td>
+      <td>Status placeholder for displaying errors or empty states (403, 404, 500, success, warning, info). Two modes: manual (status, title and subtitle are set in YAML) and auto-detect (component reads the HTTP error from urlsToFetch by reqIndex)</td>
+      <td>
+        <figure style={{ textAlign: 'center', display: 'contents' }}>
+          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdResult.png`} style={{ width: '100%', maxWidth: 'none' }} />
+          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
+          </figcaption>
+        </figure>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+
+          <YamlModal
+            yamlContent={dedent`
+              # Manual mode — static placeholder
+              - type: antdResult
+                data:
+                  id: result-403
+                  status: "403"
+                  title: "Access Denied"
+                  subTitle: "You do not have permission to view this resource."
+
+              # Manual mode with VisibilityContainer (when data is missing)
+              - type: VisibilityContainer
+                data:
+                  id: vc-no-data
+                  value: "{reqsJsonPath[0]['.items.0']}"
+                  criteria: "notExists"
+                children:
+                  - type: antdResult
+                    data:
+                      id: result-empty
+                      status: "warning"
+                      title: "Resource Not Found"
+
+              # Auto-detect mode — reqIndex points at a request
+              - type: antdResult
+                data:
+                  id: error-display
+                  reqIndex: 0
+            `}
+          />
+
+          <YamlModal
+            buttonLabel="Structure example"
+            yamlContent={dedent`
+              {
+                id: number | string
+                reqIndex?: number       // urlsToFetch request index for auto-detect
+                status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
+                title?: string          // supports templates (reqsJsonPath, partsOfUrl)
+                subTitle?: string       // supports templates
+                style?: CSSProperties
+              }
+            `}
+          />
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+            <a href="https://ant.design/components/result" target="_blank">ResultProps</a>
+            <a href="https://ant.design/components/result#result-demo-403" target="_blank">Example</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
