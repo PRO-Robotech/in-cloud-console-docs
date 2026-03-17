@@ -61,8 +61,6 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          build-contexts: |
-            sgroups-proto=./sgroups-proto
           push: true
           provenance: false
           platforms: linux/amd64
