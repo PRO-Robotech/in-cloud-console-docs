@@ -76,8 +76,6 @@ spec:
       match:
         - uri:
             prefix: {{ $expose.path }}
-      rewrite:
-        uri: /
       route:
         - destination:
             host: {{ include "in-cloud-console-docs.fullname" . }}
