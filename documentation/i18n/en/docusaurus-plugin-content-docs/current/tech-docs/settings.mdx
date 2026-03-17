@@ -8,35 +8,35 @@ import { YamlModal } from '@site/src/components/YamlModal/YamlModal'
 import { getBasePrefix } from '@site/src/utils/getBasePrefix'
 import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
-# Конфигурация
+# Configuration
 
 ---
 
-## Работа с ресурсами
+## Working with Resources
 
-Ресурсы Kubernetes составляют основу любого **Kube-native интерфейса**.
-Чтобы UI мог динамически отображать данные, подход к описанию ресурсов, контекста и областей видимости должен быть стандартизирован.
+Kubernetes resources form the foundation of any **Kube-native interface**.
+For the UI to render data dynamically, the approach to describing resources, context, and scope must be standardized.
 
-<h3>Области видимости</h3>
-Область видимости (Scope) определяет контекст интерфейса, в котором выполняются действия пользователя.
+<h3>Scopes</h3>
+Scope defines the interface context in which user actions are performed.
 
-:::info Пояснение
+:::info Explanation
 
-- **STOCK** — основная область интерфейса, в которой выполняется основная работа.
-  Она разделена на два подтипа:
+- **STOCK** is the primary interface area where the main work happens.
+  It is divided into two subtypes:
 
-  - **cluster**: когда `Namespace` не выбран или переключатель установлен в _All Namespaces_. В этом случае, например, представление ресурсов должно содержать дополнительную колонку `Namespace`.
-  - **namespace**: когда выбран конкретный `Namespace`. В этом случае колонка `Namespace` становится избыточной и скрывается.
+  - **cluster**: when no `Namespace` is selected or when the switcher is set to _All Namespaces_. In this case, for example, the resource view should include an extra `Namespace` column.
+  - **namespace**: when a specific `Namespace` is selected. In that case, the `Namespace` column becomes redundant and is hidden.
 
-- **INSIDE** — дополнительная область интерфейса, обычно предназначенная для административных задач.
-  Администраторы могут описывать её по тем же принципам, что и STOCK, адаптируя под свои потребности.
+- **INSIDE** is an additional interface area usually intended for administrative tasks.
+  Administrators can describe it using the same principles as STOCK while adapting it to their own needs.
   :::
 
 <table>
   <thead>
     <tr>
-      <th>Префикс</th>
-      <th>Значение</th>
+      <th>Prefix</th>
+      <th>Meaning</th>
     </tr>
   </thead>
   <tbody>
@@ -44,46 +44,46 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
       <td>
         <code>stock</code>
       </td>
-      <td>Пользовательский UI</td>
+      <td>User UI</td>
     </tr>
     <tr>
       <td>
         <code>inside</code>
       </td>
-      <td>Административный UI</td>
+      <td>Administrative UI</td>
     </tr>
     <tr>
       <td>
         <code>namespace</code>
       </td>
-      <td>Объекты внутри namespace</td>
+      <td>Objects inside a namespace</td>
     </tr>
     <tr>
       <td>
         <code>cluster</code>
       </td>
-      <td>Объекты `ClusterScope` или объекты с namespace-областью видимости из всех namespace</td>
+      <td>`ClusterScope` objects or namespaced objects across all namespaces</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Типы страниц</h3>
+<h3>Page Types</h3>
 
-Kubernetes предоставляет два различных механизма доступа к ресурсам: **builtin** и **api**.
+Kubernetes provides two different mechanisms for accessing resources: **builtin** and **api**.
 
-- **builtin** — базовые ресурсы, доступные по пути `/api/v1`.
-  К ним относятся стандартные сущности Kubernetes, такие как `Pods`, `Secrets` и `Services`.
+- **builtin** are the basic resources available under `/api/v1`.
+  These include standard Kubernetes entities such as `Pods`, `Secrets`, and `Services`.
 
-- **api** включает все ресурсы, доступные через URI следующего вида:
+- **api** includes all resources available through URIs of the following form:
   - `/apis/{apiGroup}/{apiVersion}/{kind}`
   - `/apis/{apiGroup}/{apiVersion}/namespaces/{namespace}/{kind}`
 
 <table>
   <thead>
     <tr>
-      <th>Тип</th>
-      <th>Назначение</th>
-      <th>Пример запроса</th>
+      <th>Type</th>
+      <th>Purpose</th>
+      <th>Request example</th>
     </tr>
   </thead>
   <tbody>
@@ -92,7 +92,7 @@ Kubernetes предоставляет два различных механизм
         <code>api-form</code>
       </td>
       <td>
-        Форма создания ресурса (<code>/apis/...</code>)
+        Resource creation form (<code>/apis/...</code>)
       </td>
       <td>
         <code>apps/v1/Deployment</code>
@@ -103,7 +103,7 @@ Kubernetes предоставляет два различных механизм
         <code>api-table</code>
       </td>
       <td>
-        Таблица ресурсов (<code>/apis/...</code>)
+        Resource table (<code>/apis/...</code>)
       </td>
       <td>
         <code>batch/v1/Job</code>
@@ -114,7 +114,7 @@ Kubernetes предоставляет два различных механизм
         <code>builtin-form</code>
       </td>
       <td>
-        Форма для <code>core/v1</code>
+        Form for <code>core/v1</code>
       </td>
       <td>
         <code>v1/Pod</code>
@@ -125,7 +125,7 @@ Kubernetes предоставляет два различных механизм
         <code>builtin-table</code>
       </td>
       <td>
-        Таблица для <code>core/v1</code>
+        Table for <code>core/v1</code>
       </td>
       <td>
         <code>v1/Service</code>
@@ -135,17 +135,17 @@ Kubernetes предоставляет два различных механизм
       <td>
         <code>factory</code>
       </td>
-      <td>Выделенные страницы factory</td>
-      <td>пусто</td>
+      <td>Dedicated factory pages</td>
+      <td>empty</td>
     </tr>
   </tbody>
 </table>
 
 ---
 
-## Визуализация абстракций
+## Visualizing the Abstractions
 
-Прежде чем углубиться в используемые абстракции, давайте наглядно представим их на основе следующих скриншотов.
+Before going deeper into the abstractions we use, let us sketch a visual view of them based on the following screenshots.
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
   <FancyboxImage
@@ -153,7 +153,7 @@ Kubernetes предоставляет два различных механизм
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Примеры страниц с упрощённой схемой расположения элементов `CustomColumnsOverride`
+    Example pages with a simplified layout of `CustomColumnsOverride` elements
   </figcaption>
 </figure>
 
@@ -163,7 +163,7 @@ Kubernetes предоставляет два различных механизм
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Примеры страниц с упрощённой схемой расположения элементов `Factory`
+    Example pages with a simplified layout of `Factory` elements
   </figcaption>
 </figure>
 
@@ -173,7 +173,7 @@ Kubernetes предоставляет два различных механизм
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Примеры страниц с упрощённой схемой расположения элементов `CusoromFormOverride/CusoromFormPrefill`
+    Example pages with a simplified layout of `CusoromFormOverride/CusoromFormPrefill` elements
   </figcaption>
 </figure>
 
@@ -183,7 +183,7 @@ Kubernetes предоставляет два различных механизм
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Примеры страниц с областью видимости `INSIDE-*`
+    Example pages with the `INSIDE-*` scope
   </figcaption>
 </figure>
 
@@ -193,7 +193,7 @@ Kubernetes предоставляет два различных механизм
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Примеры страниц с областью видимости `STOCK-CLUSTER`
+    Example pages with the `STOCK-CLUSTER` scope
   </figcaption>
 </figure>
 
@@ -203,7 +203,7 @@ Kubernetes предоставляет два различных механизм
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Примеры страниц с областью видимости `STOCK-NAMESPACE`
+    Example pages with the `STOCK-NAMESPACE` scope
   </figcaption>
 </figure>
 
@@ -212,37 +212,37 @@ Kubernetes предоставляет два различных механизм
 ## Sidebar
 
 <p>
-  Sidebar в in‑Cloud — это ключевой элемент навигации. Он обеспечивает доступ к ресурсам и страницам интерфейса и
-  настраивается через YAML. Такой подход позволяет управлять структурой и содержимым sidebar декларативно,
-  без жёсткого кодирования.
+  The Sidebar in in‑Cloud is a core navigation element. It provides access to interface resources and pages and is
+  configured through YAML. This approach makes it possible to manage sidebar structure and content declaratively,
+  without hard-coding it.
 </p>
 
 <p>
-  В отличие от статических решений, sidebar в in‑Cloud может быть адаптирован под конкретные команды и их рабочие процессы. Это позволяет
-  настраивать различные области видимости — пользовательскую, административную, кластерную или namespace — и поддерживать
-  разные сценарии работы без дублирования интерфейса.
+  Unlike static solutions, the in‑Cloud sidebar can be adapted to specific teams and their workflows. This makes it
+  possible to configure different scopes such as user, administrative, cluster, or namespace and support different
+  working scenarios without duplicating the interface.
 </p>
 
-<h3>Структура полей Sidebar</h3>
+<h3>Sidebar Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>spec.id</code></td>
       <td>string</td>
-      <td>Уникальный идентификатор sidebar, отображаемый в UI.</td>
+      <td>Unique sidebar identifier displayed in the UI.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            ### Административный интерфейс
+            ### Administrative interface
             id: inside-cluster-api-form
             id: inside-cluster-api-table
             id: inside-cluster-builtin-form
@@ -252,7 +252,7 @@ Kubernetes предоставляет два различных механизм
             id: inside-namespace-builtin-form
             id: inside-namespace-builtin-table
 
-            ### Пользовательский интерфейс
+            ### User interface
             id: stock-cluster-api-form
             id: stock-cluster-api-table
             id: stock-cluster-builtin-form
@@ -269,14 +269,14 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.keysAndTags</code></td>
       <td>object</td>
-      <td>Маппинг ключей и тегов для sidebar</td>
+      <td>Mapping of keys and tags for the sidebar</td>
       <td>
         <YamlModal
           yamlContent={dedent`
             keysAndTags:
-              # key: указатель на spec.menuItems[].children[].key
+              # key: pointer to spec.menuItems[].children[].key
               pods:
-                # tags: указатели со стороны factory на ключи, используемые в sidebar
+                # tags: pointers from the factory side to keys used in the sidebar
                 - pod-sidebar
           `}
         />
@@ -285,7 +285,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.keysAndTags.\{childrenKey\}</code></td>
       <td>array</td>
-      <td>Массив тегов, привязанных к конкретному ключу</td>
+      <td>Array of tags bound to a specific key</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -297,7 +297,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[]</code></td>
       <td>array</td>
-      <td>Список элементов меню в sidebar</td>
+      <td>List of menu items in the sidebar</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -314,7 +314,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].key</code></td>
       <td>string</td>
-      <td>Уникальный ключ группы меню</td>
+      <td>Unique menu group key</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -326,7 +326,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].resourcesList</code></td>
       <td>Object</td>
-      <td>Объект конфигурации для вывода массива объектов в Sidebar</td>
+      <td>Configuration object for listing an array of objects in the Sidebar</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -353,7 +353,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].label</code></td>
       <td>string</td>
-      <td>Отображаемое название группы меню</td>
+      <td>Displayed menu group name</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -365,7 +365,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].children[]</code></td>
       <td>array</td>
-      <td>Вложенные элементы меню</td>
+      <td>Nested menu items</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -379,7 +379,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].children[].key</code></td>
       <td>string</td>
-      <td>Уникальный ключ элемента меню</td>
+      <td>Unique menu item key</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -391,7 +391,7 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].children[].label</code></td>
       <td>string</td>
-      <td>Отображаемое имя в интерфейсе</td>
+      <td>Displayed name in the interface</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -403,41 +403,41 @@ Kubernetes предоставляет два различных механизм
     <tr>
       <td><code>spec.menuItems[].children[].link</code></td>
       <td>string</td>
-      <td>Путь внутри UI</td>
+      <td>Path inside the UI</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {cluster}      - имя кластера
-            # {namespace}    - namespace (или all-namespaces)
-            # {plural}       - ресурс (pods, deployments и т.д.)
-            # {apiGroup}     - API-группа (apps, batch, networking.k8s.io)
-            # {apiVersion}   - версия API (v1, v1beta1, v1alpha1)
+            # {cluster}      - cluster name
+            # {namespace}    - namespace (or all-namespaces)
+            # {plural}       - resource (pods, deployments, etc.)
+            # {apiGroup}     - API group (apps, batch, networking.k8s.io)
+            # {apiVersion}   - API version (v1, v1beta1, v1alpha1)
 
-            # default — список кластеров
+            # default — cluster list
             link: /openapi-ui/clusters
 
-            # default — маршрут кластера
+            # default — cluster route
             link: /openapi-ui/\{cluster\}
 
-            # builtin — область namespace
+            # builtin — namespace scope
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/pods
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/pods
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/{plural}
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/{plural}
 
-            # builtin — область кластера
+            # builtin — cluster scope
             link: /openapi-ui/\{cluster\}/builtin-table/pods
             link: /openapi-ui/\{cluster\}/builtin-form/pods
             link: /openapi-ui/\{cluster\}/builtin-table/{plural}
             link: /openapi-ui/\{cluster\}/builtin-form/{plural}
 
-            # api — область namespace
+            # api — namespace scope
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/{apiGroup}/{apiVersion}/{plural}
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/{apiGroup}/{apiVersion}/{plural}
 
-            # api — область кластера
+            # api — cluster scope
             link: /openapi-ui/\{cluster\}/api-table/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/api-form/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/api-table/{apiGroup}/{apiVersion}/{plural}
@@ -450,12 +450,12 @@ Kubernetes предоставляет два различных механизм
   </tbody>
 </table>
 
-<h3>Настройка Sidebar</h3>
+<h3>Configuring the Sidebar</h3>
 
 <details close className="custom-gray-block">
   <summary>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <p style={{ marginBottom: 0 }}>Пример Sidebar</p>
+      <p style={{ marginBottom: 0 }}>Sidebar Example</p>
     </div>
   </summary>
   <CodeBlock language="yaml">
@@ -575,13 +575,13 @@ Kubernetes предоставляет два различных механизм
 </details>
 
 :::warning
-Обратите внимание, что идентификаторы (ID) являются общими для компонентов интерфейса и должны соответствовать установленным правилам именования.
+Please note that IDs are shared across interface components and must follow the established naming rules.
 :::
 
 :::info
-Имейте в виду, что sidebar необходимо настраивать для каждой области видимости отдельно.
-Конфигурация может отличаться между административным и пользовательским интерфейсами.
-Sidebar также необходимо описывать для каждой страницы factory. На первый взгляд это может показаться избыточным, однако именно такой подход обеспечивает гибкость и позволяет адаптировать интерфейс под конкретные команды и их рабочие процессы.
+Keep in mind that sidebars must be configured for each scope separately.
+The configuration may differ between the administrative and user interfaces.
+The sidebar also needs to be described for each factory page. At first glance this may seem redundant, but this approach is exactly what provides flexibility and allows the interface to be adapted to specific teams and their workflows.
 :::
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
@@ -590,7 +590,7 @@ Sidebar также необходимо описывать для каждой �
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример sidebar для страницы `Pods` в области видимости `All Namespaces`
+    Example sidebar for the `Pods` page in the `All Namespaces` scope
   </figcaption>
 </figure>
 
@@ -599,43 +599,43 @@ Sidebar также необходимо описывать для каждой �
 ## Breadcrumb
 
 <p>
-  Breadcrumb в in‑Cloud — это дополнительный навигационный элемент. Он отображает путь от корневого уровня до текущей
-  страницы и помогает пользователям понимать контекст, в котором они работают. Его главная цель — обеспечить быстрый доступ к
-  предыдущим уровням без возврата к боковой панели или повторного поиска.
+  Breadcrumb in in‑Cloud is an additional navigation element. It shows the path from the root level to the current
+  page and helps users understand the context they are working in. Its main goal is to provide quick access to
+  previous levels without returning to the sidebar or repeating a search.
 </p>
 
 <p>
-  Цепочка строится декларативно из YAML-описания. Каждый элемент имеет ключ, отображаемое имя и ссылку, а сами
-  ссылки могут использовать плейсхолдеры, такие как <code>\{cluster}</code>, <code>\{namespace}</code>, <code>\{apiGroup}</code>,
-  <code>\{apiVersion}</code> и <code>\{plural}</code>. Это позволяет гибко настраивать навигацию для
-  конкретного рабочего процесса.
+  The trail is built declaratively from a YAML description. Each item has a key, display name, and link, and those
+  links can use placeholders such as <code>\{cluster}</code>, <code>\{namespace}</code>, <code>\{apiGroup}</code>,
+  <code>\{apiVersion}</code>, and <code>\{plural}</code>. This makes it possible to configure navigation flexibly for
+  a specific workflow.
 </p>
 
 <p>
-  В отличие от Sidebar, Breadcrumb не определяет логику интерфейса, а дополняет её. Он предназначен для удобства и
-  экономии времени при перемещении по вложенным уровням интерфейса или быстром переключении между кластерами и пространствами имён.
+  Unlike the Sidebar, Breadcrumb does not define interface logic; it complements it. It is meant for convenience and
+  time savings when moving across nested interface levels or quickly switching between clusters and namespaces.
 </p>
 
-<h3>Структура полей Breadcrumb</h3>
+<h3>Breadcrumb Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>spec.id</code></td>
       <td>string</td>
-      <td>Уникальный идентификатор навигационной цепочки, отображаемый в интерфейсе.</td>
+      <td>Unique breadcrumb trail identifier displayed in the UI.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            ### Административный интерфейс
+            ### Administrative interface
             id: inside-cluster-api-form
             id: inside-cluster-api-table
             id: inside-cluster-builtin-form
@@ -645,7 +645,7 @@ Sidebar также необходимо описывать для каждой �
             id: inside-namespace-builtin-form
             id: inside-namespace-builtin-table
 
-            ### Пользовательский интерфейс
+            ### User interface
             id: stock-cluster-api-form
             id: stock-cluster-api-table
             id: stock-cluster-builtin-form
@@ -662,11 +662,11 @@ Sidebar также необходимо описывать для каждой �
     <tr>
       <td><code>spec.breadcrumbItems[]</code></td>
       <td>array</td>
-      <td>Список элементов навигационной цепочки.</td>
+      <td>List of breadcrumb trail items.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # Пример навигационной цепочки для страницы создания ресурса внутри namespace
+            # Example breadcrumb trail for a resource creation page inside a namespace
             breadcrumbItems:
               - key: in‑Cloud
                 label: in‑Cloud
@@ -690,7 +690,7 @@ Sidebar также необходимо описывать для каждой �
     <tr>
       <td><code>spec.breadcrumbItems[].key</code></td>
       <td>string</td>
-      <td>Уникальный ключ элемента навигационной цепочки.</td>
+      <td>Unique key of the breadcrumb item.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -702,7 +702,7 @@ Sidebar также необходимо описывать для каждой �
     <tr>
       <td><code>spec.breadcrumbItems[].label</code></td>
       <td>string</td>
-      <td>Отображаемое имя элемента навигационной цепочки в интерфейсе.</td>
+      <td>Displayed name of the breadcrumb item in the UI.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -715,42 +715,42 @@ Sidebar также необходимо описывать для каждой �
       <td><code>spec.breadcrumbItems[].link</code></td>
       <td>string</td>
       <td>
-        Ссылка на страницу, представленную навигационным элементом.
+        Link to the page represented by the navigation item.
       </td>
       <td>
         <YamlModal
           yamlContent={dedent`
-            # {cluster}      - имя кластера
-            # {namespace}    - пространство имён (или all-namespaces)
-            # {plural}       - ресурс (pods, deployments и т.д.)
-            # {apiGroup}     - API-группа (apps, batch, networking.k8s.io)
-            # {apiVersion}   - версия API (v1, v1beta1, v1alpha1)
+            # {cluster}      - cluster name
+            # {namespace}    - namespace (or all-namespaces)
+            # {plural}       - resource (pods, deployments, etc.)
+            # {apiGroup}     - API group (apps, batch, networking.k8s.io)
+            # {apiVersion}   - API version (v1, v1beta1, v1alpha1)
 
-            # default — список кластеров
+            # default — cluster list
             link: /openapi-ui/clusters
 
-            # default — маршрут кластера
+            # default — cluster route
             link: /openapi-ui/\{cluster\}
 
-            # builtin — область namespace
+            # builtin — namespace scope
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/pods
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/pods
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-table/{plural}
             link: /openapi-ui/\{cluster\}/\{namespace\}/builtin-form/{plural}
 
-            # builtin — область кластера
+            # builtin — cluster scope
             link: /openapi-ui/\{cluster\}/builtin-table/pods
             link: /openapi-ui/\{cluster\}/builtin-form/pods
             link: /openapi-ui/\{cluster\}/builtin-table/{plural}
             link: /openapi-ui/\{cluster\}/builtin-form/{plural}
 
-            # api — область namespace
+            # api — namespace scope
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-table/{apiGroup}/{apiVersion}/{plural}
             link: /openapi-ui/\{cluster\}/\{namespace\}/api-form/{apiGroup}/{apiVersion}/{plural}
 
-            # api — область кластера
+            # api — cluster scope
             link: /openapi-ui/\{cluster\}/api-table/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/api-form/apps/v1/deployments
             link: /openapi-ui/\{cluster\}/api-table/{apiGroup}/{apiVersion}/{plural}
@@ -763,12 +763,12 @@ Sidebar также необходимо описывать для каждой �
   </tbody>
 </table>
 
-<h3>Настройка Breadcrumb</h3>
+<h3>Configuring Breadcrumb</h3>
 
 <details close className="custom-gray-block">
   <summary>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <p style={{ marginBottom: 0 }}>Пример BreadCrumb</p>
+      <p style={{ marginBottom: 0 }}>BreadCrumb Example</p>
     </div>
   </summary>
   <CodeBlock language="yaml">
@@ -801,13 +801,13 @@ Sidebar также необходимо описывать для каждой �
 </details>
 
 :::warning
-Обратите внимание, что идентификаторы являются общими для компонентов интерфейса и должны соответствовать установленным правилам именования.
+Please note that IDs are shared across interface components and must follow the established naming rules.
 :::
 
 :::info
-Имейте в виду, что Breadcrumb необходимо настраивать отдельно для каждой области видимости.
-Конфигурация может различаться между административным и пользовательским интерфейсами.
-Breadcrumb также необходимо описывать для каждой страницы factory. На первый взгляд это может показаться избыточным, но именно такой подход обеспечивает гибкость и позволяет адаптировать интерфейс под конкретные команды и их рабочие процессы.
+Keep in mind that Breadcrumb must be configured separately for each scope.
+The configuration may differ between the administrative and user interfaces.
+Breadcrumb also needs to be described for each factory page. At first glance this may seem redundant, but this approach is exactly what provides flexibility and allows the interface to be adapted to specific teams and their workflows.
 :::
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
@@ -816,7 +816,7 @@ Breadcrumb также необходимо описывать для каждо�
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример навигационной цепочки для страницы `Pods` в области `All Namespaces`
+    Example breadcrumbs for the `Pods` page in the `All Namespaces` scope
   </figcaption>
 </figure>
 
@@ -825,22 +825,22 @@ Breadcrumb также необходимо описывать для каждо�
 ## CustomColumnsOverride
 
 <p>
-  `CustomColumnsOverride` — это механизм описания столбцов в табличных представлениях ресурсов Kubernetes в in‑Cloud. Он
-  позволяет переопределять столбцы по умолчанию, добавлять новые и задавать поведение, такое как тип, значения по умолчанию и
-  обрезка текста.
+  `CustomColumnsOverride` is a mechanism for describing columns in Kubernetes resource table views in in‑Cloud. It
+  allows you to override default columns, add new ones, and define behavior such as type, default values, and text
+  trimming.
 </p>
 <p>
-  Работает как для пользовательской, так и для административной области видимости. Конфигурация декларативная (YAML) и не требует изменений в коде.
+  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code changes.
 </p>
 
-<h3>Структура полей CustomColumnsOverride</h3>
+<h3>CustomColumnsOverride Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -851,13 +851,13 @@ Breadcrumb также необходимо описывать для каждо�
         <YamlModal
           yamlContent={dedent`
             ###
-            ### Административный интерфейс
+            ### Administrative interface
             inside-namespace-/v1/pods
             inside-cluster-/v1/pods
             inside-namespace-/apps/v1/deployments
             inside-cluster-/apps/v1/deployments
 
-            ### Пользовательский интерфейс
+            ### User interface
             stock-namespace-/v1/pods
             stock-cluster-/v1/pods
             stock-namespace-/apps/v1/deployments
@@ -956,41 +956,41 @@ Breadcrumb также необходимо описывать для каждо�
   </tbody>
 </table>
 
-<h3>Описание полей</h3>
+<h3>Field Description</h3>
 <dl>
   <dt><code>spec.id</code></dt>
-  <dd>Идентификатор области видимости и ресурса, столбцы которого переопределяются.</dd>
+  <dd>Identifier of the scope and resource whose columns are overridden.</dd>
 
 <dt>
   <code>spec.additionalPrinterColumns[]</code>
 </dt>
-<dd>Список пользовательских столбцов для табличного представления ресурса.</dd>
+<dd>List of custom columns for the resource table view.</dd>
 
 <dt>
   <code>spec.additionalPrinterColumnsUndefinedValues[]</code>
 </dt>
-<dd>Значения по умолчанию, используемые когда вычисленное значение пустое или не определено.</dd>
+<dd>Default values used when the computed value is empty or undefined.</dd>
 
 <dt>
   <code>spec.additionalPrinterColumnsTrimLengths[]</code>
 </dt>
-<dd>Правила обрезки строковых значений по длине для выбранных столбцов.</dd>
+<dd>Rules for trimming string values by length for selected columns.</dd>
 
 <dt><code>spec.additionalPrinterColumnsCustomSortersAndFilters[]</code></dt>
-<dd>Правила сортировки или возможность отключения сортировки и фильтрации для столбца таблицы.</dd>
+<dd>Sorting rules or an option to disable sorting and filtering on a table column.</dd>
 </dl>
 
 <h3>
-  Структура элемента <code>additionalPrinterColumns[]</code>
+  Structure of the <code>additionalPrinterColumns[]</code> item
 </h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -999,7 +999,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>jsonPath</code>
       </td>
       <td>string</td>
-      <td>JSONPath-выражение, используемое для извлечения значения столбца из объекта ресурса.</td>
+      <td>JSONPath expression used to extract the column value from the resource object.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1013,7 +1013,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>name</code>
       </td>
       <td>string</td>
-      <td>Заголовок столбца.</td>
+      <td>Column title.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1026,16 +1026,16 @@ Breadcrumb также необходимо описывать для каждо�
 </table>
 
 <h3>
-  Структура элемента <code>additionalPrinterColumnsUndefinedValues[]</code>
+  Structure of the <code>additionalPrinterColumnsUndefinedValues[]</code> item
 </h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1044,7 +1044,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>key</code>
       </td>
       <td>string</td>
-      <td>Имя столбца, к которому применяется значение по умолчанию.</td>
+      <td>Name of the column to which the fallback value is applied.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1058,7 +1058,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>value</code>
       </td>
       <td>string</td>
-      <td>Значение по умолчанию, используемое при отсутствии данных.</td>
+      <td>Default value used when data is missing.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1071,16 +1071,16 @@ Breadcrumb также необходимо описывать для каждо�
 </table>
 
 <h3>
-  Структура элемента <code>additionalPrinterColumnsTrimLengths[]</code>
+  Structure of the <code>additionalPrinterColumnsTrimLengths[]</code> item
 </h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1089,7 +1089,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>key</code>
       </td>
       <td>string</td>
-      <td>Имя столбца, для которого задано ограничение длины.</td>
+      <td>Name of the column for which the length limit is defined.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1103,7 +1103,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>value</code>
       </td>
       <td>integer</td>
-      <td>Максимальная длина строки; лишние символы обрезаются.</td>
+      <td>Maximum string length; extra characters are trimmed.</td>
       <td>
         <CodeBlock language="yaml">
           {dedent`
@@ -1115,12 +1115,12 @@ Breadcrumb также необходимо описывать для каждо�
   </tbody>
 </table>
 
-<h3>Настройка CustomColumnsOverride</h3>
+<h3>Configuring CustomColumnsOverride</h3>
 
 <details close className="custom-gray-block">
   <summary>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <p style={{ marginBottom: 0 }}>Пример CustomColumnsOverride</p>
+      <p style={{ marginBottom: 0 }}>CustomColumnsOverride Example</p>
     </div>
   </summary>
   <CodeBlock language="yaml">
@@ -1178,14 +1178,14 @@ Breadcrumb также необходимо описывать для каждо�
 <details close className="custom-gray-block">
   <summary>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <p style={{ marginBottom: 0 }}>Пример CustomColumnsOverride с Factory</p>
+      <p style={{ marginBottom: 0 }}>CustomColumnsOverride Example Factory</p>
     </div>
   </summary>
 
-:::warning Внимание
-Обратите внимание, что этот пример отличается от предыдущего, так как использует пользовательский тип `factory`.
-Ниже вы найдёте более подробное объяснение этой абстракции. На данном этапе достаточно запомнить,
-что элементы таблицы также могут использовать этот механизм для заполнения ячеек.
+:::warning Attention
+Please note that this example differs from the previous one because it uses the custom `factory` type.
+Further below you will find a more detailed explanation of this abstraction. At this stage, it is enough to remember
+that table elements can also use this mechanism to populate cells.
 :::
 
   <CodeBlock language="yaml">
@@ -1370,13 +1370,13 @@ Breadcrumb также необходимо описывать для каждо�
 </details>
 
 :::warning
-Обратите внимание, что `id` в этом ресурсе отличается от идентификаторов `BreadCrumb` и `Sidebar`.
+Please note that the `id` in this resource differs from the `BreadCrumb` and `Sidebar` IDs.
 :::
 
 :::info
-Имейте в виду, что `CustomColumnsOverride` необходимо настраивать для каждого типа ресурса, поскольку их структуры различаются.
+Keep in mind that `CustomColumnsOverride` must be configured for each resource type because their structures differ.
 
-> JsonPath использует полную функциональность TypeScript-библиотеки JSONPath, что означает возможность применения фильтров, условий и других возможностей для извлечения данных из сложных структур.
+> JsonPath uses the full functionality of the TypeScript JSONPath library, which means you can use filters, conditions, and other features to extract data from complex structures.
 
 :::
 
@@ -1386,7 +1386,7 @@ Breadcrumb также необходимо описывать для каждо�
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Пример форматирования таблицы для `Pods` в области `All Namespaces`
+    Example table formatting for `Pods` in the `All Namespaces` scope
   </figcaption>
 </figure>
 
@@ -1395,29 +1395,29 @@ Breadcrumb также необходимо описывать для каждо�
 ## TableUriMapping
 
 <p>
-  `TableUriMapping` — это механизм конфигурации маршрутов для табличных представлений ресурсов Kubernetes в in‑Cloud. Когда маршрут
-  определён, строки и ячейки становятся кликабельными и ведут на соответствующие страницы ресурсов.
+  `TableUriMapping` is a route configuration mechanism for Kubernetes resource table views in in‑Cloud. When a route
+  is defined, rows and cells become clickable and lead to the corresponding resource pages.
 </p>
 <p>
-  Работает как для пользовательских, так и для административных областей. Конфигурация декларативная (YAML) и не требует изменений в коде.
+  It works for both user and administrative scopes. The configuration is declarative (YAML) and does not require code changes.
 </p>
 
-<h3>Структура полей TableUriMapping</h3>
+<h3>TableUriMapping Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>spec.id</code></td>
       <td>string</td>
-      <td>Идентификатор области и ресурса, для которого настроена табличная маршрутизация.</td>
+      <td>Identifier of the scope and resource for which table routing is configured.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1456,7 +1456,7 @@ Breadcrumb также необходимо описывать для каждо�
     <tr>
       <td><code>spec.keysToParse</code></td>
       <td>string</td>
-      <td>JSONPath к значению, подставляемому как <code>~recordValue~</code> (необязательное).</td>
+      <td>JSONPath to the value inserted as <code>~recordValue~</code> (optional).</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1468,7 +1468,7 @@ Breadcrumb также необходимо описывать для каждо�
     <tr>
       <td><code>spec.keysToParseSecond</code></td>
       <td>string</td>
-      <td>JSONPath к значению, подставляемому как <code>~recordValueSecond~</code> (необязательное).</td>
+      <td>JSONPath to the value inserted as <code>~recordValueSecond~</code> (optional).</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1480,7 +1480,7 @@ Breadcrumb также необходимо описывать для каждо�
     <tr>
       <td><code>spec.keysToParseThird</code></td>
       <td>string</td>
-      <td>JSONPath к значению, подставляемому как <code>~recordValueThird~</code> (необязательное).</td>
+      <td>JSONPath to the value inserted as <code>~recordValueThird~</code> (optional).</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1492,7 +1492,7 @@ Breadcrumb также необходимо описывать для каждо�
     <tr>
       <td><code>spec.pathToNavigate</code></td>
       <td>string</td>
-      <td>Шаблон маршрута, используемый при переходе из таблицы. Поддерживает плейсхолдеры из контекста и значения JSONPath.</td>
+      <td>Route template used when navigating from a table. Supports placeholders from context and JSONPath values.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1505,13 +1505,13 @@ Breadcrumb также необходимо описывать для каждо�
   </tbody>
 </table>
 
-<h3>Плейсхолдеры маршрутов</h3>
+<h3>Route Placeholders</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Плейсхолдер</th>
-      <th>Источник</th>
+      <th>Placeholder</th>
+      <th>Source</th>
     </tr>
   </thead>
   <tbody>
@@ -1519,20 +1519,20 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>\{cluster}</code>
       </td>
-      <td>Выбранный кластер</td>
+      <td>Selected cluster</td>
     </tr>
     <tr>
       <td>
         <code>\{namespace}</code>
       </td>
-      <td>Выбранный Namespace (если применимо)</td>
+      <td>Selected namespace (if applicable)</td>
     </tr>
     <tr>
       <td>
         <code>```~recordValue~```</code>
       </td>
       <td>
-        Значение из <code>spec.keysToParse</code>
+        Value from <code>spec.keysToParse</code>
       </td>
     </tr>
     <tr>
@@ -1540,7 +1540,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>```~recordValueSecond~```</code>
       </td>
       <td>
-        Значение из <code>spec.keysToParseSecond</code>
+        Value from <code>spec.keysToParseSecond</code>
       </td>
     </tr>
     <tr>
@@ -1548,24 +1548,24 @@ Breadcrumb также необходимо описывать для каждо�
         <code>```~recordValueThird~```</code>
       </td>
       <td>
-        Значение из <code>spec.keysToParseThird</code>
+        Value from <code>spec.keysToParseThird</code>
       </td>
     </tr>
     <tr>
       <td>
         <code>\{index}</code>
       </td>
-      <td>Индекс сегмента URI (считается по разделителям «/»)</td>
+      <td>URI segment index (counted by the "/" separators)</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Настройка TableUriMapping</h3>
+<h3>Configuring TableUriMapping</h3>
 
 <details close className="custom-gray-block">
   <summary>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <p style={{ marginBottom: 0 }}>Пример TableUriMapping</p>
+      <p style={{ marginBottom: 0 }}>TableUriMapping Example</p>
     </div>
   </summary>
   <CodeBlock language="yaml">
@@ -1585,11 +1585,11 @@ Breadcrumb также необходимо описывать для каждо�
 </details>
 
 :::warning
-Обратите внимание, что `id` в этом ресурсе отличается от идентификаторов `BreadCrumb` и `Sidebar`.
+Please note that the `id` in this resource differs from the `BreadCrumb` and `Sidebar` IDs.
 :::
 
 :::info
-Имейте в виду, что `CustomColumnsOverride` должен быть настроен для каждого типа ресурса.
+Keep in mind that `CustomColumnsOverride` must be configured for each resource type.
 :::
 
 <figure style={{ textAlign: 'center', display: 'contents' }}>
@@ -1598,7 +1598,7 @@ Breadcrumb также необходимо описывать для каждо�
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Страница таблицы `Pods` в области `All Namespaces` после клика по строке таблицы
+    `Pods` table page in the `All Namespaces` scope after clicking a table row
   </figcaption>
 </figure>
 
@@ -1608,42 +1608,42 @@ Breadcrumb также необходимо описывать для каждо�
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Страница Factory с деталями `Pods`, открытая по клику на строку таблицы
+    Factory page with `Pods` details opened by clicking a table row
   </figcaption>
 </figure>
 
-> Как показано на втором изображении, контекст сохраняется на уровне `Sidebar` и `Breadcrumb`, что позволяет легко вернуться к предыдущему состоянию интерфейса. Указатели `keysToParse` и `keysToParseSecond` передают необходимые значения в Factory и задают контекст Namespace для дальнейшей работы с `Pods`.
+> As shown in the second image, context is preserved at the `Sidebar` and `Breadcrumb` levels, which makes it easy to return to the previous interface state. The `keysToParse` and `keysToParseSecond` pointers pass the required values into the factory and set the namespace context for further work with `Pods`.
 
 ---
 
 ## Navigation
 
 <p>
-  <strong>Navigation</strong> — это механизм настройки переходов между контекстами в интерфейсе in‑Cloud. Он
-  определяет, куда должен быть перенаправлен пользователь при выборе проекта, инстанса или Namespace.
+  <strong>Navigation</strong> is the mechanism for configuring transitions between contexts in the in‑Cloud UI. It
+  defines where the user should be redirected when selecting a project, instance, or namespace.
 </p>
 
 <p>
-  Navigation работает декларативно: при изменении значения в выпадающем списке пользователь перенаправляется на заранее определённый маршрут.
-  Для каждого типа контекста определены два шаблона:
+  Navigation works declaratively: when the value in a dropdown changes, the user is redirected to a predefined route.
+  Two templates are defined for each context type:
 </p>
 
 <ul>
   <li>
-    <code>clear</code>: маршрут, используемый при сбросе значения, например «все проекты»
+    <code>clear</code>: the route used when the value is reset, for example "all projects"
   </li>
   <li>
-    <code>change</code>: маршрут, используемый при выборе нового значения
+    <code>change</code>: the route used when a new value is selected
   </li>
 </ul>
 
-<p>В маршрутах поддерживаются следующие плейсхолдеры:</p>
+<p>The following placeholders are supported in routes:</p>
 
 <table>
   <thead>
     <tr>
-      <th>Плейсхолдер</th>
-      <th>Описание</th>
+      <th>Placeholder</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -1651,26 +1651,26 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>\{selectedCluster}</code>
       </td>
-      <td>Текущий выбранный кластер</td>
+      <td>Currently selected cluster</td>
     </tr>
     <tr>
       <td>
         <code>\{value}</code>
       </td>
-      <td>Новое выбранное значение (проект, инстанс или Namespace)</td>
+      <td>Newly selected value (project, instance, or namespace)</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Структура полей Navigation</h3>
+<h3>Navigation Field Structure</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -1679,7 +1679,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.projects.clear</code>
       </td>
       <td>string</td>
-      <td>Маршрут, используемый при сбросе выбранного проекта.</td>
+      <td>Route used when the selected project is cleared.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1693,7 +1693,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.projects.change</code>
       </td>
       <td>string</td>
-      <td>Маршрут, используемый при выборе конкретного проекта.</td>
+      <td>Route used when a specific project is selected.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1707,7 +1707,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.projects.aliasPath</code>
       </td>
       <td>string</td>
-      <td>Выражение <code>{`{reqsJsonPath[...]}`}</code>, применяемое к меткам.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to labels.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1721,7 +1721,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.instances.clear</code>
       </td>
       <td>string</td>
-      <td>Маршрут, используемый при сбросе выбранного инстанса.</td>
+      <td>Route used when the selected instance is cleared.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1735,7 +1735,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.instances.change</code>
       </td>
       <td>string</td>
-      <td>Маршрут, используемый при выборе конкретного инстанса.</td>
+      <td>Route used when a specific instance is selected.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1749,7 +1749,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.instances.mapOptionsPattern</code>
       </td>
       <td>string</td>
-      <td>Выражение <code>{`{reqsJsonPath[...]}`}</code>, применяемое к значению.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to the value.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1763,7 +1763,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.instances.aliasPath</code>
       </td>
       <td>string</td>
-      <td>Выражение <code>{`{reqsJsonPath[...]}`}</code>, применяемое к меткам.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to labels.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1777,7 +1777,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.namespaces.clear</code>
       </td>
       <td>string</td>
-      <td>Маршрут, используемый при сбросе выбранного Namespace.</td>
+      <td>Route used when the selected namespace is cleared.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1791,7 +1791,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.namespaces.change</code>
       </td>
       <td>string</td>
-      <td>Маршрут, используемый при выборе конкретного Namespace.</td>
+      <td>Route used when a specific namespace is selected.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1805,7 +1805,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.namespaces.aliasPath</code>
       </td>
       <td>string</td>
-      <td>Выражение <code>{`{reqsJsonPath[...]}`}</code>, применяемое к меткам.</td>
+      <td><code>{`{reqsJsonPath[...]}`}</code> expression applied to labels.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1819,7 +1819,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.baseFactoriesMapping</code>
       </td>
       <td>Record\<string, string\></td>
-      <td>Переопределяет ID Factory по умолчанию на целевой ID.</td>
+      <td>Overrides the default factory ID with a target ID.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1833,7 +1833,7 @@ Breadcrumb также необходимо описывать для каждо�
         <code>spec.pathToNavigateFromClusterList</code>
       </td>
       <td>string</td>
-      <td>Плейсхолдер <code>~recordValue~</code>, подставляемый из столбца `name` при клике.</td>
+      <td><code>~recordValue~</code> placeholder substituted from the `name` column on click.</td>
       <td>
         <YamlModal
           yamlContent={dedent`
@@ -1845,12 +1845,12 @@ Breadcrumb также необходимо описывать для каждо�
   </tbody>
 </table>
 
-<h3>Пример ресурса Navigation</h3>
+<h3>Navigation Resource Example</h3>
 
 <details close className="custom-gray-block">
   <summary>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      <p style={{ marginBottom: 0 }}>Пример Navigation</p>
+      <p style={{ marginBottom: 0 }}>Navigation Example</p>
     </div>
   </summary>
   <CodeBlock language="yaml">
@@ -1878,12 +1878,12 @@ Breadcrumb также необходимо описывать для каждо�
 </details>
 
 :::info
-Ресурс <code>Navigation</code> обычно описывается один раз и применяется глобально ко всем элементам интерфейса.
-При необходимости можно определить различные правила навигации для разных страниц Factory.
+The <code>Navigation</code> resource is usually described once and applied globally to all interface elements.
+If needed, you can define different navigation rules for different factory pages.
 :::
 
 :::warning
-Убедитесь, что маршруты корректны и ведут к существующим представлениям, иначе пользователь может попасть на несуществующую страницу.
+Make sure the routes are valid and point to existing views, otherwise the user may end up on a non-existent page.
 :::
 
 ---
@@ -1891,25 +1891,25 @@ Breadcrumb также необходимо описывать для каждо�
 ## Factory
 
 <p>
-  Ресурс <code>Factory</code> используется в интерфейсе in‑Cloud для декларативного построения интерфейсов
-  из YAML-описаний. Он выступает описанием страницы или её части и включает:
+  The <code>Factory</code> resource is used in the in‑Cloud UI to build interfaces declaratively from YAML
+  descriptions. It acts as a description of a page or part of a page and includes:
 </p>
 
 <ul>
-  <li>получение данных через API</li>
-  <li>визуальную компоновку из компонентов</li>
-  <li>вложенность и группировку компонентов в структуру</li>
-  <li>работу с JSONPath-выражениями и URL-переменными</li>
+  <li>data retrieval through the API</li>
+  <li>visual composition from components</li>
+  <li>nesting and grouping components into a structure</li>
+  <li>work with JSONPath expressions and URL variables</li>
 </ul>
 
-<h3>URL-переменные</h3>
+<h3>URL Variables</h3>
 
 <p>
-  Все пути в <code>urlsToFetch</code> и других полях могут содержать переменные в фигурных скобках, которые подставляются
-  при рендеринге:
+  All paths in <code>urlsToFetch</code> and other fields can contain variables in curly braces that are substituted
+  during rendering:
 </p>
 
-<CodeBlock language="yaml" title="Пример подстановки">
+<CodeBlock language="yaml" title="Placeholder example">
   {dedent`
     urlsToFetch:
       - cluster: "{2}"
@@ -1921,11 +1921,11 @@ Breadcrumb также необходимо описывать для каждо�
   `}
 </CodeBlock>
 
-<h3>Обработка данных</h3>
+<h3>Data Processing</h3>
 
 <p>
-  Данные, полученные через <code>urlsToFetch</code>, доступны во всех компонентах с помощью синтаксиса JSONPath, включая
-  вложенный доступ:
+  Data fetched through <code>urlsToFetch</code> is available in all components through JSONPath syntax, including
+  nested access:
 </p>
 
 <CodeBlock language="yaml">
@@ -1954,25 +1954,25 @@ Breadcrumb также необходимо описывать для каждо�
 </ul>
 
 :::info
-Обратите внимание на несколько важных деталей:
+Please note a few important details:
 
-1. `urlsToFetch` — это массив, в котором каждый элемент содержит результаты запроса, отфильтрованные по указанным `labelSelector` и `fieldSelector`.
-2. Если целевой API поддерживает `watch` и доступен через сокет-соединение, данные передаются в реальном времени. В противном случае используется обычный REST-запрос.
+1. `urlsToFetch` is an array in which each element contains query results filtered with the specified `labelSelector` and `fieldSelector`.
+2. If the target API supports `watch` and is available through a socket connection, data is streamed in real time. Otherwise, a regular REST request is used.
    :::
-   <h3>Типичные сценарии использования</h3>
+   <h3>Typical Use Cases</h3>
 
 <ul>
-  <li>Страницы деталей ресурсов, таких как `Pods`, `Deployments` и `Nodes`</li>
-  <li>Таблицы с редактированием YAML/JSON</li>
+  <li>Resource detail pages such as `Pods`, `Deployments`, and `Nodes`</li>
+  <li>Tables with YAML/JSON editing</li>
   <li>
-    Динамические вкладки с таблицами (<code>EnrichedTable</code>)
+    Dynamic tabs with tables (<code>EnrichedTable</code>)
   </li>
-  <li>Визуализация логов и терминала</li>
+  <li>Log and terminal visualization</li>
 </ul>
 
-<h3>Общее описание</h3>
+<h3>General Description</h3>
 
-Ресурс принадлежит API-группе <code>front.in‑Cloud.io/v1alpha1</code> и имеет следующую базовую структуру:
+The resource belongs to the <code>front.in‑Cloud.io/v1alpha1</code> API group and has the following basic shape:
 
 <CodeBlock language="yaml" title="Factory.yaml">
   {dedent`
@@ -1997,14 +1997,14 @@ Breadcrumb также необходимо описывать для каждо�
   `}
 </CodeBlock>
 
-<h3>Ключевые поля</h3>
+<h3>Key Fields</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Назначение</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
@@ -2015,7 +2015,7 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>string</code>
       </td>
-      <td>Уникальный ключ страницы, используемый как идентификатор и часть URL.</td>
+      <td>Unique page key used as an ID and as part of the URL.</td>
     </tr>
     <tr>
       <td>
@@ -2024,7 +2024,7 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>string | undefined</code>
       </td>
-      <td>Ссылка на идентификатор бокового меню; влияет на то, какой ID используется для сопоставления.</td>
+      <td>Link to a sidebar ID; affects which ID is used for matching.</td>
     </tr>
     <tr>
       <td>
@@ -2033,7 +2033,7 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>string[]</code>
       </td>
-      <td>Ссылка на теги бокового меню; влияет на навигацию и видимость.</td>
+      <td>Link to sidebar tags; affects navigation and visibility.</td>
     </tr>
     <tr>
       <td>
@@ -2056,8 +2056,8 @@ Breadcrumb также необходимо описывать для каждо�
         </CodeBlock>
       </td>
       <td>
-        Список API-запросов, данные которых будут подставлены в шаблоны компонентов. Описание ресурса через
-        структурированную форму инициирует проверку глагола `watch` и использует сокет-поток при его доступности.
+        List of API requests whose data will be injected into component templates. Describing a resource through the
+        structured form triggers a `watch` verb check and uses a socket stream when available.
       </td>
     </tr>
     <tr>
@@ -2067,7 +2067,7 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>bool</code>
       </td>
-      <td>Определяет, является ли основная карточка контента прокручиваемой.</td>
+      <td>Controls whether the main content card is scrollable.</td>
     </tr>
     <tr>
       <td>
@@ -2076,33 +2076,33 @@ Breadcrumb также необходимо описывать для каждо�
       <td>
         <code>Component[]</code>
       </td>
-      <td>Основная структура компонентов интерфейса.</td>
+      <td>Main interface component structure.</td>
     </tr>
   </tbody>
 </table>
 
 <h3>
-  Поле <code>data[]</code>
+  The <code>data[]</code> Field
 </h3>
 
-Поле <code>data</code> — это **основное содержимое ресурса Factory**.
-Оно описывает структуру интерфейса как иерархию компонентов.
+The <code>data</code> field is the **main content of a Factory resource**.
+It describes the interface structure as a hierarchy of components.
 
-<h3>Доступные компоненты Factory</h3>
+<h3>Available Factory Components</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Название</th>
-      <th>Назначение</th>
-      <th>Пример</th>
+      <th>Name</th>
+      <th>Purpose</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
 
     <tr>
       <td><code>antdText</code></td>
-      <td>Отображает простой текст или заголовок</td>
+      <td>Displays plain text or a heading</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2125,7 +2125,7 @@ Breadcrumb также необходимо описывать для каждо�
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
             {
               id: number | string
@@ -2143,7 +2143,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ResourceBadge</code></td>
-      <td>Отображает простую метку в виде бейджа</td>
+      <td>Displays a simple badge-like label</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ResourceBadge.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2172,7 +2172,7 @@ Breadcrumb также необходимо описывать для каждо�
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2188,7 +2188,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>parsedText</code></td>
-      <td>Значение, полученное из JSONPath</td>
+      <td>Value resolved from JSONPath</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/parsedText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2205,12 +2205,11 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
-              export type TParsedTextProps = {
+              {
                 id: number | string
                 text: string
-                tooltip?: string
                 formatter?: 'timestamp'
                 style?: CSSProperties
               }
@@ -2222,7 +2221,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>MappedParsedText</code></td>
-      <td>Значение из JSONPath, преобразованное через `valueMap`</td>
+      <td>Value from JSONPath mapped through `valueMap`</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/parsedText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2243,7 +2242,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TMappedParsedTextProps = {
                   id: number | string
@@ -2259,7 +2258,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>LabelsToSearchParams</code></td>
-      <td>Создаёт ссылку на модуль Search с предзаполненными атрибутами поиска</td>
+      <td>Creates a link to the Search module with prefilled search attributes</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/LabelsToSearchParams.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2281,7 +2280,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TLabelsToSearchParamsProps = {
                 id: number | string
@@ -2304,7 +2303,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>StatusText</code></td>
-      <td>Определяет статус на основе значений, таких как success, error или pending</td>
+      <td>Determines status from values such as success, error, or pending</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/StatusText.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2390,7 +2389,7 @@ Breadcrumb также необходимо описывать для каждо�
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2417,7 +2416,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdLink</code></td>
-      <td>Гиперссылка на другой ресурс или маршрут</td>
+      <td>Hyperlink to another resource or route</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdLink.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2437,7 +2436,7 @@ Breadcrumb также необходимо описывать для каждо�
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2455,7 +2454,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdButton</code></td>
-      <td>Кнопка действия с ID, стилями и событиями</td>
+      <td>Action button with ID, styles, and events</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdButton.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2493,7 +2492,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2511,7 +2510,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>KeyCounter</code></td>
-      <td>Подсчитывает количество ключей в объекте</td>
+      <td>Counts the number of keys in an object</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/KeyCounter.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2532,7 +2531,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2550,7 +2549,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ItemCounter</code></td>
-      <td>Подсчитывает количество элементов в массиве</td>
+      <td>Counts the number of items in an array</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ItemCounter.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2571,7 +2570,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2589,7 +2588,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ConverterBytes</code></td>
-      <td>Конвертирует байты в читаемый размер, например KB или MB</td>
+      <td>Converts bytes into a human-readable size such as KB or MB</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ConverterBytes.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2609,7 +2608,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2635,7 +2634,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ConverterCores</code></td>
-      <td>Конвертирует ядра CPU в читаемое значение</td>
+      <td>Converts CPU cores into a readable value</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ConverterBytes.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2653,7 +2652,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2685,7 +2684,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>MarketPlace</code></td>
-      <td>Отображает доступный набор ресурсов Marketplace для заказа</td>
+      <td>Displays the available set of Marketplace resources for ordering</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/marketplace.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2709,7 +2708,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2732,7 +2731,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>SecretBase64Plain</code></td>
-      <td>Отображает секрет в base64 или открытым текстом с переключателем видимости</td>
+      <td>Displays a secret in base64 or plaintext with a visibility toggle</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/SecretBase64Plain.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2751,7 +2750,7 @@ Breadcrumb также необходимо описывать для каждо�
           `}
         />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TSecretBase64PlainProps = {
                 id: number | string
@@ -2782,7 +2781,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdFlex</code></td>
-      <td>Контейнер с flex-раскладкой, вертикальной по умолчанию</td>
+      <td>Container with flex layout, vertical by default</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdFlex.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2812,7 +2811,7 @@ Breadcrumb также необходимо описывать для каждо�
           />
 
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2829,7 +2828,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdRow</code></td>
-      <td>Горизонтальная сетка, состоящая из колонок</td>
+      <td>Horizontal grid composed of columns</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdRow.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2848,7 +2847,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -2865,7 +2864,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdCol</code></td>
-      <td>Колонка внутри <code>antdRow</code></td>
+      <td>Column inside an <code>antdRow</code></td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdCol.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2884,7 +2883,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
             {
               id: number | string
@@ -2901,7 +2900,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdTabs</code></td>
-      <td>Вкладки с различными дочерними компонентами</td>
+      <td>Tabs with different child components</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdTabs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2937,7 +2936,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TAntdTabsProps = {
                 id: number | string
@@ -2961,7 +2960,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdCard</code></td>
-      <td>Обёртка-карточка с отступами и стилями</td>
+      <td>Card wrapper with spacing and styling</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdCard.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -2989,7 +2988,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
             {
               id: number | string
@@ -3006,7 +3005,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ContentCard</code></td>
-      <td>Визуальная карточка с секцией данных</td>
+      <td>Visual card with a data section</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ContentCard.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3025,7 +3024,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3042,7 +3041,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Spacer</code></td>
-      <td>Добавляет вертикальный отступ между элементами</td>
+      <td>Adds vertical spacing between elements</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Spacer.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3059,7 +3058,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3075,7 +3074,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>EnrichedTable</code></td>
-      <td>Расширенная таблица с поддержкой загрузки данных и фильтрации</td>
+      <td>Advanced table with data loading and filtering support</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/EnrichedTable.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3105,7 +3104,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3159,7 +3158,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>VisibilityContainer</code></td>
-      <td>Показывает блок при наличии контента, обычно из <code>value</code>; критерии также можно настроить</td>
+      <td>Shows a block when content is present, usually from <code>value</code>; criteria can also be configured</td>
       <td>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <YamlModal
@@ -3186,7 +3185,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3202,7 +3201,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>YamlEditorSingleton</code></td>
-      <td>YAML-редактор для одного ресурса с предзаполнением через API</td>
+      <td>YAML editor for a single resource with prefill through the API</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/YamlEditorSingleton.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3233,7 +3232,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
              export type TYamlEditorSingletonPermissions = {
                 canUpdate?: boolean
@@ -3270,7 +3269,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>TogglerSegmented</code></td>
-      <td>Сегментированный переключатель для выбора одного из нескольких значений</td>
+      <td>Segmented switch for selecting one of several values</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/TogglerSegmented.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3308,7 +3307,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               TogglerSegmented: {
                 id: number | string
@@ -3337,7 +3336,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Toggler</code></td>
-      <td>Переключатель для выбора одного из двух значений</td>
+      <td>Switch for selecting one of two values</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Toggler.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3372,7 +3371,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               Toggler: {
                 id: number | string
@@ -3406,7 +3405,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>OwnerRefs</code></td>
-      <td>Ссылки на владельцев ресурса</td>
+      <td>Links to resource owners</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/OwnerRefs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3443,7 +3442,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               OwnerRefs: {
                 id: number | string
@@ -3475,7 +3474,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Events</code></td>
-      <td>Просмотр событий с навигацией по связанным ресурсам</td>
+      <td>Event viewer with resource-linked navigation</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Events.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3505,7 +3504,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               Events: {
                 id: number | string
@@ -3537,7 +3536,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Labels</code></td>
-      <td>Редактируемый список меток объекта</td>
+      <td>Editable list of object labels</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Labels.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3573,7 +3572,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                   id: number | string
@@ -3618,7 +3617,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Tolerations</code></td>
-      <td>Просмотр и редактирование tolerations Pod</td>
+      <td>View and edit Pod tolerations</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Tolerations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3657,7 +3656,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TTolerationsPermissions = {
                 canPatch?: boolean
@@ -3708,7 +3707,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Taints</code></td>
-      <td>Просмотр и редактирование taints</td>
+      <td>View and edit taints</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Tolerations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3749,7 +3748,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
              export type TTaintsPermissions = {
               canPatch?: boolean
@@ -3801,7 +3800,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Annotations</code></td>
-      <td>Редактируемая таблица аннотаций</td>
+      <td>Editable annotations table</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/Annotations.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3838,7 +3837,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               export type TAnnotationsPermissions = {
                 canPatch?: boolean
@@ -3889,7 +3888,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ArrayOfObjectsToKeyValues</code></td>
-      <td>Преобразует массив объектов в список ключ:значение с использованием <code>keyFieldName</code> и <code>valueFieldName</code></td>
+      <td>Converts an array of objects into a key:value list using <code>keyFieldName</code> and <code>valueFieldName</code></td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/ArrayOfObjectsToKeyValues.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3911,7 +3910,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3933,7 +3932,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>PodLogs</code></td>
-      <td>Просмотр логов выбранного Pod</td>
+      <td>View logs of the selected Pod</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/PodLogs.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3953,7 +3952,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -3974,7 +3973,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>PodTerminal</code></td>
-      <td>Терминал для exec внутри контейнера Pod</td>
+      <td>Terminal for exec inside a Pod container</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/PodTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -3994,7 +3993,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4011,7 +4010,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>NodeTerminal</code></td>
-      <td>Exec в отдельный Pod на выбранном узле. `PodTemplate` должен быть предварительно определён в namespace, указанном в параметрах.</td>
+      <td>Exec into a separate Pod on the selected node. A `PodTemplate` must be defined in the namespace specified in the parameters beforehand.</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4029,7 +4028,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4046,7 +4045,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>VMVNC</code></td>
-      <td>VNC websockify-стриминг</td>
+      <td>VNC websockify streaming</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/VMVNC.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4065,7 +4064,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4083,7 +4082,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>PrometheusGraph</code></td>
-      <td>Графики PromQL</td>
+      <td>PromQL Graphs</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4105,7 +4104,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4197,7 +4196,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Как составлены типы"
+            buttonLabel="How the types are composed"
             yamlContent={dedent`
               type TBaseContainerSizeProps = {
                 width?: CSSProperties['width']
@@ -4260,7 +4259,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>DefaultIframe</code></td>
-      <td>Встраиваемый фрейм (Iframe)</td>
+      <td>Iframe</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4279,7 +4278,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               { id: number | string } & React.DetailedHTMLProps<
                 React.IframeHTMLAttributes<HTMLIFrameElement>,
@@ -4293,7 +4292,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>DropdownRedirect</code></td>
-      <td>Выпадающий список для навигации к элементу</td>
+      <td>Item selector to navigate to</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4317,7 +4316,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4343,7 +4342,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>CopyButton</code></td>
-      <td>Кнопка для копирования текста</td>
+      <td>Button to copy text</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4362,7 +4361,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4381,7 +4380,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>AggregatedCounterCard</code></td>
-      <td>Карточка с агрегированными счётчиками</td>
+      <td>Multi proposal counter card</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4535,7 +4534,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                 export type TKeyCounterProps = {
                     id: number | string
@@ -4755,7 +4754,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdIcons</code></td>
-      <td>Иконки из пакета Antd Icons</td>
+      <td>Icons from Antd Icons package to use</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4804,7 +4803,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4820,7 +4819,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Base64Icon</code></td>
-      <td>Иконка в кодировке Base64</td>
+      <td>Base 64 encoded icon</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4839,7 +4838,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
               {
                 id: number | string
@@ -4854,7 +4853,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>ActionsDropdown</code></td>
-      <td>Выпадающее меню действий</td>
+      <td>Actions Dropdown</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -4863,7 +4862,7 @@ Breadcrumb также необходимо описывать для каждо�
         </figure> */}
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
           <YamlModal
-            buttonLabel="Pod (строка CCO) — полный"
+            buttonLabel="Pod (CCO row) — full"
             yamlContent={dedent`
               - type: ActionsDropdown
                 data:
@@ -4931,7 +4930,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Node (уровень страницы)"
+            buttonLabel="Node (page-level)"
             yamlContent={dedent`
               - type: ActionsDropdown
                 data:
@@ -5039,7 +5038,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Pod (строка CCO)"
+            buttonLabel="Pod (CCO row)"
             yamlContent={dedent`
               - type: ActionsDropdown
                 data:
@@ -5075,7 +5074,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="ConfigMap/Secret (действия с файлами на уровне страницы)"
+            buttonLabel="ConfigMap/Secret (page-level file actions)"
             yamlContent={dedent`
               # ConfigMap (page-level)
               - type: ActionsDropdown
@@ -5137,7 +5136,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Deployment (уровень страницы)"
+            buttonLabel="Deployment (page-level)"
             yamlContent={dedent`
               - type: ActionsDropdown
                 data:
@@ -5194,7 +5193,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Job (уровень страницы)"
+            buttonLabel="Job (page-level)"
             yamlContent={dedent`
               - type: rerunLast
                 props:
@@ -5213,7 +5212,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="CronJob (уровень страницы)"
+            buttonLabel="CronJob (page-level)"
             yamlContent={dedent`
               - type: triggerRun
                 props:
@@ -5248,7 +5247,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Deployment — rollback (уровень страницы)"
+            buttonLabel="Deployment — rollback (page-level)"
             yamlContent={dedent`
               - type: rollback
                 props:
@@ -5266,7 +5265,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Deployment — rollback (строка CCO)"
+            buttonLabel="Deployment — rollback (CCO row)"
             yamlContent={dedent`
               - type: rollback
                 props:
@@ -5284,7 +5283,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Node — drain (уровень страницы)"
+            buttonLabel="Node — drain (page-level)"
             yamlContent={dedent`
               - type: drain
                 props:
@@ -5299,7 +5298,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Node — drain (строка CCO)"
+            buttonLabel="Node — drain (CCO row)"
             yamlContent={dedent`
               - type: drain
                 props:
@@ -5314,7 +5313,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                   export type TLabelsModalProps = {
                     notificationSuccessMessage?: string
@@ -5534,7 +5533,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>UsageGraphCard</code></td>
-      <td>Карточка с графиком использования и градиентной полосой request/limit/used</td>
+      <td>Card with usage graph and request/limit/used gradient bar</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5603,7 +5602,7 @@ Breadcrumb также необходимо описывать для каждо�
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                 export type TCanonicalUnit =
                   | 'B'
@@ -5763,7 +5762,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>Volumes</code></td>
-      <td>Компонент для отображения `Volumes` в табличном виде вместе с информацией о монтировании</td>
+      <td>Component for displaying `Volumes` in a table view together with mount information</td>
       <td>
         {/* <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/NodeTerminal.drawio.svg`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5775,43 +5774,20 @@ Breadcrumb также необходимо описывать для каждо�
             yamlContent={dedent`
                 - type: Volumes
                   data:
-                    baseprefix: "/openapi-ui"
-                    cluster: '{2}'
-                    forcedNamespace: '{3}'
                     reqIndex: 0
                     jsonPathToSpec: .items.0.spec
-                    jsonPathToPodName: .items.0.metadata.name
-                    baseFactoryClusterSceopedAPIKey: base-factory-clusterscoped-api
-                    baseFactoryClusterSceopedBuiltinKey: base-factory-clusterscoped-builtin
-                    baseFactoryNamespacedAPIKey: base-factory-namespaced-api
-                    baseFactoryNamespacedBuiltinKey: base-factory-namespaced-builtin
-                    baseNamespaceFactoryKey: namespace-details
-                    baseNavigationPluralName: navigations
-                    baseNavigationSpecificName: navigation
                     errorText: "No efficient data in spec"
-                    # containerFactoryKey: container-details
             `}
           />
           <YamlModal
-            buttonLabel="Пример структуры"
+            buttonLabel="Structure example"
             yamlContent={dedent`
                 export type TVolumesProps = {
                   id: number | string
-                  baseprefix?: string
-                  cluster: string
                   reqIndex: string
                   jsonPathToSpec: string
-                  jsonPathToPodName?: string
-                  forcedNamespace?: string
                   errorText?: string
                   containerStyle?: CSSProperties
-                  baseFactoryNamespacedAPIKey: string
-                  baseFactoryClusterSceopedAPIKey: string
-                  baseFactoryNamespacedBuiltinKey: string
-                  baseFactoryClusterSceopedBuiltinKey: string
-                  baseNavigationPluralName: string
-                  baseNavigationSpecificName: string
-                  containerFactoryKey?: string
                 }
             `}
           />
@@ -5819,88 +5795,10 @@ Breadcrumb также необходимо описывать для каждо�
       </td>
     </tr>
 
-    <tr>
-      <td><code>antdResult</code></td>
-      <td>Status placeholder for displaying errors or empty states (403, 404, 500, success, warning, info). Three modes: manual (status, title and subtitle are set in YAML), auto-detect (component reads the HTTP error from urlsToFetch by reqIndex), and emptyAsNotFound (treats an empty K8s list response as 404 — useful for detail pages that fetch a single resource via fieldSelector)</td>
-      <td>
-        <figure style={{ textAlign: 'center', display: 'contents' }}>
-          <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdResult.png`} style={{ width: '100%', maxWidth: 'none' }} />
-          <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-          </figcaption>
-        </figure>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-
-          <YamlModal
-            yamlContent={dedent`
-              # Manual mode — static placeholder
-              - type: antdResult
-                data:
-                  id: result-403
-                  status: "403"
-                  title: "Access Denied"
-                  subTitle: "You do not have permission to view this resource."
-
-              # Manual mode with VisibilityContainer (when data is missing)
-              - type: VisibilityContainer
-                data:
-                  id: vc-no-data
-                  value: "{reqsJsonPath[0]['.items.0']}"
-                  criteria: "notExists"
-                children:
-                  - type: antdResult
-                    data:
-                      id: result-empty
-                      status: "warning"
-                      title: "Resource Not Found"
-
-              # Auto-detect mode — reqIndex points at a request
-              - type: antdResult
-                data:
-                  id: error-display
-                  reqIndex: 0
-
-              # Auto-detect + emptyAsNotFound — for detail pages
-              # (K8s list with fieldSelector returns 200 + empty items
-              #  instead of 404 when a resource is missing)
-              - type: antdResult
-                data:
-                  id: pod-fetch-error
-                  reqIndex: 0
-                  emptyAsNotFound: true
-                  title: "Pod {8} is not found"
-                  subTitle: "Namespace: {3}"
-                children:
-                  - type: antdFlex
-                    # ... page content renders as children
-            `}
-          />
-
-          <YamlModal
-            buttonLabel="Structure example"
-            yamlContent={dedent`
-              {
-                id: number | string
-                reqIndex?: number       // urlsToFetch request index for auto-detect
-                emptyAsNotFound?: boolean // treat empty K8s list (items: []) as 404
-                status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
-                title?: string          // supports templates (reqsJsonPath, partsOfUrl)
-                subTitle?: string       // supports templates
-                style?: CSSProperties
-              }
-            `}
-          />
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-            <a href="https://ant.design/components/result" target="_blank">ResultProps</a>
-            <a href="https://ant.design/components/result#result-demo-403" target="_blank">Example</a>
-          </div>
-        </div>
-      </td>
-    </tr>
-
   </tbody>
 </table>
 
-<h3>Примеры</h3>
+<h3>Examples</h3>
 
 <ul>
   <li>
@@ -5922,42 +5820,42 @@ Breadcrumb также необходимо описывать для каждо�
 </ul>
 
 :::info
-Компонент <code>Factory</code> — ключевая часть визуальной архитектуры интерфейса in‑Cloud. Он позволяет создавать интерфейсы без написания кода.
+The <code>Factory</code> component is a key part of the visual architecture of the in‑Cloud UI. It makes it possible to build interfaces without writing code.
 :::
 
 :::tip
-Factory поддерживает версионирование API. Вы можете создавать разные ресурсы Factory с одинаковым ключом, но различными реализациями для нужных кластеров.
+Factory supports API versioning. You can create different Factory resources with the same key but different implementations for the clusters you need.
 :::
 
 ---
 
 ## CustomFormsOverride
 
-Компонент `CustomFormsOverride` используется для настройки динамических форм редактирования ресурсов в интерфейсе in‑Cloud. Он работает поверх спецификаций OpenAPI и позволяет декларативно переопределять поведение и структуру UI-форм.
+The `CustomFormsOverride` component is used to customize dynamic resource editing forms in the in‑Cloud interface. It works on top of OpenAPI specifications and allows the behavior and structure of UI forms to be overridden declaratively.
 
-<h3>1. Зачем нужен CustomFormsOverride</h3>
+<h3>1. Why CustomFormsOverride Exists</h3>
 
 :::info
-`CustomFormsOverride` существует для того, чтобы сделать стандартную форму на основе OpenAPI более удобной, компактной и безопасной.
+`CustomFormsOverride` exists to make the standard OpenAPI-based form more convenient, compact, and safe.
 :::
 
-Он решает следующие задачи:
+It solves the following tasks:
 
-- скрывает ненужные или чувствительные поля, такие как `metadata` и `status`;
-- позволяет переопределять типы и поведение полей;
-- добавляет поддержку словарей и зависимостей между полями;
-- изменяет рендеринг без пересборки UI.
+- hides unnecessary or sensitive fields such as `metadata` and `status`;
+- allows field types and behavior to be overridden;
+- adds support for dictionaries and field dependencies;
+- changes the rendering without rebuilding the UI.
 
-<h3>3. Основные блоки ресурса</h3>
+<h3>3. Main Resource Blocks</h3>
 
-Внутри `spec` ресурс `CustomFormsOverride` логически разделён на несколько ключевых блоков:
+Inside `spec`, the `CustomFormsOverride` resource is logically divided into several key blocks:
 
 <table>
   <thead>
     <tr>
-      <th>Блок</th>
-      <th>Назначение</th>
-      <th>Пример</th>
+      <th>Block</th>
+      <th>Purpose</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -5966,7 +5864,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>customizationId</code>
       </td>
       <td>
-        Уникальный идентификатор, используемый UI для поиска и применения переопределённой формы к целевому ресурсу.
+        Unique identifier used by the UI to find and apply the overridden form to the target resource.
       </td>
       <td></td>
     </tr>
@@ -5975,8 +5873,8 @@ Factory поддерживает версионирование API. Вы мож
         <code>hidden</code>
       </td>
       <td>
-        Массив путей к полям, которые должны быть скрыты. Например, <code>["spec", "serviceRef", "apiVersion"]</code>.
-        Это позволяет убрать из формы технические или чувствительные поля.
+        Array of paths to fields that should be hidden. For example, <code>["spec", "serviceRef", "apiVersion"]</code>.
+        This makes it possible to remove technical or sensitive fields from the form.
       </td>
       <td>
         <YamlModal
@@ -6002,8 +5900,8 @@ Factory поддерживает версионирование API. Вы мож
         <code>sort</code>
       </td>
       <td>
-        Массив путей к полям, используемый для сортировки формы. Например, <code>["spec", "serviceRef", "apiVersion"]</code>.
-        Определяет порядок отображения полей в форме.
+        Array of field paths used to sort the form. For example, <code>["spec", "serviceRef", "apiVersion"]</code>.
+        This defines the display order of fields in the form.
       </td>
       <td>
         <YamlModal
@@ -6029,8 +5927,8 @@ Factory поддерживает версионирование API. Вы мож
         <code>schema</code>
       </td>
       <td>
-        Переопределяет структуру и поведение формы с использованием JSON Schema. Здесь определяются типы, описания, обязательные поля и
-        расширения, такие как <code>customProps</code>.
+        Overrides the structure and behavior of the form using JSON Schema. Types, descriptions, required fields, and
+        extensions such as <code>customProps</code> are defined here.
       </td>
       <td></td>
     </tr>
@@ -6039,7 +5937,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>strategy</code>
       </td>
       <td>
-        Определяет способ объединения формы с исходной схемой ресурса: <code>merge</code> или <code>replace</code>.
+        Defines how the form is combined with the original resource schema: <code>merge</code> or <code>replace</code>.
       </td>
       <td></td>
     </tr>
@@ -6048,7 +5946,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>forceViewMode</code>
       </td>
       <td>
-        Необязательный параметр, определяющий режим рендеринга: <code>OpenAPI</code> или <code>Manual</code>.
+        Optional parameter that defines the rendering mode: <code>OpenAPI</code> or <code>Manual</code>.
       </td>
       <td></td>
     </tr>
@@ -6056,17 +5954,17 @@ Factory поддерживает версионирование API. Вы мож
 </table>
 
 <h3>
-  4. Назначение блока <code>schema</code>
+  4. What the <code>schema</code> Block Does
 </h3>
 
-Блок <code>schema</code> используется для переопределения структуры формы OpenAPI. Он позволяет задать удобную, безопасную,
-бизнес-ориентированную форму с описаниями, словарями, обязательными полями и типами.
+The <code>schema</code> block is used to override the OpenAPI form structure. It lets you define a convenient, safe,
+business-oriented form with descriptions, dictionaries, required fields, and types.
 
 <table>
   <thead>
     <tr>
-      <th>Возможность</th>
-      <th>Описание</th>
+      <th>Capability</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -6075,33 +5973,33 @@ Factory поддерживает версионирование API. Вы мож
         <code>type</code>
       </td>
       <td>
-        Базовый тип поля: <code>string</code>, <code>integer</code>, <code>boolean</code>, <code>object</code> или <code>array</code>.
+        Basic field type: <code>string</code>, <code>integer</code>, <code>boolean</code>, <code>object</code>, or <code>array</code>.
       </td>
     </tr>
     <tr>
       <td>
         <code>description</code>
       </td>
-      <td>Метка поля и пояснение, отображаемое как подсказка в UI.</td>
+      <td>Field label and explanation displayed as a UI hint.</td>
     </tr>
     <tr>
       <td>
         <code>required</code>
       </td>
-      <td>Массив обязательных полей, используемых для валидации формы.</td>
+      <td>Array of required fields used for form validation.</td>
     </tr>
     <tr>
       <td>
         <code>enum</code>
       </td>
-      <td>Ограничение набора допустимых значений, автоматически отображаемое как выпадающий список.</td>
+      <td>Restriction on the set of allowed values, rendered automatically as a dropdown.</td>
     </tr>
     <tr>
       <td>
         <code>properties</code>
       </td>
       <td>
-        Вложенные поля для объектов, используются при описании <code>type: object</code>.
+        Nested fields for objects, used when describing <code>type: object</code>.
       </td>
     </tr>
     <tr>
@@ -6109,7 +6007,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>items</code>
       </td>
       <td>
-        Схема элемента массива, используется с <code>type: array</code>.
+        Schema of an array item, used with <code>type: array</code>.
       </td>
     </tr>
     <tr>
@@ -6117,28 +6015,28 @@ Factory поддерживает версионирование API. Вы мож
         <code>customProps</code>
       </td>
       <td>
-        Пользовательские расширения UI in‑Cloud для рендеринга словарей, диапазонов и зависимостей между полями.
+        Custom in‑Cloud UI extensions for rendering dictionaries, ranges, and dependencies between fields.
       </td>
     </tr>
   </tbody>
 </table>
 
 :::tip
-Блок <code>schema</code> позволяет настраивать поведение формы без пересборки UI.
+The <code>schema</code> block lets you configure form behavior without rebuilding the UI.
 :::
 
-<h3>6. Пользовательские типы полей</h3>
+<h3>6. Custom Field Types</h3>
 
-При переопределении схемы в ресурсах <code>CustomFormsOverride</code> доступны нестандартные типы полей для
-расширения базовых возможностей <code>OpenAPI Schema</code>. Эти типы используются в поле <code>type</code> и
-активируют специальное поведение UI.
+When overriding the schema in <code>CustomFormsOverride</code> resources, non-standard field types are available to
+extend the base capabilities of <code>OpenAPI Schema</code>. These types are used in the <code>type</code> field and
+activate special UI behavior.
 
 <table>
   <thead>
     <tr>
-      <th>Тип</th>
-      <th>Описание</th>
-      <th>Пример</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
     </tr>
   </thead>
   <tbody>
@@ -6147,9 +6045,9 @@ Factory поддерживает версионирование API. Вы мож
         <code>listInput</code>
       </td>
       <td>
-        Пользовательский тип для выбора значения из внешнего словаря. В сочетании с <code>customProps</code>
-        позволяет загружать данные из <code>valueUri</code> и отображать или фильтровать их с использованием указанных
-        <code>keysToLabel</code> и <code>keysToValue</code>.
+        Custom type for selecting a value from an external dictionary. In combination with <code>customProps</code>, it
+        allows data to be loaded from <code>valueUri</code> and displayed or filtered using the specified
+        <code>keysToLabel</code> and <code>keysToValue</code>.
       </td>
       <td>
         <YamlModal
@@ -6199,8 +6097,8 @@ Factory поддерживает версионирование API. Вы мож
         <code>rangeInputCpu</code>
       </td>
       <td>
-        Тип ввода CPU с настраиваемым диапазоном минимума и максимума, шагом и логикой сравнения. Поддерживает редактирование и
-        агрегацию значений из ответов API.
+        CPU input type with configurable minimum and maximum range, step, and comparison logic. Supports editing and
+        aggregation of values from API responses.
       </td>
       <td>
         <YamlModal
@@ -6260,8 +6158,8 @@ Factory поддерживает версионирование API. Вы мож
         <code>rangeInputMemory</code>
       </td>
       <td>
-        Аналогичен <code>rangeInputCpu</code>, но используется для значений памяти. Поддерживает диапазоны, фильтрацию и
-        зависимости от квот или лимитов из других ресурсов.
+        Similar to <code>rangeInputCpu</code>, but used for memory values. It supports ranges, filtering, and
+        dependencies on quotas or limits from other resources.
       </td>
       <td>
         <YamlModal
@@ -6320,29 +6218,29 @@ Factory поддерживает версионирование API. Вы мож
 </table>
 
 :::info
-Пользовательские типы являются расширениями стандартных типов <code>string</code>, <code>number</code> и <code>boolean</code> и работают только в UI in‑Cloud.
+Custom types are extensions of the standard <code>string</code>, <code>number</code>, and <code>boolean</code> types and work only within the in‑Cloud UI.
 :::
 
 ---
 
 ## CFOMapping
 
-Ресурс <code>CFOMapping</code> используется совместно с <code>CustomFormsOverride</code> для принудительного переопределения
-<code>customizationId</code> при подготовке формы.
+The <code>CFOMapping</code> resource is used together with <code>CustomFormsOverride</code> to force an override of
+<code>customizationId</code> during form preparation.
 
-Провайдер форм применяет следующую логику разрешения:
+The form provider applies the following resolution logic:
 
-1. Если существует <code>CustomFormsOverride</code> с исходным <code>customizationId</code>, он используется.
-2. В противном случае UI ищет маппинг в <code>spec.mappings[customizationId]</code> и проверяет, что целевой
-   <code>customizationId</code> действительно существует в <code>CustomFormsOverride</code>.
-3. Если не найден ни оригинальный, ни замаппленный ID, используется <code>fallbackId</code>.
+1. If a <code>CustomFormsOverride</code> exists with the original <code>customizationId</code>, it is used.
+2. Otherwise, the UI looks for a mapping in <code>spec.mappings[customizationId]</code> and checks that the target
+   <code>customizationId</code> actually exists in <code>CustomFormsOverride</code>.
+3. If neither the original nor the mapped ID is found, <code>fallbackId</code> is used.
 
 :::info
-`CFOMapping` читается как единый именованный ресурс, выбираемый по <code>metadata.name</code>, а сами маппинги
-хранятся в <code>spec.mappings</code> в виде <code>исходный ключ -&gt; целевой customizationId</code>.
+`CFOMapping` is read as a single named resource selected by <code>metadata.name</code>, while the mappings themselves
+are stored in <code>spec.mappings</code> as <code>source key -&gt; target customizationId</code>.
 :::
 
-<h3>Пример ресурса</h3>
+<h3>Resource Example</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -6358,14 +6256,14 @@ Factory поддерживает версионирование API. Вы мож
   `}
 </CodeBlock>
 
-<h3>Поля ресурса</h3>
+<h3>Resource Fields</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Назначение</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
@@ -6376,7 +6274,7 @@ Factory поддерживает версионирование API. Вы мож
       <td>
         <code>string</code>
       </td>
-      <td>Имя ресурса маппинга. Используется UI для выбора через `fieldSelector`.</td>
+      <td>Name of the mapping resource. Used by the UI for selection via `fieldSelector`.</td>
     </tr>
     <tr>
       <td>
@@ -6386,7 +6284,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>Record&lt;string, string&gt;</code>
       </td>
       <td>
-        Словарь маппинга от исходного <code>customizationId</code> к целевому <code>customizationId</code>.
+        Mapping dictionary from the source <code>customizationId</code> to the target <code>customizationId</code>.
       </td>
     </tr>
     <tr>
@@ -6397,7 +6295,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>string</code>
       </td>
       <td>
-        Целевой <code>customizationId</code>, на который форма переключится, если он существует в
+        Target <code>customizationId</code> that the form will switch to if it exists in
         <code>CustomFormsOverride</code>.
       </td>
     </tr>
@@ -6405,18 +6303,18 @@ Factory поддерживает версионирование API. Вы мож
 </table>
 
 :::tip
-Если замаппленный <code>customizationId</code> отсутствует в <code>CustomFormsOverride</code>, UI не применит
-маппинг и вернётся к <code>fallbackId</code>, если он указан.
+If the mapped <code>customizationId</code> is missing from <code>CustomFormsOverride</code>, the UI will not apply the
+mapping and will fall back to <code>fallbackId</code> if one is specified.
 :::
 
 ---
 
 ## CustomFormsPrefill
 
-Ресурс <code>CustomFormsPrefill</code> позволяет предзаполнять значения в пользовательских формах UI in‑Cloud.
-Это упрощает ввод данных и обеспечивает единообразие при создании ресурсов Kubernetes.
+The <code>CustomFormsPrefill</code> resource lets you prefill values in custom in‑Cloud UI forms.
+This simplifies data entry and ensures consistency when creating Kubernetes resources.
 
-<h3>Пример ресурса</h3>
+<h3>Resource Example</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -6447,7 +6345,7 @@ Factory поддерживает версионирование API. Вы мож
   `}
 </CodeBlock>
 
-<h3>Пример ресурса (объектный формат)</h3>
+<h3>Resource Example (Object Format)</h3>
 
 <CodeBlock language="yaml">
   {dedent`
@@ -6470,11 +6368,11 @@ Factory поддерживает версионирование API. Вы мож
 </CodeBlock>
 
 :::info
-Оба формата поддерживаются. На стороне BFF объектный формат нормализуется в каноническую
+Both formats are supported. On the BFF side, the object format is normalized into the canonical
 
-форму <code>spec.values[]</code>, массив <code>{`{ path, value }`}</code>, которая используется всеми потребителями.
+<code>spec.values[]</code> form, an array of <code>{`{ path, value }`}</code>, which is used by all consumers.
 
-Пример нормализации:
+Normalization example:
 
 <ul>
   <li>
@@ -6486,14 +6384,14 @@ Factory поддерживает версионирование API. Вы мож
 </ul>
 :::
 
-<h3>Поля ресурса</h3>
+<h3>Resource Fields</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Поле</th>
-      <th>Тип</th>
-      <th>Назначение</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
@@ -6504,7 +6402,7 @@ Factory поддерживает версионирование API. Вы мож
       <td>
         <code>string</code>
       </td>
-      <td>Уникальное имя ресурса предзаполнения.</td>
+      <td>Unique name of the prefill resource.</td>
     </tr>
     <tr>
       <td>
@@ -6514,7 +6412,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>string</code>
       </td>
       <td>
-        Идентификатор формы, к которой применяется предзаполнение; должен совпадать с <code>CustomForms</code>.
+        ID of the form to which the prefill is applied; it must match <code>CustomForms</code>.
       </td>
     </tr>
     <tr>
@@ -6525,12 +6423,12 @@ Factory поддерживает версионирование API. Вы мож
         <code>array | object</code>
       </td>
       <td>
-        Значения для предзаполнения полей формы:
+        Prefill values for form fields:
         <ul>
           <li>
-            канонический формат: массив в <code>spec.values[]</code> с использованием <code>path/value</code>;
+            canonical format: an array in <code>spec.values[]</code> using <code>path/value</code>;
           </li>
-          <li>объектный формат: вложенный объект, который BFF разворачивает в канонический массив.</li>
+          <li>object format: a nested object that the BFF expands into the canonical array.</li>
         </ul>
       </td>
     </tr>
@@ -6542,7 +6440,7 @@ Factory поддерживает версионирование API. Вы мож
         <code>string[]</code>
       </td>
       <td>
-        Путь к полю объекта в виде массива ключей, например <code>["spec","ports"]</code>.
+        Path to the object field as an array of keys, for example <code>["spec","ports"]</code>.
       </td>
     </tr>
     <tr>
@@ -6552,28 +6450,28 @@ Factory поддерживает версионирование API. Вы мож
       <td>
         <code>any</code>
       </td>
-      <td>Значение для предзаполнения: строка, число, объект или массив.</td>
+      <td>Value used for prefilling, such as a string, number, object, or array.</td>
     </tr>
   </tbody>
 </table>
 
 ## Search
 
-Страница <code>Search</code> предназначена для поиска ресурсов Kubernetes по имени, типу, меткам и пользовательским полям в выбранном кластере.
+The <code>Search</code> page is designed for searching Kubernetes resources by name, type, labels, and custom fields within the selected cluster.
 
-Она доступна из боковой панели интерфейса и также поддерживает обратные ссылки из форм создания и редактирования ресурсов, что позволяет перейти непосредственно к списку подходящих объектов после завершения операции.
+It is available from the interface sidebar and also supports callback links from resource creation and editing forms, making it possible to jump directly to the list of matching objects after completing an operation.
 
-#### Пути доступа
+#### Access Paths
 
 <details>
-  <summary>Доступные маршруты</summary>
+  <summary>Available routes</summary>
 
 <ul>
   <li>
-    <code>{`/openapi-ui/{cluster}/{namespace}/search`}</code>: поиск в конкретном namespace.
+    <code>{`/openapi-ui/{cluster}/{namespace}/search`}</code>: search within a specific namespace.
   </li>
   <li>
-    <code>{`/openapi-ui/{cluster}/search`}</code>: поиск по всему кластеру.
+    <code>{`/openapi-ui/{cluster}/search`}</code>: cluster-wide search.
   </li>
 </ul>
 
@@ -6585,39 +6483,39 @@ Factory поддерживает версионирование API. Вы мож
     style={{ width: '100%', maxWidth: 'none' }}
   />
   <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-    Схема взаимодействия между интерфейсом страницы <code>Search</code> и кластером Kubernetes
+    Interaction diagram between the <code>Search</code> page interface and the Kubernetes cluster
   </figcaption>
 </figure>
 
 :::note
-Страница <code>Search</code> является частью общей системы визуализации Factory и использует тот же механизм рендеринга данных, включая фильтрацию, подсветку совпадений и контекстную навигацию.
+The <code>Search</code> page is part of the shared Factory visualization system and uses the same data rendering mechanism, including filtering, match highlighting, and contextual navigation.
 :::
 
 ## Plugins
 
-Поддерживаются два типа плагинов:
+There are two supported plugin types:
 
-- Плагины с фиксированными именами, такие как `plugin-header`, `plugin-navigation` и `plugin-sidebar`, отвечающие за соответствующие блоки UI.
-- Плагины с динамическими именами, доступные по адресу `:prefix/:cluster/:namespace?/:syntheticProject?/plugins/:pluginName/*`
+- Plugins with fixed names such as `plugin-header`, `plugin-navigation`, and `plugin-sidebar`, responsible for the corresponding UI blocks.
+- Plugins with dynamic names, available at `:prefix/:cluster/:namespace?/:syntheticProject?/plugins/:pluginName/*`
 
-Репозиторий с [примером плагина](https://github.com/PRO-Robotech/openapi-ui-plugin-example)
+Repository with a [plugin example](https://github.com/PRO-Robotech/openapi-ui-plugin-example)
 
-Плагины должны быть настроены в chart так, чтобы `remoteEntry.js` был доступен пользователю в браузере.
+Plugins must be configured in the chart so that `remoteEntry.js` is accessible to the user in the browser.
 
-Плагины настраиваются через JSON-манифест, передаваемый как переменная окружения:
+Plugins are configured through a JSON manifest passed as an environment variable:
 
 <table>
   <thead>
     <tr>
-      <th>Тип</th>
-      <th>Где определять</th>
-      <th>Пример переменной окружения</th>
+      <th>Type</th>
+      <th>Where to define it</th>
+      <th>Environment variable example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>
-        <p>С фиксированным именем</p>
+        <p>Fixed-name</p>
       </td>
       <td>
         <p>UI</p>
@@ -6648,7 +6546,7 @@ Factory поддерживает версионирование API. Вы мож
     </tr>
     <tr>
       <td>
-        <p>С динамическим именем</p>
+        <p>Dynamic-name</p>
       </td>
       <td>
         <p>BFF</p>
@@ -6672,9 +6570,9 @@ Factory поддерживает версионирование API. Вы мож
 
 ---
 
-:::info Информация
+:::info Information
 
-> Если что-то непонятно или вы нашли ошибку, свяжитесь с нами, и мы поможем.
+> If anything is unclear or you found an error, contact us and we will help.
 
 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
   <div style={{ display: 'flex', alignItems: 'center' }}>

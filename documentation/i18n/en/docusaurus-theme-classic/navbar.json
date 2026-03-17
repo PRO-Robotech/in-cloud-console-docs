@@ -1,0 +1,14 @@
+{
+  "title": {
+    "message": "in-Cloud Console",
+    "description": "The title in the navbar"
+  },
+  "item.label.Документация": {
+    "message": "Documentation",
+    "description": "Navbar item with label Документация"
+  },
+  "item.label.Сторибук": {
+    "message": "Storybook",
+    "description": "Navbar item with label Сторибук"
+  }
+}

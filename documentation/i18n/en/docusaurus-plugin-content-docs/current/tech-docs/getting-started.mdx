@@ -1,0 +1,79 @@
+---
+id: getting-started
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import dedent from 'ts-dedent'
+
+# Getting Started
+
+---
+
+## What is in-Cloud?
+
+**in-Cloud** is a framework for building your own user interface on top of the Kubernetes API. You can create an interface that matches your vision, from a minimalist dashboard to an OpenShift Console-style experience. All elements are assembled from ready-made components, and the logic is described declaratively.
+
+---
+
+## Installing in-Cloud Console
+
+At this stage, you install the main application. You can deploy either a basic setup or a fully packaged version with `oAuth-Proxy` and `Dex`.
+
+This step also adds a UI layer, a ready-to-use preset that provides a convenient starting point for exploring the system.
+
+<CodeBlock language="bash">
+  {dedent`
+    helm upgrade in-cloud-web oci://registry-1.docker.io/prorobotech/incloud-web-chart  \\
+      --version=1.3.0-9b1cdc4 \\
+      --namespace in-cloud-web \\
+      --install \\
+      --set incloud-web-resources.enabled=false \\
+      --set fullnameOverride=in-cloud-web \\
+      --create-namespace
+  `}
+</CodeBlock>
+
+---
+
+## How to Start Using It
+
+We understand that every infrastructure is different, including the way traffic is exposed (`Ingress`, `VirtualService`, and so on). Because of that, we leave this part to your own setup.
+
+By default, one `Deployment` is created with three containers: `Nginx`, `Web`, and `BFF`. Incoming traffic should be routed to the `Nginx` container on the `nginx-http` port.
+
+For a quick start, you can use `port-forward`:
+
+<CodeBlock language="bash">
+  {dedent`
+    sudo kubectl port-forward svc/in-cloud-web 80:80 -n in-cloud-web --kubeconfig ~/.kube/config
+  `}
+</CodeBlock>
+
+After that, open [http://localhost:8081](http://localhost:8081) in your browser.
+You will see the default **in-Cloud Console** interface: an initial UI version with a preconfigured sidebar and several standard pages such as lists of `Namespaces`, `Workloads`, and services.
+
+This configuration is intended only for evaluation and local debugging.
+In production scenarios, traffic should be exposed through your standard mechanisms such as `Ingress` or `Istio VirtualService`, and access should be integrated with your identity provider.
+
+:::info RBAC
+If the installation is used for evaluation purposes, you need to add a role binding for the anonymous user.
+In Kubernetes, all users who have not been authenticated are automatically assigned to the `system:anonymous` subject.
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: anonymous-clusterrolebinding
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: admin-clusterrole
+    subjects:
+      - kind: User
+        name: system:anonymous
+        apiGroup: rbac.authorization.k8s.io
+  `}
+</CodeBlock>
+:::

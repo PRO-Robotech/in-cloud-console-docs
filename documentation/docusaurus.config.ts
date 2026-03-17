@@ -30,8 +30,12 @@ const config: Config = {
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'ru',
+    locales: ['ru', 'en'],
+    localeConfigs: {
+      en: { label: 'English', htmlLang: 'en-US' },
+      ru: { label: 'Русский', htmlLang: 'ru-RU' },
+    },
   },
 
   markdown: {
@@ -137,9 +141,18 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'techDocs',
           position: 'left',
-          label: 'Documentation',
+          label: 'Документация',
+        },
+        {
+          to: '/storybook',
+          label: 'Сторибук',
+          position: 'left',
         },
         // { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
       ],
     },
 

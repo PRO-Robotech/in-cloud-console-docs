@@ -1,0 +1,139 @@
+---
+id: introduction
+---
+
+import { getBasePrefix } from '@site/src/utils/getBasePrefix'
+
+# in-Cloud Console
+
+---
+## Introduction
+
+<div
+  style={{
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    gap: '30px',
+    marginTop: '1.5rem',
+  }}
+>
+  <div style={{ flex: '1 1 55%', minWidth: '280px' }}>
+    <p>
+      Modern companies increasingly use Kubernetes as the foundation of their infrastructure. But as the number of clusters and teams grows, a new problem appears: administration turns into a chaotic collection of tools, interfaces are inconsistent, and processes become fragmented.
+
+      in-Cloud Console was created to bring order to that chaos. It is a unified platform that combines cluster, application, and service management in a single interface. It helps reduce maintenance costs, speed up change delivery, and make infrastructure more transparent and predictable.
+
+      Below, we will explain which problems the platform solves, which goals the team is pursuing, and which advantages set it apart from other solutions.
+    </p>
+  </div>
+
+  <div
+    style={{
+      flex: '1 1 40%',
+      minWidth: '220px',
+      textAlign: 'center',
+      marginTop: '3rem',
+    }}
+  >
+    <img
+      src={`${getBasePrefix()}img/in-cloud/promo/main-green.svg`}
+      alt="in-Cloud Audit Promo"
+      style={{
+        width: '110%',
+        maxWidth: '330px',
+        filter: 'drop-shadow(0 0 30px rgba(196, 202, 255, 0.2))',
+        transition: 'transform 0.3s ease-in-out',
+      }}
+    />
+  </div>
+</div>
+
+<hr />
+
+## The Problem
+
+To illustrate the problem, let us use an abstract example.
+Imagine a franchise grocery chain operating in your city. Every store has the same name, a similar interior, and similar internal processes, but the owners are different. Because of that, differences always remain, even when franchisees try to follow the same standard.
+
+The key part is that each store has its own ordering website. Before the pandemic, almost nobody used them, but afterwards everyone switched to online delivery. What do you do when there are a thousand stores in the city and every one has its own website? It is impossible to remember them all.
+
+This story is hypothetical, but it reflects the situation in IT companies very accurately: they have hundreds of clusters, each with its own specifics. They need to be inventoried, and teams need to remember where to go and how to connect. That is where the real problem starts.
+
+How can such a store chain be helped? Let us look at the situation from their perspective.
+
+1. The franchisor should take ownership of the key processes that directly affect business quality, profitability, and revenue. There is no point duplicating the same operations in every store if they can be designed centrally and rolled out across the whole network.
+
+2. The next step is to create a single ordering website. Based on it, the franchisor can distribute orders across stores efficiently, organize delivery logistics, gather analytics, and propose growth strategies based on data such as locations, customer segments, and other factors.
+
+3. It is important to stay in control of the processes while remaining flexible. Not just impose rules, but support, suggest, and evolve. That is the only way the network can remain resilient and competitive.
+
+<hr />
+
+## What We Offer
+
+We see the solution in creating a single entry point, a “central storefront” that brings all stores under one roof. In IT terms, this means a platform that gives companies a convenient, unified interface for working with all clusters and processes.
+
+Our key goals:
+
+- **A unified tool for managing and visualizing Kubernetes infrastructure.**
+  Every company has dozens of clusters, and each team structures them differently. That is why the interface must be flexible and adapt to specific needs: quick links, relevant panels, and current metrics.
+
+- **Kubernetes as an API framework, not just a container orchestrator.**
+  For us, it is a universal mechanism that can be used to build many different processes. The UI should not limit teams; it should help them adapt the interface to any workflow built on top of this framework.
+
+- **A move toward a NoCode future.**
+  Our ultimate goal is to build a landing platform where business logic can be assembled without code, using OpenAPI schemas from backend services and a visualization core. This will help companies deliver solutions faster and reduce dependency on Kubernetes-specific details.
+
+<hr />
+
+## Key Benefits
+
+1. **Full visual customization.**
+   The platform interface is described declaratively and can be fully adapted to the engineering team’s vision. There is no need to settle for a limited “default out-of-the-box view” because the UI can be shaped around real processes and real teams.
+
+2. **Open MIT license.**
+   All of our products are published under the MIT license, with a commitment that they will never move to closed licenses such as BSL. This lowers risk, reduces TCO, and makes the platform transparent for businesses.
+
+3. **Flexible process design.**
+   By combining our own work with open-source products such as Crossplane, and using them together with our UI, companies can implement almost any internal process, from infrastructure workflows to business logic.
+
+---
+
+<div className="paragraph">
+  in-Cloud Console is available under the MIT license. For consultation and pilot launch, contact us:
+</div>
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <img
+      src={`${getBasePrefix()}img/icons/contact_icons-email.svg`}
+      alt="Email"
+      width="24"
+      height="24"
+      style={{ marginRight: '0.5rem',marginTop: '-1rem'}}
+    />
+    <a
+      href="mailto:info@in-cloud.io"
+      target="_blank"
+    >
+      info@in-cloud.io
+    </a>
+  </div>
+
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <img
+      src={`${getBasePrefix()}img/icons/contact_icons-tg.svg`}
+      alt="Telegram"
+      width="24"
+      height="24"
+      style={{ marginRight: '0.5rem',marginTop: '-1rem'}}
+    />
+    <a
+      href="https://t.me/in_cloud_en"
+      target="_blank"
+    >
+      @in_cloud_en
+    </a>
+  </div>
+</div>

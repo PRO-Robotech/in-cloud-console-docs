@@ -1,0 +1,26 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.techDocs.category.in-Cloud Console": {
+    "message": "in-Cloud Console",
+    "description": "The label for category in-Cloud Console in sidebar techDocs"
+  },
+  "sidebar.techDocs.doc.0. Введение": {
+    "message": "0. Introduction",
+    "description": "The label for the doc item 0. Введение in sidebar techDocs, linking to the doc tech-docs/introduction"
+  },
+  "sidebar.techDocs.doc.1. Начало работы": {
+    "message": "1. Getting Started",
+    "description": "The label for the doc item 1. Начало работы in sidebar techDocs, linking to the doc tech-docs/getting-started"
+  },
+  "sidebar.techDocs.doc.2. Компоненты": {
+    "message": "2. Components",
+    "description": "The label for the doc item 2. Компоненты in sidebar techDocs, linking to the doc tech-docs/components"
+  },
+  "sidebar.techDocs.doc.3. Конфигурация": {
+    "message": "3. Configuration",
+    "description": "The label for the doc item 3. Конфигурация in sidebar techDocs, linking to the doc tech-docs/settings"
+  }
+}

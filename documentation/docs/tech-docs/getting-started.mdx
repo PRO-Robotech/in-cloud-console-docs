@@ -5,21 +5,21 @@ id: getting-started
 import CodeBlock from '@theme/CodeBlock'
 import dedent from 'ts-dedent'
 
-# Getting Started
+# Начало работы
 
 ---
 
-## What is in-Cloud?
+## Что такое in-Cloud?
 
-**in-Cloud** is a framework for building your own user interface on top of the Kubernetes API. You can create an interface that matches your vision, from a minimalist dashboard to an OpenShift Console-style experience. All elements are assembled from ready-made components, and the logic is described declaratively.
+**in-Cloud** — это фреймворк для создания собственного пользовательского интерфейса поверх Kubernetes API. Вы можете создать интерфейс, соответствующий вашему видению — от минималистичного дашборда до полноценного решения в стиле OpenShift Console. Все элементы собираются из готовых компонентов, а логика описывается декларативно.
 
 ---
 
-## Installing in-Cloud Console
+## Установка in-Cloud Console
 
-At this stage, you install the main application. You can deploy either a basic setup or a fully packaged version with `oAuth-Proxy` and `Dex`.
+На этом этапе вы устанавливаете основное приложение. Можно развернуть как базовую конфигурацию, так и полную версию с `oAuth-Proxy` и `Dex`.
 
-This step also adds a UI layer, a ready-to-use preset that provides a convenient starting point for exploring the system.
+На этом же шаге добавляется UI-слой — готовый пресет, который станет удобной отправной точкой для знакомства с системой.
 
 <CodeBlock language="bash">
   {dedent`
@@ -35,13 +35,13 @@ This step also adds a UI layer, a ready-to-use preset that provides a convenient
 
 ---
 
-## How to Start Using It
+## Как начать использование
 
-We understand that every infrastructure is different, including the way traffic is exposed (`Ingress`, `VirtualService`, and so on). Because of that, we leave this part to your own setup.
+Мы понимаем, что каждая инфраструктура отличается, включая способ экспонирования трафика (`Ingress`, `VirtualService` и так далее). Поэтому эту часть мы оставляем на вашу собственную настройку.
 
-By default, one `Deployment` is created with three containers: `Nginx`, `Web`, and `BFF`. Incoming traffic should be routed to the `Nginx` container on the `nginx-http` port.
+По умолчанию создаётся один `Deployment` с тремя контейнерами: `Nginx`, `Web` и `BFF`. Входящий трафик необходимо направить на контейнер `Nginx` на порт `nginx-http`.
 
-For a quick start, you can use `port-forward`:
+Для быстрого старта можно использовать `port-forward`:
 
 <CodeBlock language="bash">
   {dedent`
@@ -49,15 +49,15 @@ For a quick start, you can use `port-forward`:
   `}
 </CodeBlock>
 
-After that, open [http://localhost:8081](http://localhost:8081) in your browser.
-You will see the default **in-Cloud Console** interface: an initial UI version with a preconfigured sidebar and several standard pages such as lists of `Namespaces`, `Workloads`, and services.
+После этого откройте [http://localhost:8081](http://localhost:8081) в браузере.
+Вы увидите стандартный интерфейс **in-Cloud Console**: начальную версию UI с предварительно настроенным сайдбаром и несколькими стандартными страницами, такими как списки `Namespaces`, `Workloads` и сервисов.
 
-This configuration is intended only for evaluation and local debugging.
-In production scenarios, traffic should be exposed through your standard mechanisms such as `Ingress` or `Istio VirtualService`, and access should be integrated with your identity provider.
+Эта конфигурация предназначена только для ознакомления и локальной отладки.
+В продакшн-среде трафик должен быть экспонирован через ваши стандартные механизмы, такие как `Ingress` или `Istio VirtualService`, а доступ должен быть интегрирован с вашим провайдером идентификации.
 
 :::info RBAC
-If the installation is used for evaluation purposes, you need to add a role binding for the anonymous user.
-In Kubernetes, all users who have not been authenticated are automatically assigned to the `system:anonymous` subject.
+Если установка используется для ознакомительных целей, необходимо добавить привязку роли для анонимного пользователя.
+В Kubernetes все пользователи, не прошедшие аутентификацию, автоматически назначаются субъекту `system:anonymous`.
 
 <CodeBlock language="yaml">
   {dedent`
