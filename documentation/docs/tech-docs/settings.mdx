@@ -5821,7 +5821,7 @@ Breadcrumb также необходимо описывать для каждо�
 
     <tr>
       <td><code>antdResult</code></td>
-      <td>Status placeholder for displaying errors or empty states (403, 404, 500, success, warning, info). Three modes: manual (status, title and subtitle are set in YAML), auto-detect (component reads the HTTP error from urlsToFetch by reqIndex), and emptyAsNotFound (treats an empty K8s list response as 404 — useful for detail pages that fetch a single resource via fieldSelector)</td>
+      <td>Status placeholder for displaying errors or empty states (403, 404, 500, success, warning, info). Three modes: manual (status, title and subtitle are set in YAML), auto-detect (component reads the HTTP error from urlsToFetch by reqIndex), and empty-response check (enabled by default — if the array at <code>itemsPath</code> (default <code>.items</code>) is empty, the component shows 404; disable with <code>checkEmpty: false</code>).</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdResult.png`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5859,19 +5859,34 @@ Breadcrumb также необходимо описывать для каждо�
                   id: error-display
                   reqIndex: 0
 
-              # Auto-detect + emptyAsNotFound — for detail pages
-              # (K8s list with fieldSelector returns 200 + empty items
-              #  instead of 404 when a resource is missing)
+              # Auto-detect with children wrapper
+              # On error or empty response — only Result is shown,
+              # on success — children render. checkEmpty is on by default.
               - type: antdResult
                 data:
                   id: pod-fetch-error
                   reqIndex: 0
-                  emptyAsNotFound: true
-                  title: "Pod {8} is not found"
-                  subTitle: "Namespace: {3}"
                 children:
                   - type: antdFlex
-                    # ... page content renders as children
+                    data:
+                      id: page-header
+                  - type: antdTabs
+                    data:
+                      id: page-tabs
+
+              # Custom items path (for non-K8s APIs)
+              - type: antdResult
+                data:
+                  id: external-api-error
+                  reqIndex: 1
+                  itemsPath: ".data.results"
+
+              # Disable empty array check
+              - type: antdResult
+                data:
+                  id: allow-empty-list
+                  reqIndex: 0
+                  checkEmpty: false
             `}
           />
 
@@ -5881,7 +5896,8 @@ Breadcrumb также необходимо описывать для каждо�
               {
                 id: number | string
                 reqIndex?: number       // urlsToFetch request index for auto-detect
-                emptyAsNotFound?: boolean // treat empty K8s list (items: []) as 404
+                itemsPath?: string       // path to array for empty check (default ".items")
+                checkEmpty?: boolean     // check empty array → 404 (default true, disable: false)
                 status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
                 title?: string          // supports templates (reqsJsonPath, partsOfUrl)
                 subTitle?: string       // supports templates
