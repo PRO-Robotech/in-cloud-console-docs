@@ -2087,6 +2087,15 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
     <tr>
       <td>
+        <code>effectiveItemsPath</code>
+      </td>
+      <td>
+        <code>string | string[]</code>
+      </td>
+      <td>Путь до массива для проверки пустоты в ответах <code>effectiveReqIndexes</code>. По умолчанию <code>".items"</code>. Если задан как массив — каждая позиция соответствует позиции в <code>effectiveReqIndexes</code> (например, <code>[".items", ".data.results"]</code> для комбинированных запросов K8s + Prometheus).</td>
+    </tr>
+    <tr>
+      <td>
         <code>data[]</code>
       </td>
       <td>
@@ -5897,6 +5906,13 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   reqIndex: 1
                   itemsPath: ".data.results"
 
+              # Per-request пути (K8s + Prometheus в одном reqIndex)
+              - type: antdResult
+                data:
+                  id: combined-error
+                  reqIndex: [0, 1]
+                  itemsPath: [".items", ".data.results"]
+
               # Отключение проверки пустого массива
               - type: antdResult
                 data:
@@ -5924,6 +5940,11 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               #     - type: antdTabs
               #       data:
               #         id: page-tabs
+              #
+              # С per-request путями (K8s + Prometheus):
+              # spec:
+              #   effectiveReqIndexes: [0, 1]
+              #   effectiveItemsPath: [".items", ".data.results"]
             `}
           />
 
@@ -5933,7 +5954,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
               {
                 id: number | string
                 reqIndex?: number | number[]  // индекс (или массив индексов) запроса из urlsToFetch для автоопределения ошибки
-                itemsPath?: string       // путь до массива для проверки пустоты (по умолчанию ".items")
+                itemsPath?: string | string[]  // путь (или массив путей по позиции reqIndex) для проверки пустоты (по умолчанию ".items")
                 checkEmpty?: boolean     // проверять пустой массив → 404 (по умолчанию true, отключить: false)
                 status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
                 title?: string          // поддерживает шаблоны (reqsJsonPath, partsOfUrl)
