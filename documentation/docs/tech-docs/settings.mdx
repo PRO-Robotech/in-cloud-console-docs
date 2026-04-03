@@ -6575,10 +6575,106 @@ CFOMapping читается как один именованный ресурс 
       <td>
         <code>any</code>
       </td>
-      <td>Значение для подстановки (строка, число, объект или массив).</td>
+      <td>
+        Значение для подстановки (строка, число, объект или массив).
+        Строковые значения поддерживают плейсхолдеры <code>{`{index}`}</code>,
+        которые подставляются из сегментов текущего URL (см.&nbsp;ниже).
+      </td>
     </tr>
   </tbody>
 </table>
+
+<h3>Шаблонизация значений через partsOfUrl</h3>
+
+В поле <code>value</code> можно использовать плейсхолдеры <code>{`{0}`}</code>, <code>{`{1}`}</code>, <code>{`{2}`}</code>, …,
+которые при обработке на стороне BFF заменяются на соответствующие сегменты текущего URL
+(<code>location.pathname.split('/')</code>).
+
+Например, если пользователь находится на странице
+<code>/openapi-ui/clusters/prod/namespaces/my-ns</code>, то сегменты будут:
+
+<table>
+  <thead>
+    <tr>
+      <th>Плейсхолдер</th>
+      <th>Индекс</th>
+      <th>Значение</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>{`{0}`}</code></td>
+      <td>0</td>
+      <td><code>""</code> (пустая строка перед первым <code>/</code>)</td>
+    </tr>
+    <tr>
+      <td><code>{`{1}`}</code></td>
+      <td>1</td>
+      <td><code>openapi-ui</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{2}`}</code></td>
+      <td>2</td>
+      <td><code>clusters</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{3}`}</code></td>
+      <td>3</td>
+      <td><code>prod</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{4}`}</code></td>
+      <td>4</td>
+      <td><code>namespaces</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{5}`}</code></td>
+      <td>5</td>
+      <td><code>my-ns</code></td>
+    </tr>
+  </tbody>
+</table>
+
+:::info
+**Правила шаблонизации:**
+- Подстановка выполняется **только** в <code>value</code>, поле <code>path</code> не&nbsp;шаблонизируется.
+- Шаблонизация работает **рекурсивно** — плейсхолдеры заменяются в&nbsp;строках на&nbsp;любом уровне вложенности (внутри объектов и&nbsp;массивов).
+- Если сегмента с&nbsp;указанным индексом нет в&nbsp;URL, подставляется пустая строка.
+:::
+
+<h4>Пример с partsOfUrl-плейсхолдерами</h4>
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: front.in‑Cloud.io/v1alpha1
+    kind: CustomFormsPrefill
+    metadata:
+      name: v1.service.prefill
+    spec:
+      customizationId: default-/v1/services
+      values:
+        - path:
+            - metadata
+          value:
+            name: svc-{3}
+        - path:
+            - spec
+          value:
+            ports:
+              - name: http-{2}
+                port: 80
+                protocol: TCP
+                targetPort: 8080
+            selector:
+              app: app-{3}
+            type: ClusterIP
+  `}
+</CodeBlock>
+
+В этом примере при открытии формы на&nbsp;странице <code>/openapi-ui/clusters/prod/…</code>
+поле <code>metadata.name</code> будет предзаполнено значением <code>svc-prod</code>,
+а&nbsp;<code>spec.selector.app</code>&nbsp;— значением <code>app-prod</code>.
 
 ## Search
 
