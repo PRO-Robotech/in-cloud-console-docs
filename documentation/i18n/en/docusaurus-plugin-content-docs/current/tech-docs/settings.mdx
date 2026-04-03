@@ -6630,10 +6630,106 @@ Normalization example:
       <td>
         <code>any</code>
       </td>
-      <td>Value used for prefilling, such as a string, number, object, or array.</td>
+      <td>
+        Value used for prefilling, such as a string, number, object, or array.
+        String values support <code>{`{index}`}</code> placeholders
+        that are substituted from the current URL segments (see&nbsp;below).
+      </td>
     </tr>
   </tbody>
 </table>
+
+<h3>Value Templating via partsOfUrl</h3>
+
+The <code>value</code> field supports placeholders <code>{`{0}`}</code>, <code>{`{1}`}</code>, <code>{`{2}`}</code>, …,
+which the BFF replaces with the corresponding segments of the current URL
+(<code>location.pathname.split('/')</code>).
+
+For example, if the user is on the page
+<code>/openapi-ui/clusters/prod/namespaces/my-ns</code>, the segments are:
+
+<table>
+  <thead>
+    <tr>
+      <th>Placeholder</th>
+      <th>Index</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>{`{0}`}</code></td>
+      <td>0</td>
+      <td><code>""</code> (empty string before the first <code>/</code>)</td>
+    </tr>
+    <tr>
+      <td><code>{`{1}`}</code></td>
+      <td>1</td>
+      <td><code>openapi-ui</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{2}`}</code></td>
+      <td>2</td>
+      <td><code>clusters</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{3}`}</code></td>
+      <td>3</td>
+      <td><code>prod</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{4}`}</code></td>
+      <td>4</td>
+      <td><code>namespaces</code></td>
+    </tr>
+    <tr>
+      <td><code>{`{5}`}</code></td>
+      <td>5</td>
+      <td><code>my-ns</code></td>
+    </tr>
+  </tbody>
+</table>
+
+:::info
+**Templating rules:**
+- Substitution is performed **only** in <code>value</code>; the <code>path</code> field is never templated.
+- Templating works **recursively** — placeholders are replaced in strings at any nesting level (inside objects and arrays).
+- If a segment with the given index does not exist in the URL, an empty string is substituted.
+:::
+
+<h4>Example with partsOfUrl Placeholders</h4>
+
+<CodeBlock language="yaml">
+  {dedent`
+    ---
+    apiVersion: front.in‑Cloud.io/v1alpha1
+    kind: CustomFormsPrefill
+    metadata:
+      name: v1.service.prefill
+    spec:
+      customizationId: default-/v1/services
+      values:
+        - path:
+            - metadata
+          value:
+            name: svc-{3}
+        - path:
+            - spec
+          value:
+            ports:
+              - name: http-{2}
+                port: 80
+                protocol: TCP
+                targetPort: 8080
+            selector:
+              app: app-{3}
+            type: ClusterIP
+  `}
+</CodeBlock>
+
+In this example, when the form is opened on a page like <code>/openapi-ui/clusters/prod/…</code>,
+the <code>metadata.name</code> field will be prefilled with <code>svc-prod</code>,
+and <code>spec.selector.app</code> with <code>app-prod</code>.
 
 ## Search
 
