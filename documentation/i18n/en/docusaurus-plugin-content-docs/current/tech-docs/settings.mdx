@@ -1959,6 +1959,48 @@ Please note a few important details:
 1. `urlsToFetch` is an array in which each element contains query results filtered with the specified `labelSelector` and `fieldSelector`.
 2. If the target API supports `watch` and is available through a socket connection, data is streamed in real time. Otherwise, a regular REST request is used.
    :::
+
+<h3>Per-Request Error Isolation (reqIndex)</h3>
+
+<p>
+  When <code>urlsToFetch</code> contains multiple requests, a failure of one request <strong>does not</strong> cause
+  all components on the page to crash. Each component can specify which request it depends on through the
+  <code>reqIndex</code> parameter:
+</p>
+
+<CodeBlock language="yaml" title="Example: two requests, components bound to req0">
+  {dedent`
+    urlsToFetch:
+      - cluster: "{2}"       # req0 — main resource
+        apiVersion: "v1"
+        plural: "nodes"
+        fieldSelector: "metadata.name={7}"
+      - apiGroup: "metrics.k8s.io"  # req1 — metrics (may be unavailable)
+        apiVersion: "v1beta1"
+        cluster: "{2}"
+        plural: "pods"
+    data:
+      - type: parsedText
+        data:
+          reqIndex: "0"       # depends only on req0
+          text: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+  `}
+</CodeBlock>
+
+<ul>
+  <li>
+    When <code>reqIndex</code> is specified, the component checks errors <strong>only</strong> for that specific request.
+    Errors from other requests are ignored, and the component renders its data normally.
+  </li>
+  <li>
+    When <code>reqIndex</code> is <strong>not specified</strong>, the component behaves as before:
+    if any request fails, the component shows an error (backward compatible).
+  </li>
+  <li>
+    The <code>reqIndex</code> value is a string (<code>"0"</code>, <code>"1"</code>, ...) corresponding to the index in the <code>urlsToFetch</code> array.
+  </li>
+</ul>
+
    <h3>Typical Use Cases</h3>
 
 <ul>
@@ -2185,6 +2227,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // request index for per-request error isolation
                 value: string // to get color and maybe abbr
                 abbreviation?: string
                 spanStyle?: CSSProperties
@@ -2218,6 +2261,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // request index for per-request error isolation
                 text: string
                 formatter?: 'timestamp'
                 style?: CSSProperties
@@ -2255,6 +2299,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               export type TMappedParsedTextProps = {
                   id: number | string
+                  reqIndex?: string // request index for per-request error isolation
                   value: string
                   valueMap: Record<string, string>
                   style?: CSSProperties
@@ -2402,6 +2447,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // request index for per-request error isolation
                 values: string[] // array of reqsJsonPath
                 criteriaSuccess: 'equals' | 'notEquals'
                 criteriaError: 'equals' | 'notEquals'
@@ -2621,6 +2667,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // request index for per-request error isolation
                 bytesValue: string | string[] // reqs
                 unit?: TUnitInput // do not enter if wanna auto format
                 /** If true, returns "12.3 GiB" instead of just 12.3 */
@@ -2665,6 +2712,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // request index for per-request error isolation
                 /** Raw text that may contain a number or number+unit like "0.5", "500m", "2 vcpu" */
                 coresValue: string | string[]
                 /** Target unit; omit to auto format (core vs mcore) */
@@ -4289,7 +4337,9 @@ It describes the interface structure as a hierarchy of components.
           <YamlModal
             buttonLabel="Structure example"
             yamlContent={dedent`
-              { id: number | string } & React.DetailedHTMLProps<
+              { id: number | string
+                reqIndex?: string // request index for per-request error isolation
+              } & React.DetailedHTMLProps<
                 React.IframeHTMLAttributes<HTMLIFrameElement>,
                 HTMLIFrameElement
               >
@@ -4329,6 +4379,7 @@ It describes the interface structure as a hierarchy of components.
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // request index for per-request error isolation
                 cluster: string
                 apiVersion: string
                 apiGroup?: string
@@ -4742,6 +4793,7 @@ It describes the interface structure as a hierarchy of components.
                       }
                   export type TAggregatedCounterCardProps = {
                     id: number | string
+                    reqIndex?: string // request index for per-request error isolation
                     iconBase64Encoded?: string
                     text: string
                     counter:
@@ -5527,6 +5579,7 @@ It describes the interface structure as a hierarchy of components.
                 export type TActionsPermissions = Record<string, boolean | undefined>
                 export type TActionsDropdownProps = {
                   id: number | string
+                  reqIndex?: string // request index for per-request error isolation
                   buttonText?: string
                   buttonVariant?: 'default' | 'icon'
                   containerStyle?: CSSProperties
@@ -5692,6 +5745,7 @@ It describes the interface structure as a hierarchy of components.
                   | 'EiB'
                 export type TConverterBytesProps = {
                   id: number | string
+                  reqIndex?: string // request index for per-request error isolation
                   bytesValue: string | string[] // reqs
                   unit?: TUnitInput // do not enter if wanna auto format
                   /** If true, returns "12.3 GiB" instead of just 12.3 */
@@ -5715,6 +5769,7 @@ It describes the interface structure as a hierarchy of components.
                 export type TCoreUnitInput = string | TCoreCanonicalUnit
                 export type TConverterCoresProps = {
                   id: number | string
+                  reqIndex?: string // request index for per-request error isolation
                   /** Raw text that may contain a number or number+unit like "0.5", "500m", "2 vcpu" */
                   coresValue: string | string[]
                   /** Target unit; omit to auto format (core vs mcore) */
@@ -5740,6 +5795,7 @@ It describes the interface structure as a hierarchy of components.
                   label?: string | number
                 }
                 export type TUsageGraphCardProps = {
+                  reqIndex?: string // request index for per-request error isolation
                   title?: string // default: 'CPU, core'
                   series?: TUsageGraphCardDatum[] // can be provided straight forward
                   containerStyle?: CSSProperties
