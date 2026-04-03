@@ -1966,6 +1966,48 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 1. urlsToFetch — это массив, в котором каждый элемент содержит результаты выборки, прошедшие через заданные фильтры (labelSelector, fieldSelector).
 2. Если целевой API поддерживает watch и доступен по сокетному соединению, данные приходят потоково в реальном времени. Если такой возможности нет, выполняется обычный REST-запрос.
    :::
+
+<h3>Изоляция ошибок по запросам (reqIndex)</h3>
+
+<p>
+  Если в <code>urlsToFetch</code> указано несколько запросов, ошибка в одном из них <strong>не приводит</strong> к падению
+  всех компонентов на странице. Каждый компонент может указать, от какого именно запроса он зависит, через параметр
+  <code>reqIndex</code>:
+</p>
+
+<CodeBlock language="yaml" title="Пример: два запроса, компоненты привязаны к req0">
+  {dedent`
+    urlsToFetch:
+      - cluster: "{2}"       # req0 — основной ресурс
+        apiVersion: "v1"
+        plural: "nodes"
+        fieldSelector: "metadata.name={7}"
+      - apiGroup: "metrics.k8s.io"  # req1 — метрики (может быть недоступен)
+        apiVersion: "v1beta1"
+        cluster: "{2}"
+        plural: "pods"
+    data:
+      - type: parsedText
+        data:
+          reqIndex: "0"       # зависит только от req0
+          text: "{reqsJsonPath[0]['.items.0.metadata.name']['-']}"
+  `}
+</CodeBlock>
+
+<ul>
+  <li>
+    Если <code>reqIndex</code> указан — компонент проверяет ошибку <strong>только</strong> для этого запроса.
+    Ошибки других запросов игнорируются, и компонент рендерит данные.
+  </li>
+  <li>
+    Если <code>reqIndex</code> <strong>не указан</strong> — компонент ведёт себя как раньше:
+    если хотя бы один запрос упал, компонент показывает ошибку (backward compatible).
+  </li>
+  <li>
+    Значение <code>reqIndex</code> — строка (<code>"0"</code>, <code>"1"</code>, ...), соответствующая индексу в массиве <code>urlsToFetch</code>.
+  </li>
+</ul>
+
    <h3>Типовые применения</h3>
 
 <ul>
@@ -2201,6 +2243,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // индекс запроса для изоляции ошибок
                 value: string // to get color and maybe abbr
                 abbreviation?: string
                 spanStyle?: CSSProperties
@@ -2238,6 +2281,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 tooltip?: string
                 formatter?: 'timestamp'
                 style?: CSSProperties
+                reqIndex?: string // индекс запроса для изоляции ошибок
               }
             `}
           />
@@ -2275,6 +2319,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   value: string
                   valueMap: Record<string, string>
                   style?: CSSProperties
+                  reqIndex?: string // индекс запроса для изоляции ошибок
                 }
             `}
           />
@@ -2429,6 +2474,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 successText: string
                 errorText: string
                 fallbackText: string
+                reqIndex?: string // индекс запроса для изоляции ошибок
               } & Omit<TextProps, 'id' | 'children'>
             `}
           />
@@ -4306,7 +4352,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
           <YamlModal
             buttonLabel="Пример структуры"
             yamlContent={dedent`
-              { id: number | string } & React.DetailedHTMLProps<
+              { id: number | string, reqIndex?: string // индекс запроса для изоляции ошибок
+              } & React.DetailedHTMLProps<
                 React.IframeHTMLAttributes<HTMLIFrameElement>,
                 HTMLIFrameElement
               >
@@ -4346,6 +4393,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             yamlContent={dedent`
               {
                 id: number | string
+                reqIndex?: string // индекс запроса для изоляции ошибок
                 cluster: string
                 apiVersion: string
                 apiGroup?: string
@@ -4759,6 +4807,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                       }
                   export type TAggregatedCounterCardProps = {
                     id: number | string
+                    reqIndex?: string // индекс запроса для изоляции ошибок
                     iconBase64Encoded?: string
                     text: string
                     counter:
@@ -5544,6 +5593,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                 export type TActionsPermissions = Record<string, boolean | undefined>
                 export type TActionsDropdownProps = {
                   id: number | string
+                  reqIndex?: string // индекс запроса для изоляции ошибок
                   buttonText?: string
                   buttonVariant?: 'default' | 'icon'
                   containerStyle?: CSSProperties
@@ -5727,6 +5777,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   /** If provided, convert to this explicit unit */
                   toUnit?: TUnitInput // do not enter if wanna auto format
                   /** If omitted and toUnit is missing, use auto-scaling */
+                  reqIndex?: string // индекс запроса для изоляции ошибок
                 }
                 export type TCoreCanonicalUnit = 'core' | 'mcore' | 'ucore' | 'ncore'
                 export type TCoreUnitInput = string | TCoreCanonicalUnit
@@ -5751,12 +5802,14 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   /** If provided, convert to this explicit unit; omit for auto-format */
                   toUnit?: TCoreUnitInput
                   /** If omitted and toUnit is missing, use auto-scaling (core vs mcore) */
+                  reqIndex?: string // индекс запроса для изоляции ошибок
                 }
                 export type TUsageGraphCardDatum = {
                   value: number
                   label?: string | number
                 }
                 export type TUsageGraphCardProps = {
+                  reqIndex?: string // индекс запроса для изоляции ошибок
                   title?: string // default: 'CPU, core'
                   series?: TUsageGraphCardDatum[] // can be provided straight forward
                   containerStyle?: CSSProperties
