@@ -2071,6 +2071,24 @@ Breadcrumb также необходимо описывать для каждо�
     </tr>
     <tr>
       <td>
+        <code>effectiveReqIndexes</code>
+      </td>
+      <td>
+        <code>number[]</code>
+      </td>
+      <td>Indexes of requests from <code>urlsToFetch</code> that are critical for page rendering. If any of the specified requests returns an error or empty response, an <code>antdResult</code> with the worst error (500 {'>'} 403 {'>'} 404) is shown instead of content. Replaces the need to manually wrap <code>data</code> in <code>antdResult</code>. If not set, no automatic wrapper is applied.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>effectiveItemsPath</code>
+      </td>
+      <td>
+        <code>string | string[]</code>
+      </td>
+      <td>Path to the array for empty-check in <code>effectiveReqIndexes</code> responses. Defaults to <code>".items"</code>. When set as an array, each position maps to the corresponding position in <code>effectiveReqIndexes</code> (e.g. <code>[".items", ".data.results"]</code> for combined K8s + Prometheus queries).</td>
+    </tr>
+    <tr>
+      <td>
         <code>data[]</code>
       </td>
       <td>
@@ -5881,6 +5899,13 @@ Breadcrumb также необходимо описывать для каждо�
                   reqIndex: 1
                   itemsPath: ".data.results"
 
+              # Per-request paths (K8s + Prometheus in one reqIndex)
+              - type: antdResult
+                data:
+                  id: combined-error
+                  reqIndex: [0, 1]
+                  itemsPath: [".items", ".data.results"]
+
               # Disable empty array check
               - type: antdResult
                 data:
@@ -5895,8 +5920,8 @@ Breadcrumb также необходимо описывать для каждо�
             yamlContent={dedent`
               {
                 id: number | string
-                reqIndex?: number       // urlsToFetch request index for auto-detect
-                itemsPath?: string       // path to array for empty check (default ".items")
+                reqIndex?: number | number[]  // urlsToFetch request index (or array of indexes) for auto-detect
+                itemsPath?: string | string[]  // path (or per-position array of paths) to array for empty check (default ".items")
                 checkEmpty?: boolean     // check empty array → 404 (default true, disable: false)
                 status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
                 title?: string          // supports templates (reqsJsonPath, partsOfUrl)
