@@ -2078,6 +2078,24 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
     </tr>
     <tr>
       <td>
+        <code>effectiveReqIndexes</code>
+      </td>
+      <td>
+        <code>number[]</code>
+      </td>
+      <td>Индексы запросов из <code>urlsToFetch</code>, критичных для отображения страницы. Если хотя бы один из указанных запросов вернул ошибку или пустой ответ — вместо контента отображается <code>antdResult</code> с наихудшей ошибкой (500 {'>'} 403 {'>'} 404). Заменяет необходимость вручную оборачивать <code>data</code> в <code>antdResult</code>. Если не указан — автоматическая обёртка не применяется.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>effectiveItemsPath</code>
+      </td>
+      <td>
+        <code>string | string[]</code>
+      </td>
+      <td>Путь до массива для проверки пустоты в ответах <code>effectiveReqIndexes</code>. По умолчанию <code>".items"</code>. Если задан как массив — каждая позиция соответствует позиции в <code>effectiveReqIndexes</code> (например, <code>[".items", ".data.results"]</code> для комбинированных запросов K8s + Prometheus).</td>
+    </tr>
+    <tr>
+      <td>
         <code>data[]</code>
       </td>
       <td>
@@ -5828,7 +5846,7 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
 
     <tr>
       <td><code>antdResult</code></td>
-      <td>Заглушка для отображения статуса (403, 404, 500, success, warning, info). Три режима: ручной (статус, заголовок и подзаголовок задаются в YAML), автоматический (компонент считывает HTTP-ошибку из urlsToFetch по reqIndex) и проверка пустого ответа (по умолчанию включена — если массив по пути <code>itemsPath</code> (по умолчанию <code>.items</code>) пуст, компонент показывает 404; отключается через <code>checkEmpty: false</code>).</td>
+      <td>Заглушка для отображения статуса (403, 404, 500, success, warning, info). Три режима: ручной (статус, заголовок и подзаголовок задаются в YAML), автоматический (компонент считывает HTTP-ошибку из urlsToFetch по reqIndex) и проверка пустого ответа (по умолчанию включена — если массив по пути <code>itemsPath</code> (по умолчанию <code>.items</code>) пуст, компонент показывает 404; отключается через <code>checkEmpty: false</code>). <code>reqIndex</code> может быть числом или массивом — при массиве проверяются все указанные запросы и отображается наихудшая ошибка (500 {'>'} 403 {'>'} 404). <br/><br/><strong>Рекомендуемый способ:</strong> вместо ручного добавления <code>antdResult</code> в <code>data</code> используйте проп <code>effectiveReqIndexes</code> в спеке фабрики — обёртка будет применена автоматически.</td>
       <td>
         <figure style={{ textAlign: 'center', display: 'contents' }}>
           <FancyboxImage src={`${getBasePrefix()}img/in-cloud/components/antdResult.png`} style={{ width: '100%', maxWidth: 'none' }} />
@@ -5888,12 +5906,45 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
                   reqIndex: 1
                   itemsPath: ".data.results"
 
+              # Per-request пути (K8s + Prometheus в одном reqIndex)
+              - type: antdResult
+                data:
+                  id: combined-error
+                  reqIndex: [0, 1]
+                  itemsPath: [".items", ".data.results"]
+
               # Отключение проверки пустого массива
               - type: antdResult
                 data:
                   id: allow-empty-list
                   reqIndex: 0
                   checkEmpty: false
+
+              # ── Рекомендуемый способ: effectiveReqIndexes ──
+              # Вместо ручного antdResult в data — укажите
+              # effectiveReqIndexes в спеке фабрики.
+              # Обёртка применяется автоматически.
+              #
+              # spec:
+              #   key: deployment-details
+              #   effectiveReqIndexes: [0]
+              #   urlsToFetch:
+              #     - cluster: "{2}"
+              #       apiGroup: apps
+              #       apiVersion: v1
+              #       plural: deployments
+              #   data:
+              #     - type: antdFlex
+              #       data:
+              #         id: page-header
+              #     - type: antdTabs
+              #       data:
+              #         id: page-tabs
+              #
+              # С per-request путями (K8s + Prometheus):
+              # spec:
+              #   effectiveReqIndexes: [0, 1]
+              #   effectiveItemsPath: [".items", ".data.results"]
             `}
           />
 
@@ -5902,8 +5953,8 @@ import { FancyboxImage } from '@site/src/components/commonBlocks/FancyboxImage'
             yamlContent={dedent`
               {
                 id: number | string
-                reqIndex?: number       // индекс запроса из urlsToFetch для автоопределения ошибки
-                itemsPath?: string       // путь до массива для проверки пустоты (по умолчанию ".items")
+                reqIndex?: number | number[]  // индекс (или массив индексов) запроса из urlsToFetch для автоопределения ошибки
+                itemsPath?: string | string[]  // путь (или массив путей по позиции reqIndex) для проверки пустоты (по умолчанию ".items")
                 checkEmpty?: boolean     // проверять пустой массив → 404 (по умолчанию true, отключить: false)
                 status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
                 title?: string          // поддерживает шаблоны (reqsJsonPath, partsOfUrl)
