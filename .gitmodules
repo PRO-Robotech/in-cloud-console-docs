@@ -1,4 +1,4 @@
 [submodule "landing"]
 	path = landing
-	url = git@github.com:PRO-Robotech/in-cloud-console-landing.git
+	url = https://github.com/PRO-Robotech/in-cloud-console-landing.git
 	branch = main
